@@ -83,11 +83,12 @@ export const signup = async (req, res, next) => {
 
 export const setup = async (req, res) => {
   try {
-    const { firstName, lastName, avatar, profileTheme } = req.body;
+    const avatar_filename = req.file?.filename;
+    const { firstName, lastName, profileTheme } = req.body;
     const user = await User.findByIdAndUpdate(req.user.id, {
       firstName,
       lastName,
-      avatar,
+      avatar : avatar_filename,
       profileTheme,
       profileSetup: true,
     });

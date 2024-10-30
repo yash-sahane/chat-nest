@@ -18,7 +18,7 @@ const Profile = () => {
   const { theme, setTheme } = useTheme();
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
-  const [profileImg, setProfileImg] = useState("");
+  const [profileImg, setProfileImg] = useState<File>();
   const navigate = useNavigate();
   const params = new URLSearchParams(location.search);
   const email = params.get("email");
@@ -49,14 +49,15 @@ const Profile = () => {
       return;
     }
     try {
+      const formData = new FormData();      
+      profileImg && formData.append("image", profileImg);
+      formData.append('firstName', fname);
+      formData.append('lastName', lname);
+      formData.append('profileTheme', activeProfileTheme);
+
       const response: AxiosResponse<ApiResponse> = await axios.post(
         `${import.meta.env.VITE_SERVER_URI}/user/setup`,
-        {
-          firstName: fname,
-          lastName: lname,
-          profileTheme: activeProfileTheme,
-          avatar: profileImg,
-        },
+        formData,
         {
           withCredentials: true,
         }
@@ -82,11 +83,15 @@ const Profile = () => {
     }
   };
 
-  const profileImgHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const profileImgHandler = (e: React.ChangeEvent<HTMLInputElement>) => {    
     if (e.target.files && e.target.files.length > 0) {
-      setProfileImg(URL.createObjectURL(e.target.files[0]));
+      setProfileImg(e.target.files[0]);
     }
   };
+
+  useEffect(() => {
+    console.log(profileImg); 
+  }, [profileImg]);
 
   return (
     <div className="custom-transition relative w-screen h-screen flex items-center justify-center overflow-hidden">
@@ -136,7 +141,7 @@ const Profile = () => {
                     color: darkProfileTheme[activeProfileTheme].border,
                   }}
                 >
-                  {profileImg ? <img src={profileImg} alt="" /> : "Y"}
+                  {profileImg ? <img src={profileImg && URL.createObjectURL(profileImg)} alt="" /> : "Y"}
                   <input
                     type="file"
                     accept="image/*"

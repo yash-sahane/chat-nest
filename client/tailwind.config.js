@@ -4,6 +4,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Open Sans', 'ui-sans-serif', 'system-ui'],
+      },
       boxShadow: {
         "inner-bottom": "inset 0 -100px 100px #180e39",
       },
