@@ -89,10 +89,6 @@ const Profile = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(profileImg); 
-  }, [profileImg]);
-
   return (
     <div className="custom-transition relative w-screen h-screen flex items-center justify-center overflow-hidden">
       <Button
@@ -141,7 +137,7 @@ const Profile = () => {
                     color: darkProfileTheme[activeProfileTheme].border,
                   }}
                 >
-                  {profileImg ? <img src={profileImg && URL.createObjectURL(profileImg)} alt="" /> : "Y"}
+                  {profileImg ? <img src={profileImg && URL.createObjectURL(profileImg)} className="h-full object-contain" /> : "Y"}
                   <input
                     type="file"
                     accept="image/*"

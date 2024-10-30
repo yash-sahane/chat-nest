@@ -153,7 +153,7 @@ const Auth = () => {
           </div>
           <div className="flex items-center">
             <h1 className="text-3xl msm:text-4xl font-bold">Welcome</h1>
-            <img src={victorySVG} alt="victorySVG" />
+            <img src={victorySVG} alt="victorySVG" className="w-[40px] msm:w-full" />
           </div>
           <p className="font-semibold text-center mt-2">
             Fill in the details to get started with the best chat app!
