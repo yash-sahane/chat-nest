@@ -4,6 +4,14 @@
 
 @layer base {
   :root {
+    /* custom light theme */
+    --status-online: 142, 55%, 76%;
+    --status-offline: 0, 1%, 93%;
+    --chat-bg: 260, 100%, 96%;
+    --chat-primary: 261, 100%, 93%;
+    --chat-secondary: 262, 100%, 92%;
+    --chat-card: 262, 100%, 92%;
+    /* custom light theme */
     --background: 0 0% 100%;
     --foreground: 224 71.4% 4.1%;
     --card: 0 0% 100%;
@@ -32,6 +40,14 @@
   }
 
   .dark {
+    /* custom */
+    --status-online: 142, 75%, 36%;
+    --status-offline: 0, 1%, 53%;
+    --chat-bg: 250, 47%, 10%;
+    --chat-primary: 253, 51%, 13%;
+    --chat-secondary: 252, 50%, 20%;
+    /* custom */
+    --chat-card: 253, 49%, 15%;
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
     --card: 224 71.4% 4.1%;
@@ -66,20 +82,20 @@
   body {
     @apply bg-background text-foreground;
   }
-  .custom-transition{
-    @apply !transition-colors !duration-300 !ease-linear
+  .custom-transition {
+    @apply transition-colors duration-300 ease-linear;
   }
-  .animation-drop-in{
-    animation: drop-in .3s ease 200ms backwards;
+  .animation-drop-in {
+    animation: drop-in 0.3s ease 200ms backwards;
   }
   @keyframes drop-in {
     from {
-     opacity: 0;
-     transform: translateY(-10px);
+      opacity: 0;
+      transform: translateY(-10px);
     }
     to {
-     opacity: 1;
-     transform: translate(0px);
+      opacity: 1;
+      transform: translate(0px);
     }
-   }
+  }
 }

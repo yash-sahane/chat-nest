@@ -5,25 +5,19 @@ import victorySVG from "../assets/victory.svg";
 import banner from "../assets/Chat-rafiki-cropped (1).svg";
 import appLogo from "../assets/app-logo.png";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "@/context/ThemeProvider";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { AxiosResponse } from "axios";
 import { ApiResponse } from "@/types/apiResponse";
 import { useNavigate } from "react-router-dom";
+import ToggleTheme from "@/components/ToggleTheme";
 
 const Auth = () => {
-  const { theme, setTheme } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
-
-  const themeHandler = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
 
   const validateSignup = () => {
     if (!validateLogin()) {
@@ -111,7 +105,7 @@ const Auth = () => {
         if (data.data.profileSetup) {
           navigate(`/profile?email=${email}`);
         } else {
-          navigate("/chat");
+          navigate("/");
         }
       }
     } catch (e: any) {
@@ -124,19 +118,7 @@ const Auth = () => {
 
   return (
     <div className="custom-transition relative w-screen h-screen flex items-center justify-center overflow-hidden">
-      <Button
-        className="z-10 absolute top-2 right-2 p-2 h-fit"
-        onClick={() => themeHandler()}
-      >
-        <Moon
-          size={18}
-          className={`${theme === "dark" ? "animation-drop-in" : "hidden"} `}
-        />
-        <Sun
-          size={18}
-          className={`${theme === "light" ? "animation-drop-in" : "hidden"}`}
-        />
-      </Button>
+      <ToggleTheme position="absolute" top={8} right={8} />
       {/* Background Beams */}
       <div className="absolute inset-0 z-0 h-full w-full">
         <BackgroundBeamsWithCollision
@@ -153,14 +135,18 @@ const Auth = () => {
           </div>
           <div className="flex items-center">
             <h1 className="text-3xl msm:text-4xl font-bold">Welcome</h1>
-            <img src={victorySVG} alt="victorySVG" className="w-[40px] msm:w-full" />
+            <img
+              src={victorySVG}
+              alt="victorySVG"
+              className="w-[40px] msm:w-full"
+            />
           </div>
           <p className="font-semibold text-center mt-2">
             Fill in the details to get started with the best chat app!
           </p>
           <Tabs
             defaultValue="login"
-            className="w-[90%] sm:w-3/4 mt-4 transition-all duration-300 custom-transition"
+            className="w-[90%] sm:w-3/4 mt-4 transition-all duration-300 ease-linear custom-transition"
           >
             <TabsList className="bg-transparent rounded-none w-full">
               <TabsTrigger
@@ -182,13 +168,13 @@ const Auth = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email"
-                  className="transition-all duration-300 custom-transition border-2 focus:border-purple-500 focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-0"
+                  className="transition-all duration-300 ease-linear custom-transition border-2 focus:border-purple-500 focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-0"
                 />
                 <Input
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
-                  className="transition-all duration-300 custom-transition border-2 focus:border-purple-500 focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-0"
+                  className="transition-all duration-300 ease-linear custom-transition border-2 focus:border-purple-500 focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-0"
                 />
                 <Button className="rounded-full" onClick={loginHandler}>
                   Login

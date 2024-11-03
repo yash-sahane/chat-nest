@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import profileThemeKeys from "@/utils/profileThemeKeys";
 import { darkProfileTheme, lightProfileTheme } from "@/utils/profileTheme";
 import { useStore } from "@/context/StoreContext";
+import ToggleTheme from "@/components/ToggleTheme";
 
 const Profile = () => {
   const { theme, setTheme } = useTheme();
@@ -49,11 +50,11 @@ const Profile = () => {
       return;
     }
     try {
-      const formData = new FormData();      
+      const formData = new FormData();
       profileImg && formData.append("image", profileImg);
-      formData.append('firstName', fname);
-      formData.append('lastName', lname);
-      formData.append('profileTheme', activeProfileTheme);
+      formData.append("firstName", fname);
+      formData.append("lastName", lname);
+      formData.append("profileTheme", activeProfileTheme);
 
       const response: AxiosResponse<ApiResponse> = await axios.post(
         `${import.meta.env.VITE_SERVER_URI}/user/setup`,
@@ -70,7 +71,7 @@ const Profile = () => {
         setLname("");
         toast.success(data.message);
         if (data.data.profileSetup) {
-          navigate("/chat");
+          navigate("/");
         } else {
           navigate("/profile");
         }
@@ -83,7 +84,7 @@ const Profile = () => {
     }
   };
 
-  const profileImgHandler = (e: React.ChangeEvent<HTMLInputElement>) => {    
+  const profileImgHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setProfileImg(e.target.files[0]);
     }
@@ -91,19 +92,7 @@ const Profile = () => {
 
   return (
     <div className="custom-transition relative w-screen h-screen flex items-center justify-center overflow-hidden">
-      <Button
-        className="z-10 absolute top-2 right-2 p-2 h-fit"
-        onClick={() => themeHandler()}
-      >
-        <Moon
-          size={18}
-          className={`${theme === "dark" ? "animation-drop-in" : "hidden"} `}
-        />
-        <Sun
-          size={18}
-          className={`${theme === "light" ? "animation-drop-in" : "hidden"}`}
-        />
-      </Button>
+      <ToggleTheme position="absolute" top={2} right={2} />
       {/* Background Beams */}
       <div className="absolute inset-0 z-0 h-full w-full">
         <BackgroundBeamsWithCollision
@@ -127,7 +116,7 @@ const Profile = () => {
             <div className="flex gap-4">
               <div className={`w-2/4 flex justify-center items-center`}>
                 <div
-                  className="bg-[hsl(var(--secondary))] text-5xl w-48 h-48 flex items-center justify-center border border-border rounded-full custom-transition relative overflow-hidden"
+                  className="bg-[hsl(var(--secondary))] text-5xl w-48 h-48 flex items-center justify-center border border-border rounded-full transition-all duration-300 ease-linear custom-transition relative overflow-hidden"
                   style={{
                     background:
                       theme === "dark"
@@ -137,7 +126,14 @@ const Profile = () => {
                     color: darkProfileTheme[activeProfileTheme].border,
                   }}
                 >
-                  {profileImg ? <img src={profileImg && URL.createObjectURL(profileImg)} className="h-full object-contain" /> : "Y"}
+                  {profileImg ? (
+                    <img
+                      src={profileImg && URL.createObjectURL(profileImg)}
+                      className="h-full object-contain"
+                    />
+                  ) : (
+                    "Y"
+                  )}
                   <input
                     type="file"
                     accept="image/*"
@@ -147,7 +143,7 @@ const Profile = () => {
                   />
                   <label
                     htmlFor="profile-pic"
-                    className="transition-all duration-300 absolute hover:bottom-0 -bottom-[32px] rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[73px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer"
+                    className="transition-all duration-150 ease-linear absolute hover:bottom-0 -bottom-[32px] rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[73px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer"
                   >
                     <Camera />
                     <p className="text-base">Add Profile Picture</p>
@@ -178,7 +174,7 @@ const Profile = () => {
                     <div
                       onClick={() => setActiveProfileTheme(profileThemeColor)}
                       key={index}
-                      className="h-8 w-8 rounded-full custom-transition"
+                      className="h-8 w-8 rounded-full transition-all duration-150 ease-linear custom-transition"
                       style={{
                         background:
                           theme === "dark"
