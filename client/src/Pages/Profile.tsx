@@ -92,7 +92,7 @@ const Profile = () => {
 
   return (
     <div className="custom-transition relative w-screen h-screen flex items-center justify-center overflow-hidden">
-      <ToggleTheme position="absolute" top={2} right={2} />
+      <ToggleTheme position="absolute" top={8} right={8} />
       {/* Background Beams */}
       <div className="absolute inset-0 z-0 h-full w-full">
         <BackgroundBeamsWithCollision
@@ -105,9 +105,7 @@ const Profile = () => {
       <div className="custom-transition shadow-2xl dark:shadow-inner-bottom relative z-10 p-4 pr-8 w-[60vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] max-w-[50rem] min-h-[28rem] max-h-[28rem] rounded-xl flex bg-opacity-90 bg-white dark:bg-[hsl(var(--background))]">
         <div className="flex justify-center items-center flex-col gap-6 w-full">
           <div className="flex flex-col items-center">
-            <div>
-              <img src={appLogo} alt="applogo" className="w-16" />
-            </div>
+            <img src={appLogo} alt="applogo" className="w-16" />
             <p className="font-semibold text-center mt-2">
               Update your profile details to start chatting with your friends!
             </p>

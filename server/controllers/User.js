@@ -45,6 +45,19 @@ export const login = async (req, res, next) => {
   }
 };
 
+export const logout = async (req, res) => {
+  try {
+    return res
+      .cookie("jwt", "", { maxAge: 1, sameSite: none, secure: true })
+      .json({
+        success: true,
+        message: "User Logged out successfully",
+      });
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
 export const signup = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -88,7 +101,7 @@ export const setup = async (req, res) => {
     const user = await User.findByIdAndUpdate(req.user.id, {
       firstName,
       lastName,
-      avatar : avatar_filename,
+      avatar: avatar_filename,
       profileTheme,
       profileSetup: true,
     });

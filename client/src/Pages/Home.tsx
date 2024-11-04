@@ -27,11 +27,36 @@ import EmojiPicker, {
   EmojiClickData,
 } from "emoji-picker-react";
 import { useEffect, useRef, useState } from "react";
+import { AxiosResponse } from "axios";
+import { ApiResponse } from "@/types/apiResponse";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Home = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>("");
   const emojiRef = useRef();
+  const navigate = useNavigate();
+
+  const logoutHandler = async () => {
+    try {
+      const response: AxiosResponse<ApiResponse> = await axios.get(
+        `${import.meta.env.VITE_SERVER_URI}/user/logout`,
+        {
+          withCredentials: true,
+        }
+      );
+      const { data } = response;
+
+      if (data.success) {
+        toast.success(data.message);
+        navigate("/auth");
+      }
+    } catch (e: any) {
+      console.log(e.message);
+    }
+  };
 
   const emojiHandler = (emoji: EmojiClickData) => {
     setMsg((msg) => msg + emoji.emoji);
@@ -68,14 +93,17 @@ const Home = () => {
                 className="rounded-full object-contain w-[38px] h-[38px]"
               />
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-48 ml-2">
+            <DropdownMenuContent className="w-48 ml-3">
               <DropdownMenuGroup>
-                <DropdownMenuItem className="focus:bg-[hsl(var(--chat-primary))]">
+                <DropdownMenuItem className="focus:bg-[hsl(var(--chat-primary))] cursor-pointer">
                   <User />
                   <span>Profile</span>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-              <DropdownMenuItem className="focus:bg-[hsl(var(--chat-primary))]">
+              <DropdownMenuItem
+                className="focus:bg-[hsl(var(--chat-primary))] cursor-pointer"
+                onClick={logoutHandler}
+              >
                 <LogOut />
                 <span>Log out</span>
               </DropdownMenuItem>
