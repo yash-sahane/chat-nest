@@ -12,12 +12,14 @@ import { AxiosResponse } from "axios";
 import { ApiResponse } from "@/types/apiResponse";
 import { useNavigate } from "react-router-dom";
 import ToggleTheme from "@/components/ToggleTheme";
+import { useStore } from "@/context/StoreContext";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
+  const { setIsAuthenticated, setUser } = useStore();
 
   const validateSignup = () => {
     if (!validateLogin()) {
@@ -62,14 +64,22 @@ const Auth = () => {
         }
       );
       const { data } = response;
+      console.log(data);
 
       if (data.success) {
         toast.success(data.message);
+        setUser(data.data);
         setEmail("");
         setPassword("");
         setConfirmPassword("");
-        toast.success(data.message);
-        navigate(`/profile/email=${email}`);
+        setIsAuthenticated(true);
+
+        if (data.data.profileSetup) {
+          navigate("/");
+        } else {
+          navigate(`/profile?email=${email}`);
+          console.log("going into false");
+        }
       }
     } catch (e: any) {
       console.log(e);
@@ -98,14 +108,19 @@ const Auth = () => {
       console.log(data);
 
       if (data.success) {
+        setUser(data.data);
         setEmail("");
         setPassword("");
         setConfirmPassword("");
         toast.success(data.message);
+        setIsAuthenticated(true);
+
         if (data.data.profileSetup) {
-          navigate(`/profile?email=${email}`);
-        } else {
+          console.log("going into true");
           navigate("/");
+        } else {
+          navigate(`/profile?email=${email}`);
+          console.log("going into false");
         }
       }
     } catch (e: any) {

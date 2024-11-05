@@ -10,6 +10,17 @@ const createToken = (id) => {
   });
 };
 
+export const getInfo = async (req, res) => {
+  try {
+    return res.json({
+      success: true,
+      data: req.user,
+    });
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -48,7 +59,7 @@ export const login = async (req, res, next) => {
 export const logout = async (req, res) => {
   try {
     return res
-      .cookie("jwt", "", { maxAge: 1, sameSite: none, secure: true })
+      .cookie("jwt", "", { maxAge: 1, sameSite: "none", secure: true })
       .json({
         success: true,
         message: "User Logged out successfully",
@@ -98,13 +109,17 @@ export const setup = async (req, res) => {
   try {
     const avatar_filename = req.file?.filename;
     const { firstName, lastName, profileTheme } = req.body;
-    const user = await User.findByIdAndUpdate(req.user.id, {
-      firstName,
-      lastName,
-      avatar: avatar_filename,
-      profileTheme,
-      profileSetup: true,
-    });
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        firstName,
+        lastName,
+        avatar: avatar_filename,
+        profileTheme,
+        profileSetup: true,
+      },
+      { new: true }
+    );
 
     return res.json({
       success: true,

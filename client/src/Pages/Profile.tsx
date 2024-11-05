@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import appLogo from "../assets/app-logo.png";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
-import { Camera, Moon, Sun } from "lucide-react";
+import { Camera, Moon, Sun, Trash } from "lucide-react";
 import { useTheme } from "@/context/ThemeProvider";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -72,8 +72,6 @@ const Profile = () => {
         toast.success(data.message);
         if (data.data.profileSetup) {
           navigate("/");
-        } else {
-          navigate("/profile");
         }
       }
     } catch (e: any) {
@@ -85,10 +83,16 @@ const Profile = () => {
   };
 
   const profileImgHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("profileimghandler");
+
     if (e.target.files && e.target.files.length > 0) {
       setProfileImg(e.target.files[0]);
     }
   };
+
+  useEffect(() => {
+    console.log("profile img changed");
+  }, [profileImg]);
 
   return (
     <div className="custom-transition relative w-screen h-screen flex items-center justify-center overflow-hidden">
@@ -126,31 +130,51 @@ const Profile = () => {
                 >
                   {profileImg ? (
                     <img
-                      src={profileImg && URL.createObjectURL(profileImg)}
+                      src={URL.createObjectURL(profileImg)}
                       className="h-full object-contain"
                     />
+                  ) : email && !fname && !lname ? (
+                    email[0]
                   ) : (
-                    "Y"
+                    `${fname?.[0]?.toUpperCase() ?? ""}${
+                      lname?.[0]?.toUpperCase() ?? ""
+                    }`
                   )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="profile-pic"
-                    className="hidden"
-                    onChange={(event) => profileImgHandler(event)}
-                  />
-                  <label
-                    htmlFor="profile-pic"
-                    className="transition-all duration-150 ease-linear absolute hover:bottom-0 -bottom-[32px] rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[73px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer"
-                  >
-                    <Camera />
-                    <p className="text-base">Add Profile Picture</p>
-                  </label>
+                  {!profileImg && (
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id="profile-pic"
+                      className="hidden"
+                      onChange={(event) => profileImgHandler(event)}
+                    />
+                  )}
+                  {!profileImg ? (
+                    <label
+                      htmlFor="profile-pic"
+                      className={`transition-all duration-150 ease-linear absolute hover:bottom-0
+                        -bottom-[32px] rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[73px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer`}
+                    >
+                      <Camera />
+                      <p className="text-base">Add Profile Picture</p>
+                    </label>
+                  ) : (
+                    <div
+                      className={`transition-all duration-150 ease-linear absolute hover:bottom-0 -bottom-[60px] rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[100px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer`}
+                      onClick={() => {
+                        setProfileImg(undefined);
+                        console.log("getting undefined");
+                      }}
+                    >
+                      <Trash />
+                      <p className="text-base">Remove Profile Picture</p>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex flex-col gap-3 mt-4 w-2/4">
                 <Input
-                  value={email}
+                  value={email || ""}
                   disabled
                   placeholder="Email"
                   className="custom-transition border-2 focus:border-purple-500 focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-0"

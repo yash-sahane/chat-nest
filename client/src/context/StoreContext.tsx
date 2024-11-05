@@ -1,5 +1,10 @@
+import { ApiResponse } from "@/types/apiResponse";
+import getCookie from "@/types/getCookie";
 import { ProfileThemeKeys } from "@/utils/profileThemeKeys";
-import React, { createContext, useContext, useState } from "react";
+import axios from "axios";
+import { AxiosResponse } from "axios";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type User = object | undefined;
 type StoreContextType = {
@@ -7,6 +12,8 @@ type StoreContextType = {
   setUser: React.Dispatch<React.SetStateAction<object>>;
   activeProfileTheme: ProfileThemeKeys;
   setActiveProfileTheme: React.Dispatch<React.SetStateAction<ProfileThemeKeys>>;
+  isAuthenticated: boolean;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -19,6 +26,35 @@ export const StoreContextProvider = ({
   const [user, setUser] = useState<object>();
   const [activeProfileTheme, setActiveProfileTheme] =
     useState<ProfileThemeKeys>("violet");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      console.log("fetching user");
+
+      const response: AxiosResponse<ApiResponse> = await axios.get(
+        `${import.meta.env.VITE_SERVER_URI}/user/`,
+        { withCredentials: true }
+      );
+      const { data } = response;
+      console.log(data);
+
+      if (data.success) {
+        setUser(data.data);
+        setIsAuthenticated(true);
+        if (data.data.profileSetup) {
+          navigate("/");
+        }
+      }
+    };
+
+    if (getCookie("jwt")) {
+      fetchUser();
+    } else {
+      localStorage.removeItem("isAuthenticated");
+    }
+  }, []);
 
   return (
     <StoreContext.Provider
@@ -27,6 +63,8 @@ export const StoreContextProvider = ({
         setUser,
         activeProfileTheme,
         setActiveProfileTheme,
+        isAuthenticated,
+        setIsAuthenticated,
       }}
     >
       {children}

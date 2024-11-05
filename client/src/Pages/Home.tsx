@@ -1,6 +1,7 @@
 import {
   LogOut,
   MessageCircleMore,
+  MessageSquareText,
   Paperclip,
   Plus,
   Search,
@@ -32,12 +33,14 @@ import { ApiResponse } from "@/types/apiResponse";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useStore } from "@/context/StoreContext";
 
 const Home = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>("");
   const emojiRef = useRef();
   const navigate = useNavigate();
+  const { setUser } = useStore();
 
   const logoutHandler = async () => {
     try {
@@ -52,6 +55,7 @@ const Home = () => {
       if (data.success) {
         toast.success(data.message);
         navigate("/auth");
+        setUser({});
       }
     } catch (e: any) {
       console.log(e.message);
@@ -81,7 +85,7 @@ const Home = () => {
           <img src={appLogo} alt="" className="w-[40px]" />
           <div className="w-[30px] h-[2px] dark:bg-gray-800 bg-gray-300 bottom-[-2px]"></div>
           <div className="flex flex-col gap-2">
-            <MessageCircleMore />
+            <MessageSquareText />
           </div>
         </div>
         <div className="flex flex-col items-center gap-4 mb-3">
