@@ -1,6 +1,7 @@
 import {
   LogOut,
   MessageCircleMore,
+  MessageSquarePlus,
   MessageSquareText,
   Paperclip,
   Plus,
@@ -34,10 +35,13 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useStore } from "@/context/StoreContext";
+import ProfilesDialog from "@/components/ProfilesDialog";
 
 const Home = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>("");
+  const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const emojiRef = useRef();
   const navigate = useNavigate();
   const { setUser } = useStore();
@@ -65,6 +69,21 @@ const Home = () => {
   const emojiHandler = (emoji: EmojiClickData) => {
     setMsg((msg) => msg + emoji.emoji);
     setShowEmojiPicker(false);
+  };
+
+  const userSearchHandler = async (searchTerm) => {
+    try {
+      const response: AxiosResponse<ApiResponse> = await axios.post(
+        `${import.meta.env.VITE_SERVER_URI}/profiles/getProfiles`,
+        { searchTerm },
+        { withCredentials: true }
+      );
+      const { data } = response;
+      setUsers(data.data);
+    } catch (e: any) {
+      console.log(e.message);
+      toast.error(e.response.data.message);
+    }
   };
 
   useEffect(() => {
@@ -118,13 +137,20 @@ const Home = () => {
       <div className="custom-transition bg-[hsl(var(--chat-bg))] w-1/5 min-w-[300px] max-w-[320px] rounded-2xl p-3">
         <div>
           <p className="text-lg tracking-wide font-bold">Chats</p>
-          <div className="relative transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))] h-[42px] rounded-md mt-2">
-            <Search size={20} className="absolute left-2 top-[10px]" />
-            <Input
-              type="text"
-              className="custom-transition pl-[34px] h-full w-full bg-transparent placeholder:text-sm placeholder:text-gray-500 rounded-lg"
-              placeholder="Search message..."
-            />
+          <div className="flex items-center gap-2 mt-2">
+            <div className="relative transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))] h-[42px] w-full rounded-md">
+              <Search size={20} className="absolute left-2 top-[10px]" />
+              <Input
+                type="text"
+                className="custom-transition pl-[34px] h-full w-full bg-transparent placeholder:text-sm placeholder:text-gray-500 rounded-lg"
+                placeholder="Search message..."
+              />
+            </div>
+            <ProfilesDialog userSearchHandler={}>
+              <div className="custom-transition p-2 cursor-pointer rounded-md hover:bg-[hsl(var(--primary))] hover:text-white bg-[hsl(var(--chat-primary))]">
+                <MessageSquarePlus />
+              </div>
+            </ProfilesDialog>
           </div>
         </div>
         <Chats />
@@ -138,21 +164,14 @@ const Home = () => {
           <div className="flex flex-col gap-1 w-full">
             <div className="flex justify-between">
               <p className="font-semibold text-sm">Omkar Khodse</p>
-              {/* <p className="text-sm text-gray-600">4m</p> */}
             </div>
             <div className="flex justify-between">
               <p className="text-sm text-gray-500">Online</p>
-              {/* <span className="flex items-center justify-center px-[6px] rounded-full bg-[hsl(var(--primary))]">
-                <p className="text-xs text-white">1</p>
-              </span> */}
             </div>
           </div>
         </div>
         <div className="h-[calc(100%-128px)]"></div>
         <div className="relative transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))] h-[52px] rounded-2xl mt-2">
-          {/* <div className="p-2 rounded-lg absolute left-2 top-[8px] bg-[hsl(var(--chat-secondary))]">
-            <Plus size={20} />
-          </div> */}
           <div className="absolute h-full flex gap-3 items-center right-[95px]">
             <Paperclip size={20} />
             <Smile onClick={() => setShowEmojiPicker((prev) => !prev)} />
