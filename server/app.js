@@ -31,6 +31,7 @@ app.use(express.json());
 
 app.use("/api/user", userRouter);
 app.use("/api/profiles", profileRouter);
+app.use("/profiles", express.static("uploads/profiles"));
 
 app.use((err, req, res, next) => {
   errMiddleware(err, req, res, next);

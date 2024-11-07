@@ -57,7 +57,7 @@ const Profile = () => {
       formData.append("profileTheme", activeProfileTheme);
 
       const response: AxiosResponse<ApiResponse> = await axios.post(
-        `${import.meta.env.VITE_SERVER_URI}/user/setup`,
+        `${import.meta.env.VITE_SERVER_URI}/api/user/setup`,
         formData,
         {
           withCredentials: true,

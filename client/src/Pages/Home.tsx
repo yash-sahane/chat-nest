@@ -41,6 +41,7 @@ const Home = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>("");
   const [users, setUsers] = useState([]);
+  const { user } = useStore();
   const [searchTerm, setSearchTerm] = useState("");
   const emojiRef = useRef();
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ const Home = () => {
   const logoutHandler = async () => {
     try {
       const response: AxiosResponse<ApiResponse> = await axios.get(
-        `${import.meta.env.VITE_SERVER_URI}/user/logout`,
+        `${import.meta.env.VITE_SERVER_URI}/api/user/logout`,
         {
           withCredentials: true,
         }
@@ -77,7 +78,7 @@ const Home = () => {
     try {
       // setSearchedUserLoading(true);
       const response: AxiosResponse<ApiResponse> = await axios.post(
-        `${import.meta.env.VITE_SERVER_URI}/profiles/getProfiles`,
+        `${import.meta.env.VITE_SERVER_URI}/api/profiles/getProfiles`,
         { searchTerm },
         { withCredentials: true }
       );
@@ -143,7 +144,7 @@ const Home = () => {
             <DropdownMenu>
               <DropdownMenuTrigger className="cursor-pointer " asChild>
                 <img
-                  src={appLogo}
+                  src={`http://localhost:3000/profiles/${user?.avatar}`}
                   className="rounded-full object-contain w-[38px] h-[38px]"
                 />
               </DropdownMenuTrigger>

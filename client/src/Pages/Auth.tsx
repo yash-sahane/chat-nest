@@ -54,7 +54,7 @@ const Auth = () => {
     }
     try {
       const response: AxiosResponse<ApiResponse> = await axios.post(
-        `${import.meta.env.VITE_SERVER_URI}/user/signup`,
+        `${import.meta.env.VITE_SERVER_URI}/api/user/signup`,
         {
           email,
           password,
@@ -95,7 +95,7 @@ const Auth = () => {
     }
     try {
       const response: AxiosResponse<ApiResponse> = await axios.post(
-        `${import.meta.env.VITE_SERVER_URI}/user/login`,
+        `${import.meta.env.VITE_SERVER_URI}/api/user/login`,
         {
           email,
           password,

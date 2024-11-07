@@ -8,6 +8,7 @@ type User = {
   firstName: string;
   lastName: string;
   profileTheme: ProfileThemeKeys;
+  avatar: string;
 };
 
 export default User;

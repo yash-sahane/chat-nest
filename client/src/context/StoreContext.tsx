@@ -34,7 +34,7 @@ export const StoreContextProvider = ({
       console.log("fetching user");
 
       const response: AxiosResponse<ApiResponse> = await axios.get(
-        `${import.meta.env.VITE_SERVER_URI}/user/`,
+        `${import.meta.env.VITE_SERVER_URI}/api/user/`,
         { withCredentials: true }
       );
       const { data } = response;
