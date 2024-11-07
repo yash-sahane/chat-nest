@@ -4,6 +4,6 @@ import isAuthenticated from "../middleware/auth.js";
 
 const router = Router();
 
-router.get("/getProfiles", isAuthenticated, getAllProfiles);
+router.post("/getProfiles", isAuthenticated, getAllProfiles);
 
 export default router;

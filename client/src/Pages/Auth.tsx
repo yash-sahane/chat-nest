@@ -112,15 +112,15 @@ const Auth = () => {
         setEmail("");
         setPassword("");
         setConfirmPassword("");
-        toast.success(data.message);
+        toast.success(`Welcome back, ${data.data.firstName}`);
         setIsAuthenticated(true);
 
         if (data.data.profileSetup) {
-          console.log("going into true");
+          // console.log("going into true");
           navigate("/");
         } else {
           navigate(`/profile?email=${email}`);
-          console.log("going into false");
+          // console.log("going into false");
         }
       }
     } catch (e: any) {

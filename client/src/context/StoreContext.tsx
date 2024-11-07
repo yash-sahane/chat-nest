@@ -1,15 +1,15 @@
 import { ApiResponse } from "@/types/apiResponse";
 import getCookie from "@/types/getCookie";
+import User from "@/types/user";
 import { ProfileThemeKeys } from "@/utils/profileThemeKeys";
 import axios from "axios";
 import { AxiosResponse } from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-type User = object | undefined;
 type StoreContextType = {
-  user: User;
-  setUser: React.Dispatch<React.SetStateAction<object>>;
+  user: User | undefined;
+  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
   activeProfileTheme: ProfileThemeKeys;
   setActiveProfileTheme: React.Dispatch<React.SetStateAction<ProfileThemeKeys>>;
   isAuthenticated: boolean;
@@ -23,7 +23,7 @@ export const StoreContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [user, setUser] = useState<object>();
+  const [user, setUser] = useState<User>();
   const [activeProfileTheme, setActiveProfileTheme] =
     useState<ProfileThemeKeys>("violet");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
