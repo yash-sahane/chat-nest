@@ -64,7 +64,7 @@ const Auth = () => {
         }
       );
       const { data } = response;
-      console.log(data);
+      // console.log(data);
 
       if (data.success) {
         toast.success(data.message);
@@ -78,7 +78,7 @@ const Auth = () => {
           navigate("/");
         } else {
           navigate(`/profile?email=${email}`);
-          console.log("going into false");
+          // console.log("going into false");
         }
       }
     } catch (e: any) {
@@ -105,7 +105,7 @@ const Auth = () => {
         }
       );
       const { data } = response;
-      console.log(data);
+      // console.log(data);
 
       if (data.success) {
         setUser(data.data);

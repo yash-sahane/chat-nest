@@ -31,14 +31,14 @@ export const StoreContextProvider = ({
 
   useEffect(() => {
     const fetchUser = async () => {
-      console.log("fetching user");
+      // console.log("fetching user");
 
       const response: AxiosResponse<ApiResponse> = await axios.get(
         `${import.meta.env.VITE_SERVER_URI}/api/user/`,
         { withCredentials: true }
       );
       const { data } = response;
-      console.log(data);
+      // console.log(data);
 
       if (data.success) {
         setUser(data.data);
