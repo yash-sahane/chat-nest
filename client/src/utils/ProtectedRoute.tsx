@@ -1,6 +1,7 @@
-import { useStore } from "@/context/StoreContext";
+import { RootState } from "@/store/store";
 import getCookie from "@/types/getCookie";
 import React, { ReactNode } from "react";
+import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 type ProtectedRouteProps = {
@@ -8,7 +9,7 @@ type ProtectedRouteProps = {
 };
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
-  const { isAuthenticated } = useStore();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   return isAuthenticated ? element : <Navigate to="/auth" />;
 };

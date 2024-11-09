@@ -34,42 +34,53 @@ import { ApiResponse } from "@/types/apiResponse";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useStore } from "@/context/StoreContext";
 import ProfilesDialog from "@/components/ProfilesDialog";
 import { darkProfileTheme, lightProfileTheme } from "@/utils/profileTheme";
 import { useTheme } from "@/context/ThemeProvider";
+import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { useDispatch } from "react-redux";
+import { logout } from "@/slices/AuthApi";
 
 const Home = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>("");
   const [users, setUsers] = useState([]);
-  const { user } = useStore();
   const [searchTerm, setSearchTerm] = useState("");
   const emojiRef = useRef();
   const navigate = useNavigate();
-  const { setUser } = useStore();
   const [searchedUserLoading, setSearchedUserLoading] =
     useState<boolean>(false);
   const { theme } = useTheme();
+  const { user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
 
   const logoutHandler = async () => {
-    try {
-      const response: AxiosResponse<ApiResponse> = await axios.get(
-        `${import.meta.env.VITE_SERVER_URI}/api/user/logout`,
-        {
-          withCredentials: true,
-        }
-      );
-      const { data } = response;
+    const response = await dispatch(logout());
 
-      if (data.success) {
-        toast.success(data.message);
-        navigate("/auth");
-        setUser(undefined);
-      }
-    } catch (e: any) {
-      console.log(e.message);
+    if (logout.fulfilled.match(response)) {
+      toast.success(response.payload.message);
+      navigate("/auth");
+    } else {
+      toast.error(response.payload as string);
     }
+    // try {
+    //   const response: AxiosResponse<ApiResponse> = await axios.get(
+    //     `${import.meta.env.VITE_SERVER_URI}/api/user/logout`,
+    //     {
+    //       withCredentials: true,
+    //     }
+    //   );
+    //   const { data } = response;
+
+    //   if (data.success) {
+    //     toast.success(data.message);
+    //     navigate("/auth");
+    //     setUser(undefined);
+    //   }
+    // } catch (e: any) {
+    //   console.log(e.message);
+    // }
   };
 
   const emojiHandler = (emoji: EmojiClickData) => {

@@ -7,19 +7,18 @@ import appLogo from "../assets/app-logo.png";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import axios from "axios";
-import { AxiosResponse } from "axios";
-import { ApiResponse } from "@/types/apiResponse";
 import { useNavigate } from "react-router-dom";
 import ToggleTheme from "@/components/ToggleTheme";
-import { useStore } from "@/context/StoreContext";
+import { useDispatch } from "react-redux";
+import { login, signup } from "@/slices/AuthApi";
+import { AppDispatch } from "@/store/store";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
-  const { setIsAuthenticated, setUser } = useStore();
+  const dispatch = useDispatch<AppDispatch>();
 
   const validateSignup = () => {
     if (!validateLogin()) {
@@ -52,83 +51,119 @@ const Auth = () => {
     if (!validateSignup()) {
       return;
     }
-    try {
-      const response: AxiosResponse<ApiResponse> = await axios.post(
-        `${import.meta.env.VITE_SERVER_URI}/api/user/signup`,
-        {
-          email,
-          password,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      const { data } = response;
-      // console.log(data);
+    const response = await dispatch(signup({ email, password }));
+    if (signup.fulfilled.match(response)) {
+      const { message, data } = response.payload;
 
-      if (data.success) {
-        toast.success(data.message);
-        setUser(data.data);
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-        setIsAuthenticated(true);
-
-        if (data.data.profileSetup) {
-          navigate("/");
-        } else {
-          navigate(`/profile?email=${email}`);
-          // console.log("going into false");
-        }
+      toast.success(message);
+      if (data.profileSetup) {
+        navigate("/");
+      } else {
+        navigate(`/profile?email=${email}`);
       }
-    } catch (e: any) {
-      console.log(e);
-      if (e.response.data.message) {
-        toast.error(e.response.data.message);
+    } else {
+      if (response.payload) {
+        toast.error(response.payload as string);
       }
     }
+    // try {
+    //   const response: AxiosResponse<ApiResponse> = await axios.post(
+    //     `${import.meta.env.VITE_SERVER_URI}/api/user/signup`,
+    //     {
+    //       email,
+    //       password,
+    //     },
+    //     {
+    //       withCredentials: true,
+    //     }
+    //   );
+    //   const { data } = response;
+    //   // console.log(data);
+
+    //   if (data.success) {
+    //     toast.success(data.message);
+    //     setUser(data.data);
+    //     setEmail("");
+    //     setPassword("");
+    //     setConfirmPassword("");
+    //     setIsAuthenticated(true);
+
+    //     if (data.data.profileSetup) {
+    //       navigate("/");
+    //     } else {
+    //       navigate(`/profile?email=${email}`);
+    //       // console.log("going into false");
+    //     }
+    //   }
+    // } catch (e: any) {
+    //   console.log(e);
+    //   if (e.response.data.message) {
+    //     toast.error(e.response.data.message);
+    //   }
+    // }
   };
 
   const loginHandler = async () => {
     if (!validateLogin()) {
       return;
     }
-    try {
-      const response: AxiosResponse<ApiResponse> = await axios.post(
-        `${import.meta.env.VITE_SERVER_URI}/api/user/login`,
-        {
-          email,
-          password,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      const { data } = response;
-      // console.log(data);
 
-      if (data.success) {
-        setUser(data.data);
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-        toast.success(`Welcome back, ${data.data.firstName}`);
-        setIsAuthenticated(true);
+    const response = await dispatch(login({ email, password }));
+    if (login.fulfilled.match(response)) {
+      console.log("matched");
 
-        if (data.data.profileSetup) {
-          // console.log("going into true");
-          navigate("/");
-        } else {
-          navigate(`/profile?email=${email}`);
-          // console.log("going into false");
-        }
+      const { firstName, profileSetup } = response.payload;
+
+      toast.success(`Welcome back ${firstName}`);
+      setEmail("");
+      setPassword("");
+      if (profileSetup) {
+        navigate("/");
+      } else {
+        navigate(`/profile?email=${email}`);
       }
-    } catch (e: any) {
-      console.log(e);
-      if (e.response.data.message) {
-        toast.error(e.response.data.message);
+    } else {
+      if (response.payload) {
+        toast.error(response.payload as string);
       }
     }
+
+    // try {
+    //   const response: AxiosResponse<ApiResponse> = await axios.post(
+    //     `${import.meta.env.VITE_SERVER_URI}/api/user/login`,
+    //     {
+    //       email,
+    //       password,
+    //     },
+    //     {
+    //       withCredentials: true,
+    //     }
+    //   );
+    //   const { data } = response;
+    //   console.log(data);
+
+    //   if (data.success) {
+    //     setUser(data.data);
+    //     setEmail("");
+    //     setPassword("");
+    //     setConfirmPassword("");
+    //     toast.success(`Welcome back, ${data.data.firstName}`);
+    //     setIsAuthenticated(true);
+
+    //     if (data.data.profileSetup) {
+    //       // console.log("going into true");
+    //       navigate("/");
+    //     } else {
+    //       navigate(`/profile?email=${email}`);
+    //       // console.log("going into false");
+    //     }
+    //   }
+    // } catch (e: any) {
+    //   console.log(e);
+    //   if (e.response.data.message) {
+    //     toast.error(e.response.data.message);
+    //   }
+    // }
   };
 
   return (
