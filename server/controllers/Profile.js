@@ -14,7 +14,8 @@ export const getAllProfiles = async (req, res, next) => {
     const profiles = await User.find({
       $and: [
         { _id: { $ne: req.user.id } },
-        { $or: [{ firstName: regex }, { lastName: regex }, { email: regex }] },
+        { profileSetup: true },
+        { $or: [{ firstName: regex }, { lastName: regex }] },
       ],
     });
 

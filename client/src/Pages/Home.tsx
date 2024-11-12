@@ -41,6 +41,7 @@ import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch } from "react-redux";
 import { logout } from "@/slices/AuthApi";
+import UserProfile from "@/utils/UserProfile";
 
 const Home = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
@@ -53,6 +54,7 @@ const Home = () => {
     useState<boolean>(false);
   const { theme } = useTheme();
   const { user } = useSelector((state: RootState) => state.auth);
+  const { selectedChatData } = useSelector((state: RootState) => state.chat);
   const dispatch = useDispatch<AppDispatch>();
 
   const logoutHandler = async () => {
@@ -64,23 +66,6 @@ const Home = () => {
     } else {
       toast.error(response.payload as string);
     }
-    // try {
-    //   const response: AxiosResponse<ApiResponse> = await axios.get(
-    //     `${import.meta.env.VITE_SERVER_URI}/api/user/logout`,
-    //     {
-    //       withCredentials: true,
-    //     }
-    //   );
-    //   const { data } = response;
-
-    //   if (data.success) {
-    //     toast.success(data.message);
-    //     navigate("/auth");
-    //     setUser(undefined);
-    //   }
-    // } catch (e: any) {
-    //   console.log(e.message);
-    // }
   };
 
   const emojiHandler = (emoji: EmojiClickData) => {
@@ -104,14 +89,6 @@ const Home = () => {
       toast.error(e.response.data.message);
     }
   };
-
-  // const userSearchHandler = (searchTerm: string) => {
-  //   !searchTerm.length
-  //     ? setUsers([])
-  //     : setTimeout(() => {
-  //         getProfiles(searchTerm);
-  //       }, 2000);
-  // };
 
   useEffect(() => {
     const handleClickOutside = () => {
@@ -144,7 +121,7 @@ const Home = () => {
 
   useEffect(() => {
     console.log(user);
-  }, [user]);
+  }, []);
 
   const userProfile = () => {
     const borderColor = user?.avatar
@@ -252,50 +229,54 @@ const Home = () => {
         </div>
       </div>
       <div className="custom-transition bg-[hsl(var(--chat-bg))] w-4/5 rounded-2xl p-3">
-        <div className="rounded-2xl flex gap-3 items-center p-2 py-3 transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]">
-          <div className="relative max-w-[38px] max-h-[38px] min-w-[38px] min-h-[38px]">
-            <img src={profileLogo} className="rounded-full w-full" />
-            <span className="absolute bottom-0 right-0 bg-[hsl(var(--status-online))] h-2 w-2 rounded-full"></span>
-          </div>
-          <div className="flex flex-col gap-1 w-full">
-            <div className="flex justify-between">
-              <p className="font-semibold text-sm">Omkar Khodse</p>
+        {selectedChatData && (
+          <>
+            <div className="rounded-2xl flex gap-3 items-center p-2 py-3 transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]">
+              <UserProfile userProfile={selectedChatData} />
+              <div className="flex flex-col gap-1 w-full">
+                <div className="flex justify-between">
+                  <p className="font-semibold text-sm">{`${selectedChatData.firstName} ${selectedChatData.lastName}`}</p>
+                </div>
+                <div className="flex justify-between">
+                  <p className="text-sm text-gray-500">Online</p>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <p className="text-sm text-gray-500">Online</p>
-            </div>
-          </div>
-        </div>
-        <div className="h-[calc(100%-128px)]"></div>
-        <div className="relative transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))] h-[52px] rounded-2xl mt-2">
-          <div className="absolute h-full flex gap-3 items-center right-[95px]">
-            <Paperclip size={20} />
-            <Smile onClick={() => setShowEmojiPicker((prev) => !prev)} />
-          </div>
-          {showEmojiPicker && (
-            <div className="absolute bottom-[45px] right-[95px]" ref={emojiRef}>
-              <EmojiPicker
-                onEmojiClick={emojiHandler}
-                theme={Theme.DARK}
-                lazyLoadEmojis={true}
-                emojiStyle={EmojiStyle.GOOGLE}
-                previewConfig={{ showPreview: false }}
+            <div className="h-[calc(100%-128px)]"></div>
+            <div className="relative transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))] h-[52px] rounded-2xl mt-2">
+              <div className="absolute h-full flex gap-3 items-center right-[95px]">
+                <Paperclip size={20} />
+                <Smile onClick={() => setShowEmojiPicker((prev) => !prev)} />
+              </div>
+              {showEmojiPicker && (
+                <div
+                  className="absolute bottom-[45px] right-[95px]"
+                  ref={emojiRef}
+                >
+                  <EmojiPicker
+                    onEmojiClick={emojiHandler}
+                    theme={Theme.DARK}
+                    lazyLoadEmojis={true}
+                    emojiStyle={EmojiStyle.GOOGLE}
+                    previewConfig={{ showPreview: false }}
+                  />
+                </div>
+              )}
+              <Input
+                type="text"
+                className="custom-transition pr-[80px] h-full w-full bg-transparent placeholder:text-sm placeholder:text-gray-500 rounded-lg"
+                placeholder="Search message..."
+                onChange={(e) => setMsg(e.target.value)}
+                value={msg}
               />
+              <div className=" absolute right-2 top-[8px] bg-[hsl(var(--chat-secondary))]">
+                <Button className="flex gap-1 py-2 px-2 h-fit">
+                  Send <Send size={18} />
+                </Button>
+              </div>
             </div>
-          )}
-          <Input
-            type="text"
-            className="custom-transition pr-[80px] h-full w-full bg-transparent placeholder:text-sm placeholder:text-gray-500 rounded-lg"
-            placeholder="Search message..."
-            onChange={(e) => setMsg(e.target.value)}
-            value={msg}
-          />
-          <div className=" absolute right-2 top-[8px] bg-[hsl(var(--chat-secondary))]">
-            <Button className="flex gap-1 py-2 px-2 h-fit">
-              Send <Send size={18} />
-            </Button>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </div>
   );

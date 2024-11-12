@@ -52,6 +52,7 @@ const Auth = () => {
       return;
     }
     const response = await dispatch(signup({ email, password }));
+
     if (signup.fulfilled.match(response)) {
       const { message, data } = response.payload;
 
@@ -64,6 +65,8 @@ const Auth = () => {
     } else {
       if (response.payload) {
         toast.error(response.payload as string);
+      } else {
+        toast.error(response.error.message as string);
       }
     }
     // try {
@@ -109,6 +112,8 @@ const Auth = () => {
     }
 
     const response = await dispatch(login({ email, password }));
+
+    console.log(response);
     if (login.fulfilled.match(response)) {
       console.log("matched");
 
@@ -125,6 +130,8 @@ const Auth = () => {
     } else {
       if (response.payload) {
         toast.error(response.payload as string);
+      } else {
+        toast.error(response.error.message as string);
       }
     }
 

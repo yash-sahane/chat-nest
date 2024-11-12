@@ -89,6 +89,9 @@
   .animation-drop-in {
     animation: drop-in 0.3s ease 200ms backwards;
   }
+  .reset-classes {
+    all: unset !important;
+  }
   @keyframes drop-in {
     from {
       opacity: 0;

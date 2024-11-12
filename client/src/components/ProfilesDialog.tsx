@@ -18,6 +18,11 @@ import User from "@/types/user";
 import UserSkeleton from "./UserSkeleton";
 import { useTheme } from "@/context/ThemeProvider";
 import { darkProfileTheme, lightProfileTheme } from "@/utils/profileTheme";
+import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import UserProfile from "@/utils/UserProfile";
+import { useDispatch } from "react-redux";
+import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
 
 function ProfilesDialog({
   users,
@@ -32,7 +37,12 @@ function ProfilesDialog({
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
   searchedUserLoading: boolean;
 }) {
-  const { theme } = useTheme();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const chatSelectHandler = (userProfile: User) => {
+    dispatch(setSelectedChatData(userProfile));
+    dispatch(setSelectedChatType("chat"));
+  };
 
   return (
     <AlertDialog>
@@ -62,43 +72,22 @@ function ProfilesDialog({
             )}
             {users.map((user) => {
               return (
-                <div className="rounded-2xl flex gap-3 items-center p-2 py-3 cursor-pointer transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]">
+                <AlertDialogCancel className="reset-classes">
                   <div
-                    className={`relative max-w-[38px] max-h-[38px] min-w-[38px] min-h-[38px]`}
+                    className="rounded-2xl flex gap-3 items-center p-2 py-3 cursor-pointer transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]"
+                    onClick={() => chatSelectHandler(user)}
                   >
-                    {user?.avatar ? (
-                      <img
-                        src={`${import.meta.env.VITE_SERVER_URI}/profiles/${
-                          user?.avatar
-                        }`}
-                        className="rounded-full w-full"
-                      />
-                    ) : (
-                      <div
-                        className="bg-[hsl(var(--secondary))] text-5xl w-48 h-48 flex items-center justify-center border border-border rounded-full transition-all duration-300 ease-linear custom-transition relative overflow-hidden"
-                        style={{
-                          background:
-                            theme === "dark"
-                              ? darkProfileTheme[user.profileTheme].bg
-                              : lightProfileTheme[user.profileTheme].bg,
-                          border: `2px solid ${
-                            darkProfileTheme[user.profileTheme].border
-                          }`,
-                          color: darkProfileTheme[user.profileTheme].border,
-                        }}
-                      />
-                    )}
-                    <span className="absolute bottom-0 right-0 bg-[hsl(var(--status-online))] h-2 w-2 rounded-full"></span>
-                  </div>
-                  <div className="flex flex-col gap-1 w-full">
-                    <div className="flex justify-between">
-                      <p className="font-semibold text-sm">{`${user.firstName} ${user.lastName}`}</p>
-                    </div>
-                    <div className="flex justify-between">
-                      <p className="text-sm text-gray-500">Online</p>
+                    <UserProfile user={user} />
+                    <div className="flex flex-col gap-1 w-full">
+                      <div className="flex justify-between">
+                        <p className="font-semibold text-sm">{`${user.firstName} ${user.lastName}`}</p>
+                      </div>
+                      <div className="flex justify-between">
+                        <p className="text-sm text-gray-500">Online</p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </AlertDialogCancel>
               );
             })}
             <div>

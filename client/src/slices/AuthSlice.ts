@@ -1,7 +1,7 @@
 import User from "@/types/user";
 import { ProfileThemeKeys } from "@/utils/profileThemeKeys";
 import { createSlice } from "@reduxjs/toolkit";
-import { login, logout, signup } from "./AuthApi";
+import { fetchUser, login, logout, setup, signup } from "./AuthApi";
 
 type InitialState = {
   user: User | undefined;
@@ -22,7 +22,11 @@ const initialState: InitialState = {
 const AuthSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    setActiveProfileTheme: (state, action) => {
+      state.activeProfileTheme = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       //login
@@ -60,8 +64,32 @@ const AuthSlice = createSlice({
       })
       .addCase(logout.rejected, (state) => {
         state.loading = false;
+      })
+      .addCase(setup.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setup.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.data;
+      })
+      .addCase(setup.rejected, (state) => {
+        state.loading = false;
+      })
+      // fetch user
+      .addCase(fetchUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload;
+      })
+      .addCase(fetchUser.rejected, (state) => {
+        state.loading = false;
       });
   },
 });
+
+export const { setActiveProfileTheme } = AuthSlice.actions;
 
 export default AuthSlice.reducer;

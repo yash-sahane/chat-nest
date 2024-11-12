@@ -6,14 +6,16 @@ import connectDB from "./database/db.js";
 import ErrorHandler, { errMiddleware } from "./middleware/error.js";
 import userRouter from "./routes/User.js";
 import profileRouter from "./routes/Profile.js";
+import { createServer } from "http";
 
 const app = express();
+export const server = createServer(app);
 connectDB();
 
 config();
 
 const port = process.env.PORT || 3001;
-app.listen(port, () => {
+server.listen(port, () => {
   console.log("Server is running on port " + port);
 });
 

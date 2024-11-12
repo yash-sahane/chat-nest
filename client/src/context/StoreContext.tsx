@@ -29,33 +29,6 @@ export const StoreContextProvider = ({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      // console.log("fetching user");
-
-      const response: AxiosResponse<ApiResponse> = await axios.get(
-        `${import.meta.env.VITE_SERVER_URI}/api/user/`,
-        { withCredentials: true }
-      );
-      const { data } = response;
-      // console.log(data);
-
-      if (data.success) {
-        setUser(data.data);
-        setIsAuthenticated(true);
-        if (data.data.profileSetup) {
-          navigate("/");
-        }
-      }
-    };
-
-    if (getCookie("jwt")) {
-      fetchUser();
-    } else {
-      localStorage.removeItem("isAuthenticated");
-    }
-  }, []);
-
   return (
     <StoreContext.Provider
       value={{

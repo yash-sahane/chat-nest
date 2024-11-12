@@ -4,16 +4,18 @@ import appLogo from "../assets/app-logo.png";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { Camera, Moon, Sun, Trash } from "lucide-react";
 import { useTheme } from "@/context/ThemeProvider";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { AxiosResponse } from "axios";
-import { ApiResponse } from "@/types/apiResponse";
 import { useNavigate } from "react-router-dom";
 import profileThemeKeys from "@/utils/profileThemeKeys";
 import { darkProfileTheme, lightProfileTheme } from "@/utils/profileTheme";
-import { useStore } from "@/context/StoreContext";
 import ToggleTheme from "@/components/ToggleTheme";
+import { useDispatch } from "react-redux";
+import { setup } from "@/slices/AuthApi";
+import { AppDispatch, RootState } from "@/store/store";
+import { useSelector } from "react-redux";
+import { setActiveProfileTheme } from "@/slices/AuthSlice";
 
 const Profile = () => {
   const { theme, setTheme } = useTheme();
@@ -23,7 +25,8 @@ const Profile = () => {
   const navigate = useNavigate();
   const params = new URLSearchParams(location.search);
   const email = params.get("email");
-  const { activeProfileTheme, setActiveProfileTheme } = useStore();
+  const dispatch = useDispatch<AppDispatch>();
+  const { activeProfileTheme } = useSelector((state: RootState) => state.auth);
 
   const themeHandler = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -49,35 +52,28 @@ const Profile = () => {
     if (!validateProfile()) {
       return;
     }
-    try {
-      const formData = new FormData();
-      profileImg && formData.append("image", profileImg);
-      formData.append("firstName", fname);
-      formData.append("lastName", lname);
-      formData.append("profileTheme", activeProfileTheme);
 
-      const response: AxiosResponse<ApiResponse> = await axios.post(
-        `${import.meta.env.VITE_SERVER_URI}/api/user/setup`,
-        formData,
-        {
-          withCredentials: true,
-        }
-      );
-      const { data } = response;
-      // console.log(data);
+    const formData = new FormData();
+    profileImg && formData.append("image", profileImg);
+    formData.append("firstName", fname);
+    formData.append("lastName", lname);
+    formData.append("profileTheme", activeProfileTheme);
 
-      if (data.success) {
-        setFname("");
-        setLname("");
-        toast.success(data.message);
-        if (data.data.profileSetup) {
-          navigate("/");
-        }
+    const response = await dispatch(setup({ formData }));
+    if (setup.fulfilled.match(response)) {
+      setFname("");
+      setLname("");
+
+      const { message, data } = response.payload;
+      toast.success(message);
+      if (data.profileSetup) {
+        navigate("/");
       }
-    } catch (e: any) {
-      console.log(e);
-      if (e.response.data.message) {
-        toast.error(e.response.data.message);
+    } else {
+      if (response.payload) {
+        toast.error(response.payload as string);
+      } else {
+        toast.error(response.error.message as string);
       }
     }
   };
@@ -189,7 +185,9 @@ const Profile = () => {
                 <div className="flex gap-2">
                   {profileThemeKeys.map((profileThemeColor, index) => (
                     <div
-                      onClick={() => setActiveProfileTheme(profileThemeColor)}
+                      onClick={() =>
+                        dispatch(setActiveProfileTheme(profileThemeColor))
+                      }
                       key={index}
                       className="h-8 w-8 rounded-full transition-all duration-150 ease-linear custom-transition"
                       style={{
