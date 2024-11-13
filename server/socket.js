@@ -9,6 +9,20 @@ const io = new Server(server, {
   },
 });
 
+const userSocketMap = new Map();
 io.on("connection", (socket) => {
-  console.log(socket.id);
+  const userId = socket.handshake.query.userId;
+  if (userId) {
+    userSocketMap.set(userId, socket.id);
+    console.log(`${userId} has been connected with socket id ${socket.id}`);
+  } else {
+    console.log("User id not provided during connection");
+  }
+
+  socket.on("disconnect", () => {
+    console.log(`Client disconnected : ${socket.id}`);
+    userSocketMap.delete(userId);
+  });
 });
+
+export default io;
