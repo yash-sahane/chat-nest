@@ -1,7 +1,6 @@
 import { RootState } from "@/store/store";
 import {
   createContext,
-  ReactElement,
   ReactNode,
   useContext,
   useEffect,
@@ -34,7 +33,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         }
       );
       setSocket(newSocket);
-      socket?.on("connect", () => {
+      newSocket?.on("connect", () => {
         console.log("connected to the server");
       });
 
