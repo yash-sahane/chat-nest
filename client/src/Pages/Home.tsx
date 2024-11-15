@@ -1,10 +1,8 @@
 import {
   LogOut,
-  MessageCircleMore,
   MessageSquarePlus,
   MessageSquareText,
   Paperclip,
-  Plus,
   Search,
   Send,
   Smile,
@@ -21,7 +19,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import profileLogo from "@/assets/app-logo.png";
 import { Button } from "@/components/ui/button";
 import EmojiPicker, {
   Theme,
@@ -30,7 +27,7 @@ import EmojiPicker, {
 } from "emoji-picker-react";
 import { useEffect, useRef, useState } from "react";
 import { AxiosResponse } from "axios";
-import { ApiResponse } from "@/types/apiResponse";
+import { ApiResponse } from "@/types";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -42,6 +39,7 @@ import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch } from "react-redux";
 import { logout } from "@/slices/AuthApi";
 import UserProfile from "@/utils/UserProfile";
+import { useSocket } from "@/context/SocketProvier";
 
 const Home = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
@@ -56,6 +54,7 @@ const Home = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { selectedChatData } = useSelector((state: RootState) => state.chat);
   const dispatch = useDispatch<AppDispatch>();
+  const { socket } = useSocket();
 
   const logoutHandler = async () => {
     const response = await dispatch(logout());
@@ -71,6 +70,10 @@ const Home = () => {
   const emojiHandler = (emoji: EmojiClickData) => {
     setMsg((msg) => msg + emoji.emoji);
     setShowEmojiPicker(false);
+  };
+
+  const sendMsgHandler = () => {
+    socket.on("sendMessage");
   };
 
   const getProfiles = async () => {
@@ -118,10 +121,6 @@ const Home = () => {
       setSearchedUserLoading(false);
     };
   }, [searchTerm]);
-
-  useEffect(() => {
-    console.log(user);
-  }, []);
 
   const userProfile = () => {
     const borderColor = user?.avatar
@@ -270,7 +269,10 @@ const Home = () => {
                 value={msg}
               />
               <div className=" absolute right-2 top-[8px] bg-[hsl(var(--chat-secondary))]">
-                <Button className="flex gap-1 py-2 px-2 h-fit">
+                <Button
+                  className="flex gap-1 py-2 px-2 h-fit"
+                  onClick={sendMsgHandler}
+                >
                   Send <Send size={18} />
                 </Button>
               </div>

@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/types/apiResponse";
+import { ApiResponse } from "@/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { AxiosResponse } from "axios";

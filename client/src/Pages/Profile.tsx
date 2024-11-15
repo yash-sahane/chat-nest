@@ -2,11 +2,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import appLogo from "../assets/app-logo.png";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
-import { Camera, Moon, Sun, Trash } from "lucide-react";
+import { Camera, Trash } from "lucide-react";
 import { useTheme } from "@/context/ThemeProvider";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import profileThemeKeys from "@/utils/profileThemeKeys";
 import { darkProfileTheme, lightProfileTheme } from "@/utils/profileTheme";
@@ -18,7 +17,7 @@ import { useSelector } from "react-redux";
 import { setActiveProfileTheme } from "@/slices/AuthSlice";
 
 const Profile = () => {
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [profileImg, setProfileImg] = useState<File>();
@@ -27,10 +26,6 @@ const Profile = () => {
   const email = params.get("email");
   const dispatch = useDispatch<AppDispatch>();
   const { activeProfileTheme } = useSelector((state: RootState) => state.auth);
-
-  const themeHandler = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
 
   const validateProfile = () => {
     if (!email) {

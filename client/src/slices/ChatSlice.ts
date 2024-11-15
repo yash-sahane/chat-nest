@@ -1,10 +1,10 @@
-import User from "@/types/user";
+import { Message, User } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 
 type InitialState = {
   selectedChatType: "chat" | "group" | undefined;
   selectedChatData: User | undefined;
-  selectedChatMessages: [];
+  selectedChatMessages: Message[] | [];
 };
 
 const initialState: InitialState = {
@@ -24,7 +24,14 @@ const ChatSlice = createSlice({
       state.selectedChatData = action.payload;
     },
     setSelectedChatMessages: (state, action) => {
-      state.selectedChatMessages = action.payload;
+      state.selectedChatMessages = [
+        ...state.selectedChatMessages,
+        {
+          ...action.payload,
+          sender: action.payload.sender._id,
+          recipient: action.payload.recipient._id,
+        },
+      ];
     },
   },
 });

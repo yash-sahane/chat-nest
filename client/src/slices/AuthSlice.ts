@@ -1,5 +1,5 @@
-import User from "@/types/user";
-import { ProfileThemeKeys } from "@/utils/profileThemeKeys";
+import { User } from "@/types";
+import { ProfileThemeKeys } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchUser, login, logout, setup, signup } from "./AuthApi";
 

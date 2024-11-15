@@ -1,5 +1,5 @@
 import { ApiResponse } from "@/types/apiResponse";
-import getCookie from "@/types/getCookie";
+import getCookie from "@/utils/getCookie";
 import User from "@/types/user";
 import { ProfileThemeKeys } from "@/utils/profileThemeKeys";
 import axios from "axios";

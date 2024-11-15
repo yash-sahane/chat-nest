@@ -1,6 +1,6 @@
 import { darkProfileTheme, lightProfileTheme } from "@/utils/profileTheme";
 import { useTheme } from "@/context/ThemeProvider";
-import User from "@/types/user";
+import { User } from "@/types";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 

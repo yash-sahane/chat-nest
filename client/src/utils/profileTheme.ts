@@ -1,4 +1,4 @@
-import ProfileTheme from "@/types/themeKeys";
+import { ProfileTheme } from "@/types";
 
 export const darkProfileTheme: ProfileTheme = {
   violet: {

@@ -11,7 +11,7 @@ import { Toaster } from "react-hot-toast";
 import Home from "./Pages/Home";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import { StoreContextProvider } from "./context/StoreContext";
-import getCookie from "./types/getCookie";
+import getCookie from "./utils/getCookie";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "./store/store";

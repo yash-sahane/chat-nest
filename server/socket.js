@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import Message from "./model/Message";
+import Message from "./model/Message.js";
 
 const setupSocket = (server) => {
   const io = new Server(server, {
@@ -10,14 +10,26 @@ const setupSocket = (server) => {
     },
   });
 
-  const sendMessage = async (message) => {
-    const senderSocketId = userSocketMap.get(message.sender);
-    const recipientSocketId = userSocketMap.get(message.recipient);
+  const userSocketMap = new Map();
 
-    const createMessage = await Message.create(message);
+  const sendMessage = async (message) => {
+    console.log(message);
+
+    const senderSocketId = userSocketMap.get(message.senderId);
+    const recipientSocketId = userSocketMap.get(message.recipientId);
+
+    const newMessage = (await Message.create(message))
+      .populate("sender", "id email firstName lastName avatar profileTheme")
+      .populate("recipient", "id email firstName lastName avatar profileTheme");
+
+    if (senderSocketId) {
+      io.to(senderSocketId).emit("receiveMessage", newMessage);
+    }
+    if (recipientSocketId) {
+      io.to(recipientSocketId).emit("receiveMessage", newMessage);
+    }
   };
 
-  const userSocketMap = new Map();
   io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId;
     if (userId) {

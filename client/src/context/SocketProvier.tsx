@@ -1,4 +1,6 @@
-import { RootState } from "@/store/store";
+import { setSelectedChatMessages } from "@/slices/ChatSlice";
+import { AppDispatch, RootState } from "@/store/store";
+import { Message } from "@/types";
 import {
   createContext,
   ReactNode,
@@ -6,6 +8,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { io, Socket } from "socket.io-client";
 
@@ -17,13 +20,22 @@ const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useSelector((state: RootState) => state.auth);
+  const { selectedChatData } = useSelector((state: RootState) => state.chat);
+  const dispatch = useDispatch<AppDispatch>();
 
   const [socket, setSocket] = useState<typeof Socket | null>(null);
 
-  useEffect(() => {
-    // console.log("working");
+  const receiveMessageHandler = (message: Message) => {
+    if (
+      selectedChatData !== undefined &&
+      (selectedChatData._id === message.sender._id ||
+        selectedChatData._id === message.recipient._id)
+    ) {
+      dispatch(setSelectedChatMessages(message));
+    }
+  };
 
-    // console.log(user);
+  useEffect(() => {
     if (user) {
       let newSocket = io(
         import.meta.env.VITE_SERVER_URI || "http://localhost:3000",
@@ -36,6 +48,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       newSocket?.on("connect", () => {
         console.log("connected to the server");
       });
+
+      newSocket.on("receiveMessage", receiveMessageHandler);
 
       return () => {
         newSocket.close();
