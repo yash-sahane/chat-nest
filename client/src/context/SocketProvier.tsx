@@ -6,9 +6,11 @@ import {
   ReactNode,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { useDispatch } from "react-redux";
+import { useStore } from "react-redux";
 import { useSelector } from "react-redux";
 import { io, Socket } from "socket.io-client";
 
@@ -20,17 +22,28 @@ const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useSelector((state: RootState) => state.auth);
-  const { selectedChatData } = useSelector((state: RootState) => state.chat);
   const dispatch = useDispatch<AppDispatch>();
+  const { selectedChatData } = useSelector((state: RootState) => state.chat);
+  const selectedChatDataRef = useRef(selectedChatData);
 
   const [socket, setSocket] = useState<typeof Socket | null>(null);
 
   const receiveMessageHandler = (message: Message) => {
+    console.log(
+      selectedChatDataRef.current !== undefined,
+      " ",
+      selectedChatDataRef.current?._id === message.sender._id,
+      " ",
+      selectedChatDataRef.current?._id === message.recipient._id
+    );
+
     if (
-      selectedChatData !== undefined &&
-      (selectedChatData._id === message.sender._id ||
-        selectedChatData._id === message.recipient._id)
+      selectedChatDataRef.current !== undefined &&
+      (selectedChatDataRef.current._id === message.sender._id ||
+        selectedChatDataRef.current._id === message.recipient._id)
     ) {
+      console.log("working");
+
       dispatch(setSelectedChatMessages(message));
     }
   };
@@ -56,6 +69,10 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       };
     }
   }, [user]);
+
+  useEffect(() => {
+    selectedChatDataRef.current = selectedChatData;
+  }, [selectedChatData]);
 
   return (
     <SocketContext.Provider value={{ socket }}>

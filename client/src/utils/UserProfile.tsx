@@ -4,11 +4,7 @@ import { User } from "@/types";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
-type UserProfileProps = {
-  userProfile?: User;
-};
-
-const UserProfile = ({ userProfile }: UserProfileProps) => {
+const UserProfile = ({ userProfile }: { userProfile: User }) => {
   let { user } = useSelector((state: RootState) => state.auth);
   user = userProfile ? userProfile : user;
   const { theme } = useTheme();

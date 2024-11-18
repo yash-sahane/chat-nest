@@ -3,12 +3,12 @@ import mongoose, { Schema } from "mongoose";
 const messageSchema = new Schema({
   sender: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "user",
     required: true,
   },
   recipient: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "user",
     required: false,
   },
   messageType: {
@@ -18,14 +18,20 @@ const messageSchema = new Schema({
   },
   content: {
     type: String,
-    required: () => {
-      return this.messageType === "text";
+    required: {
+      validate: {
+        validator: function (value) {
+          return this.messageType === "text" ? true : false;
+        },
+      },
     },
   },
   fileURL: {
     type: String,
-    required: () => {
-      return this.messageType === "file";
+    validate: {
+      validator: function (value) {
+        return this.messageType === "text" ? false : true;
+      },
     },
   },
   timeStamp: {

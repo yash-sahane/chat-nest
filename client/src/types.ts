@@ -43,3 +43,13 @@ export type Message = {
   fileURL: string;
   timeStamp: Date;
 };
+
+export type ChatMsg = {
+  _id: string;
+  sender: string;
+  recipient: string;
+  messageType: "text" | "file";
+  content: string;
+  fileURL: string;
+  timeStamp: Date;
+};

@@ -1,25 +1,19 @@
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Input } from "./ui/input";
 import { Search, X } from "lucide-react";
-import profileLogo from "@/assets/app-logo.png";
 import searchGif from "@/assets/people-search-animate.svg";
 import notFoundSVG from "@/assets/404 Error-cuate.svg";
-import User from "@/types/user";
+import { User } from "@/types";
 import UserSkeleton from "./UserSkeleton";
-import { useTheme } from "@/context/ThemeProvider";
-import { darkProfileTheme, lightProfileTheme } from "@/utils/profileTheme";
-import { useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store/store";
+import { AppDispatch } from "@/store/store";
 import UserProfile from "@/utils/UserProfile";
 import { useDispatch } from "react-redux";
 import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
@@ -72,12 +66,12 @@ function ProfilesDialog({
             )}
             {users.map((user) => {
               return (
-                <AlertDialogCancel className="reset-classes">
+                <AlertDialogCancel className="reset-classes" key={user._id}>
                   <div
                     className="rounded-2xl flex gap-3 items-center p-2 py-3 cursor-pointer transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]"
                     onClick={() => chatSelectHandler(user)}
                   >
-                    <UserProfile user={user} />
+                    <UserProfile userProfile={user} />
                     <div className="flex flex-col gap-1 w-full">
                       <div className="flex justify-between">
                         <p className="font-semibold text-sm">{`${user.firstName} ${user.lastName}`}</p>
@@ -136,10 +130,6 @@ function ProfilesDialog({
             </div>
           </div>
         </AlertDialogHeader>
-        {/* <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
-        </AlertDialogFooter> */}
       </AlertDialogContent>
     </AlertDialog>
   );

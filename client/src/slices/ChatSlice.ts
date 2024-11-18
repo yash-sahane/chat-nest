@@ -1,10 +1,10 @@
-import { Message, User } from "@/types";
+import { ChatMsg, Message, User } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 
 type InitialState = {
   selectedChatType: "chat" | "group" | undefined;
   selectedChatData: User | undefined;
-  selectedChatMessages: Message[] | [];
+  selectedChatMessages: ChatMsg[] | [];
 };
 
 const initialState: InitialState = {

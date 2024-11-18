@@ -15,18 +15,22 @@ const setupSocket = (server) => {
   const sendMessage = async (message) => {
     console.log(message);
 
-    const senderSocketId = userSocketMap.get(message.senderId);
-    const recipientSocketId = userSocketMap.get(message.recipientId);
+    const senderSocketId = userSocketMap.get(message.sender);
+    const recipientSocketId = userSocketMap.get(message.recipient);
 
-    const newMessage = (await Message.create(message))
+    const newMessage = await Message.create(message);
+
+    // Find the created message to get a Mongoose document
+    const populatedMessage = await Message.findById(newMessage._id)
       .populate("sender", "id email firstName lastName avatar profileTheme")
-      .populate("recipient", "id email firstName lastName avatar profileTheme");
+      .populate("recipient", "id email firstName lastName avatar profileTheme")
+      .exec();
 
     if (senderSocketId) {
-      io.to(senderSocketId).emit("receiveMessage", newMessage);
+      io.to(senderSocketId).emit("receiveMessage", populatedMessage);
     }
     if (recipientSocketId) {
-      io.to(recipientSocketId).emit("receiveMessage", newMessage);
+      io.to(recipientSocketId).emit("receiveMessage", populatedMessage);
     }
   };
 
