@@ -53,3 +53,14 @@ export type ChatMsg = {
   fileURL: string;
   timeStamp: Date;
 };
+
+export type DMProfile = {
+  _id: string;
+  lastMessageTime: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  profileTheme: ProfileThemeKeys;
+  avatar: string;
+  lastMessage: string;
+};

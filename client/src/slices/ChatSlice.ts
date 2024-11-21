@@ -1,16 +1,19 @@
 import { ChatMsg, Message, User } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
+import { getChatMessages } from "./ChatApi";
 
 type InitialState = {
   selectedChatType: "chat" | "group" | undefined;
   selectedChatData: User | undefined;
   selectedChatMessages: ChatMsg[] | [];
+  loading: boolean;
 };
 
 const initialState: InitialState = {
   selectedChatType: undefined,
   selectedChatData: undefined,
   selectedChatMessages: [],
+  loading: false,
 };
 
 const ChatSlice = createSlice({
@@ -33,6 +36,19 @@ const ChatSlice = createSlice({
         },
       ];
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getChatMessages.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getChatMessages.fulfilled, (state, action) => {
+        state.selectedChatMessages = action.payload;
+        state.loading = false;
+      })
+      .addCase(getChatMessages.rejected, (state) => {
+        state.loading = false;
+      });
   },
 });
 

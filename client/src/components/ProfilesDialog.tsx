@@ -17,6 +17,7 @@ import { AppDispatch } from "@/store/store";
 import UserProfile from "@/utils/UserProfile";
 import { useDispatch } from "react-redux";
 import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
+import { getChatMessages } from "@/slices/ChatApi";
 
 function ProfilesDialog({
   users,
@@ -33,9 +34,11 @@ function ProfilesDialog({
 }) {
   const dispatch = useDispatch<AppDispatch>();
 
-  const chatSelectHandler = (userProfile: User) => {
+  const chatSelectHandler = async (userProfile: User) => {
     dispatch(setSelectedChatData(userProfile));
     dispatch(setSelectedChatType("chat"));
+
+    dispatch(getChatMessages({ id: userProfile._id }));
   };
 
   return (

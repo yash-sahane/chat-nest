@@ -23,10 +23,10 @@ export const getInfo = async (req, res) => {
 
 export const login = async (req, res, next) => {
   try {
-    console.log("working");
+    // console.log("working");
 
     const { email, password } = req.body;
-    console.log(email, password);
+    // console.log(email, password);
 
     if (!email || !password) {
       return next(new ErrorHandler(400, "Please provide email and password"));

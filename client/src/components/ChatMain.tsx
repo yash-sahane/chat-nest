@@ -73,8 +73,6 @@ const ChatMain = () => {
   }, [useRef]);
 
   useEffect(() => {
-    console.log("working");
-
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
@@ -98,7 +96,7 @@ const ChatMain = () => {
           <div className="h-[calc(100%-134px)] flex flex-col gap-3 pr-2 mt-2 overflow-y-auto">
             {selectedChatMessages.map((chatMsg, idx) => {
               return (
-                <>
+                <React.Fragment key={chatMsg._id}>
                   {renderDate(chatMsg)}
                   <div
                     ref={
@@ -130,7 +128,7 @@ const ChatMain = () => {
                       {moment(chatMsg.timeStamp).format("LT")}
                     </p>
                   </div>
-                </>
+                </React.Fragment>
               );
             })}
           </div>

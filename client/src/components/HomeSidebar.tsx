@@ -9,6 +9,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/context/ThemeProvider";
 import { logout } from "@/slices/AuthApi";
+import {
+  setSelectedChatData,
+  setSelectedChatMessages,
+  setSelectedChatType,
+} from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { darkProfileTheme, lightProfileTheme } from "@/utils/profileTheme";
 import { LogOut, MessageSquareText, User } from "lucide-react";
@@ -21,14 +26,17 @@ const HomeSidebar = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
   const { theme } = useTheme();
+  const navigate = useNavigate();
 
   const logoutHandler = async () => {
     const response = await dispatch(logout());
-    const navigate = useNavigate();
 
     if (logout.fulfilled.match(response)) {
       toast.success(response.payload.message);
       navigate("/auth");
+      dispatch(setSelectedChatData(undefined));
+      dispatch(setSelectedChatMessages([]));
+      dispatch(setSelectedChatType(undefined));
     } else {
       toast.error(response.payload as string);
     }
@@ -61,7 +69,7 @@ const HomeSidebar = () => {
 
     return user?.avatar ? (
       <img
-        src={`http://localhost:3000/profiles/${user?.avatar}`}
+        src={`${import.meta.env.VITE_SERVER_URI}/profiles/${user?.avatar}`}
         className={`p-[2px] rounded-full object-contain w-[40px] h-[40px]`}
         style={{ border: `1px solid ${borderColor}`, background: bg }}
       />

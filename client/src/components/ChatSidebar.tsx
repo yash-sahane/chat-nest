@@ -5,10 +5,10 @@ import ProfilesDialog from "./ProfilesDialog";
 import Chats from "./Chats";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
-import { ApiResponse } from "@/types";
+import { ApiResponse, DMProfile } from "@/types";
 import axios from "axios";
 
-const ChatSidebar = () => {
+const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedUserLoading, setSearchedUserLoading] =
@@ -74,7 +74,7 @@ const ChatSidebar = () => {
           </ProfilesDialog>
         </div>
       </div>
-      <Chats />
+      <Chats DMProfiles={DMProfiles} />
     </div>
   );
 };
