@@ -1,7 +1,19 @@
 import { Router } from "express";
 import { getInfo, login, logout, setup, signup } from "../controllers/User.js";
 import isAuthenticated from "../middleware/auth.js";
-import upload from "../multer.js";
+
+import multer from "multer";
+
+let storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads/profiles");
+  },
+  filename: function (req, file, cb) {
+    cb(null, `${req.user.email}_${file.originalname}`);
+  },
+});
+
+let upload = multer({ storage: storage });
 
 const router = Router();
 

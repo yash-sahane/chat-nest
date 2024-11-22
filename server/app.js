@@ -39,6 +39,7 @@ app.use("/api/user", userRouter);
 app.use("/api/profiles", profileRouter);
 app.use("/api/chat", chatRouter);
 app.use("/profiles", express.static("uploads/profiles"));
+app.use("/files", express.static("uploads/files"));
 
 app.use((err, req, res, next) => {
   errMiddleware(err, req, res, next);

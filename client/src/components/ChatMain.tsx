@@ -11,8 +11,11 @@ import { useSelector } from "react-redux";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useSocket } from "@/context/SocketProvier";
-import { ChatMsg } from "@/types";
+import { ApiResponse, ChatMsg } from "@/types";
 import moment from "moment";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { AxiosResponse } from "axios";
 
 const ChatMain = () => {
   const { selectedChatData, selectedChatMessages } = useSelector(
@@ -61,6 +64,48 @@ const ChatMain = () => {
     );
   };
 
+  function getFileType(file: File) {
+    const fileType = file.type;
+    if (fileType.startsWith("image/")) {
+      return "image";
+    } else if (fileType.startsWith("video/")) {
+      return "video";
+    } else {
+      return "file";
+    }
+  }
+
+  const fileUploadHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.length) {
+      try {
+        const fileType = getFileType(e.target.files[0]);
+
+        const formData = new FormData();
+        formData.append("file", e.target.files[0]);
+
+        const { data }: AxiosResponse<ApiResponse> = await axios.post(
+          `${import.meta.env.VITE_SERVER_URI}/api/chat/send_file`,
+          formData,
+          { withCredentials: true }
+        );
+        if (data.success) {
+          socket.emit("sendMessage", {
+            sender: user?._id,
+            recipient: selectedChatData?._id,
+            content: undefined,
+            messageType: fileType,
+            fileURL: data.data,
+          });
+        }
+      } catch (e: any) {
+        console.log(e.message);
+        toast.error(e.response.data.message);
+      }
+    } else {
+      toast.error("Please select file");
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = () => {
       if (emojiRef.current && !emojiRef.current.contains(event?.target)) {
@@ -95,6 +140,8 @@ const ChatMain = () => {
           </div>
           <div className="h-[calc(100%-134px)] flex flex-col gap-3 pr-2 mt-2 overflow-y-auto">
             {selectedChatMessages.map((chatMsg, idx) => {
+              console.log(chatMsg.messageType);
+
               return (
                 <React.Fragment key={chatMsg._id}>
                   {renderDate(chatMsg)}
@@ -104,7 +151,9 @@ const ChatMain = () => {
                     }
                   >
                     <div
-                      className="rounded-md p-3 text-sm py-[6px] w-fit max-w-[80%]"
+                      className={`${
+                        chatMsg.fileURL ? "max-w-[300px]" : "py-[6px]"
+                      } rounded-md p-3 text-sm w-fit max-w-[80%]`}
                       style={{
                         background:
                           user?._id === chatMsg.sender
@@ -116,7 +165,26 @@ const ChatMain = () => {
                             : "0 auto 0 0",
                       }}
                     >
-                      {chatMsg.content}
+                      {chatMsg.messageType === "text" && (
+                        <p>{chatMsg.content}</p>
+                      )}
+                      {chatMsg.messageType === "image" && (
+                        <img
+                          src={`${import.meta.env.VITE_SERVER_URI}/files/${
+                            chatMsg.fileURL
+                          }`}
+                          className="w-full h-full object-contain"
+                        />
+                      )}
+                      {chatMsg.messageType === "video" && (
+                        <video
+                          src={`${import.meta.env.VITE_SERVER_URI}/files/${
+                            chatMsg.fileURL
+                          }`}
+                          className="w-full h-full object-contain"
+                          controls
+                        />
+                      )}
                     </div>
                     <p
                       className={`text-xs text-gray-500 w-full ${
@@ -134,7 +202,16 @@ const ChatMain = () => {
           </div>
           <div className="relative transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))] h-[52px] rounded-2xl mt-2">
             <div className="absolute h-full flex gap-3 items-center right-[95px]">
-              <Paperclip size={20} />
+              <input
+                type="file"
+                id="upload-file"
+                onChange={fileUploadHandler}
+                className="hidden"
+                accept="*"
+              />
+              <label htmlFor="upload-file">
+                <Paperclip size={20}></Paperclip>
+              </label>
               <Smile onClick={() => setShowEmojiPicker((prev) => !prev)} />
             </div>
             {showEmojiPicker && (

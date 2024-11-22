@@ -5,9 +5,14 @@ import { AxiosResponse } from "axios";
 import { ApiResponse, DMProfile } from "@/types";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const Home = () => {
   const [DMProfiles, setDMProfiles] = useState<DMProfile[] | []>([]);
+  const { selectedChatMessages } = useSelector(
+    (state: RootState) => state.chat
+  );
 
   useEffect(() => {
     const getProfilesForDMList = async () => {
@@ -24,7 +29,7 @@ const Home = () => {
     };
 
     getProfilesForDMList();
-  }, []);
+  }, [selectedChatMessages]);
 
   return (
     <div className="custom-transition flex gap-3 h-screen p-4 pl-0">

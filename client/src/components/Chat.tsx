@@ -4,6 +4,7 @@ import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { DMProfile, User } from "@/types";
 import UserProfile from "@/utils/UserProfile";
+import moment from "moment";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
@@ -31,7 +32,9 @@ const Chat = ({ DMProfile }: { DMProfile: DMProfile }) => {
           <p className="font-semibold text-sm">
             {DMProfile.firstName} {DMProfile.lastName}
           </p>
-          <p className="text-sm text-gray-600">{DMProfile.lastMessageTime}</p>
+          <p className="text-sm text-gray-600">
+            {moment(DMProfile.lastMessageTime).fromNow()}
+          </p>
         </div>
         <div className="flex justify-between">
           <p className="text-sm text-gray-500">{DMProfile.lastMessage}</p>

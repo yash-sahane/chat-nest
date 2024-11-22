@@ -13,16 +13,14 @@ const messageSchema = new Schema({
   },
   messageType: {
     type: String,
-    enum: ["text", "file"],
+    enum: ["text", "image", "video", "file"],
     required: true,
   },
   content: {
     type: String,
-    required: {
-      validate: {
-        validator: function (value) {
-          return this.messageType === "text" ? true : false;
-        },
+    validate: {
+      validator: function (value) {
+        return this.messageType === "text" ? true : false;
       },
     },
   },
@@ -30,7 +28,11 @@ const messageSchema = new Schema({
     type: String,
     validate: {
       validator: function (value) {
-        return this.messageType === "text" ? false : true;
+        return this.messageType === "file" ||
+          this.messageType === "image" ||
+          this.messageType === "video"
+          ? true
+          : false;
       },
     },
   },

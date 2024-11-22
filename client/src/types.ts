@@ -38,7 +38,7 @@ export type Message = {
   _id: string;
   sender: User;
   recipient: User;
-  messageType: "text" | "file";
+  messageType: "text" | "file" | "image" | "video";
   content: string;
   fileURL: string;
   timeStamp: Date;
@@ -48,7 +48,7 @@ export type ChatMsg = {
   _id: string;
   sender: string;
   recipient: string;
-  messageType: "text" | "file";
+  messageType: "text" | "file" | "image" | "video";
   content: string;
   fileURL: string;
   timeStamp: Date;

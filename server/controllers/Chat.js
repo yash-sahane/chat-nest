@@ -25,3 +25,18 @@ export const getChatMessages = async (req, res, next) => {
     console.log(e);
   }
 };
+
+export const sendFile = async (req, res, next) => {
+  try {
+    const fileName = req.file.filename;
+    if (!fileName) {
+      return next(ErrorHandler(404, "File not found"));
+    }
+    return res.json({
+      success: true,
+      data: fileName,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
