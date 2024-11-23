@@ -113,9 +113,9 @@ const Auth = () => {
 
     const response = await dispatch(login({ email, password }));
 
-    console.log(response);
+    // console.log(response);
     if (login.fulfilled.match(response)) {
-      console.log("matched");
+      // console.log("matched");
 
       const { firstName, profileSetup } = response.payload;
 

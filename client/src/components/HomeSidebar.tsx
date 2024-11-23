@@ -16,7 +16,7 @@ import {
 } from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { darkProfileTheme, lightProfileTheme } from "@/utils/profileTheme";
-import { LogOut, MessageSquareText, User } from "lucide-react";
+import { LogOut, MessageSquareText, User, Users } from "lucide-react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -90,8 +90,9 @@ const HomeSidebar = () => {
       <div className="flex flex-col gap-3 items-center">
         <img src={appLogo} alt="" className="w-[40px]" />
         <div className="w-[30px] h-[2px] dark:bg-gray-800 bg-gray-300 bottom-[-2px]"></div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           <MessageSquareText />
+          <Users />
         </div>
       </div>
       <div className="flex flex-col items-center gap-4 mb-3">

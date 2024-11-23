@@ -57,6 +57,7 @@ export type ChatMsg = {
 export type DMProfile = {
   _id: string;
   lastMessageTime: string;
+  lastMessageType: "text" | "image" | "video" | "file";
   email: string;
   firstName: string;
   lastName: string;

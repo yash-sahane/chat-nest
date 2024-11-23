@@ -58,6 +58,7 @@ export const getAllProfilesForDMList = async (req, res, next) => {
           },
           lastMessageTime: { $first: "$timeStamp" },
           lastMessage: { $first: "$content" },
+          lastMessageType: { $first: "$messageType" },
         },
       },
       {
@@ -76,6 +77,7 @@ export const getAllProfilesForDMList = async (req, res, next) => {
           _id: 1,
           lastMessageTime: 1,
           lastMessage: 1,
+          lastMessageType: 1,
           email: "$user.email",
           firstName: "$user.firstName",
           lastName: "$user.lastName",
@@ -87,8 +89,6 @@ export const getAllProfilesForDMList = async (req, res, next) => {
         $sort: { lastMessageTime: -1 },
       },
     ]);
-
-    console.log(profiles);
 
     return res.json({
       success: true,

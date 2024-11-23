@@ -14,7 +14,7 @@ export const getChatMessages = createAsyncThunk(
         { withCredentials: true }
       );
 
-      console.log(data);
+      // console.log(data);
 
       if (data.success) {
         return data.data;

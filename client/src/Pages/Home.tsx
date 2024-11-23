@@ -21,7 +21,7 @@ const Home = () => {
         { withCredentials: true }
       );
 
-      console.log(data);
+      // console.log(data);
 
       if (data.success) {
         setDMProfiles(data.data);

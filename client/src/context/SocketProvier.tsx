@@ -29,20 +29,20 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const [socket, setSocket] = useState<typeof Socket | null>(null);
 
   const receiveMessageHandler = (message: Message) => {
-    console.log(
-      selectedChatDataRef.current !== undefined,
-      " ",
-      selectedChatDataRef.current?._id === message.sender._id,
-      " ",
-      selectedChatDataRef.current?._id === message.recipient._id
-    );
+    // console.log(
+    //   selectedChatDataRef.current !== undefined,
+    //   " ",
+    //   selectedChatDataRef.current?._id === message.sender._id,
+    //   " ",
+    //   selectedChatDataRef.current?._id === message.recipient._id
+    // );
 
     if (
       selectedChatDataRef.current !== undefined &&
       (selectedChatDataRef.current._id === message.sender._id ||
         selectedChatDataRef.current._id === message.recipient._id)
     ) {
-      console.log("working");
+      // console.log("working");
 
       dispatch(setSelectedChatMessages(message));
     }

@@ -1,5 +1,5 @@
 import { MessageSquarePlus, Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import ProfilesDialog from "./ProfilesDialog";
 import Chats from "./Chats";
@@ -13,6 +13,7 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedUserLoading, setSearchedUserLoading] =
     useState<boolean>(false);
+  const [searchDMProfiles, setSearchDMProfiles] = useState<string>("");
 
   const getProfiles = async () => {
     try {
@@ -30,6 +31,11 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
       toast.error(e.response.data.message);
     }
   };
+
+  const filteredProfiles = DMProfiles.filter((profile) => {
+    const fullName = `${profile.firstName} ${profile.lastName}`.toLowerCase();
+    return fullName.includes(searchDMProfiles.toLowerCase());
+  });
 
   useEffect(() => {
     setUsers([]);
@@ -59,7 +65,10 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
             <Input
               type="text"
               className="custom-transition pl-[34px] h-full w-full bg-transparent placeholder:text-sm placeholder:text-gray-500 rounded-lg"
-              placeholder="Search message..."
+              placeholder="Search profile..."
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setSearchDMProfiles(e.target.value)
+              }
             />
           </div>
           <ProfilesDialog
@@ -74,7 +83,7 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
           </ProfilesDialog>
         </div>
       </div>
-      <Chats DMProfiles={DMProfiles} />
+      <Chats filteredProfiles={filteredProfiles} />
     </div>
   );
 };

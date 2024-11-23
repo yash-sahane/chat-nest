@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { getChatMessages, sendFile } from "../controllers/Chat.js";
+import {
+  downloadFile,
+  getChatMessages,
+  sendFile,
+} from "../controllers/Chat.js";
 import isAuthenticated from "../middleware/auth.js";
 import multer from "multer";
 
@@ -18,5 +22,6 @@ let upload = multer({ storage: storage });
 
 router.post("/", isAuthenticated, getChatMessages);
 router.post("/send_file", isAuthenticated, upload.single("file"), sendFile);
+router.get("/download_file/:filename", isAuthenticated, downloadFile);
 
 export default router;

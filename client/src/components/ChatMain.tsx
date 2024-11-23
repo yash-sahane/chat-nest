@@ -5,7 +5,7 @@ import EmojiPicker, {
   EmojiStyle,
   Theme,
 } from "emoji-picker-react";
-import { Paperclip, Send, Smile } from "lucide-react";
+import { Download, File, Image, Paperclip, Send, Smile } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Input } from "./ui/input";
@@ -106,6 +106,12 @@ const ChatMain = () => {
     }
   };
 
+  const downloadHandler = (fileUrl: string) => {
+    window.location.href = `${
+      import.meta.env.VITE_SERVER_URI
+    }/api/chat/download_file/${fileUrl.split("/").pop()}`;
+  };
+
   useEffect(() => {
     const handleClickOutside = () => {
       if (emojiRef.current && !emojiRef.current.contains(event?.target)) {
@@ -118,6 +124,8 @@ const ChatMain = () => {
   }, [useRef]);
 
   useEffect(() => {
+    // console.log(selectedChatMessages.length);
+
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
@@ -140,7 +148,7 @@ const ChatMain = () => {
           </div>
           <div className="h-[calc(100%-134px)] flex flex-col gap-3 pr-2 mt-2 overflow-y-auto">
             {selectedChatMessages.map((chatMsg, idx) => {
-              console.log(chatMsg.messageType);
+              // console.log(chatMsg.messageType);
 
               return (
                 <React.Fragment key={chatMsg._id}>
@@ -152,8 +160,10 @@ const ChatMain = () => {
                   >
                     <div
                       className={`${
-                        chatMsg.fileURL ? "max-w-[300px]" : "py-[6px]"
-                      } rounded-md p-3 text-sm w-fit max-w-[80%]`}
+                        chatMsg.fileURL
+                          ? "max-w-[500px]"
+                          : "py-[6px] max-w-[80%]"
+                      } rounded-md p-3 text-sm w-fit`}
                       style={{
                         background:
                           user?._id === chatMsg.sender
@@ -173,7 +183,7 @@ const ChatMain = () => {
                           src={`${import.meta.env.VITE_SERVER_URI}/files/${
                             chatMsg.fileURL
                           }`}
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-contain rounded-md"
                         />
                       )}
                       {chatMsg.messageType === "video" && (
@@ -181,9 +191,23 @@ const ChatMain = () => {
                           src={`${import.meta.env.VITE_SERVER_URI}/files/${
                             chatMsg.fileURL
                           }`}
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-contain rounded-md"
                           controls
                         />
+                      )}
+                      {chatMsg.messageType === "file" && (
+                        <div className="flex gap-2 items-center">
+                          <div className="flex justify-center rounded-md p-2 bg-[hsl(var(--background))]">
+                            <File size={19} />
+                          </div>
+                          <p>{chatMsg.fileURL}</p>
+                          <Button className="h-fit flex justify-center rounded-md p-2">
+                            <Download
+                              size={20}
+                              onClick={() => downloadHandler(chatMsg.fileURL)}
+                            />
+                          </Button>
+                        </div>
                       )}
                     </div>
                     <p

@@ -1,5 +1,7 @@
+import { fileURLToPath } from "url";
 import ErrorHandler from "../middleware/error.js";
 import Message from "../model/Message.js";
+import path from "path";
 
 export const getChatMessages = async (req, res, next) => {
   try {
@@ -36,6 +38,19 @@ export const sendFile = async (req, res, next) => {
       success: true,
       data: fileName,
     });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export const downloadFile = async (req, res, next) => {
+  try {
+    const fileName = req.params.filename;
+    const filePath = path.join(__dirname, "../uploads/files", fileName);
+    res.download(filePath);
   } catch (e) {
     console.log(e);
   }
