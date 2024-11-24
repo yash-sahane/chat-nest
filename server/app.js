@@ -7,6 +7,7 @@ import ErrorHandler, { errMiddleware } from "./middleware/error.js";
 import userRouter from "./routes/User.js";
 import profileRouter from "./routes/Profile.js";
 import chatRouter from "./routes/Chat.js";
+import channelRouter from "./routes/Channel.js";
 import { createServer } from "http";
 import setupSocket from "./socket.js";
 
@@ -38,6 +39,7 @@ app.use(express.json());
 app.use("/api/user", userRouter);
 app.use("/api/profiles", profileRouter);
 app.use("/api/chat", chatRouter);
+app.use("/api/channel", channelRouter);
 app.use("/profiles", express.static("uploads/profiles"));
 app.use("/files", express.static("uploads/files"));
 

@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useStore } from "@/context/StoreContext";
 import { useTheme } from "@/context/ThemeProvider";
 import { logout } from "@/slices/AuthApi";
 import {
@@ -25,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 const HomeSidebar = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
+  const { setChatView } = useStore();
   const { theme } = useTheme();
   const navigate = useNavigate();
 
@@ -91,8 +93,8 @@ const HomeSidebar = () => {
         <img src={appLogo} alt="" className="w-[40px]" />
         <div className="w-[30px] h-[2px] dark:bg-gray-800 bg-gray-300 bottom-[-2px]"></div>
         <div className="flex flex-col gap-4">
-          <MessageSquareText />
-          <Users />
+          <MessageSquareText onClick={() => setChatView("person")} />
+          <Users onClick={() => setChatView("channel")} />
         </div>
       </div>
       <div className="flex flex-col items-center gap-4 mb-3">

@@ -65,3 +65,14 @@ export type DMProfile = {
   avatar: string;
   lastMessage: string;
 };
+
+export type View = "person" | "channel";
+
+export type Channel = {
+  _id: string;
+  name: string;
+  members: string[];
+  admin: string;
+  createdAt: Date;
+  updatedAt: Date;
+};

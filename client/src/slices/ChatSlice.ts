@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getChatMessages } from "./ChatApi";
 
 type InitialState = {
-  selectedChatType: "chat" | "group" | undefined;
+  selectedChatType: "chat" | "channel" | undefined;
   selectedChatData: User | undefined;
   selectedChatMessages: ChatMsg[] | [];
   loading: boolean;

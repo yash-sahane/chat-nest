@@ -5,19 +5,23 @@ import ProfilesDialog from "./ProfilesDialog";
 import Chats from "./Chats";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
-import { ApiResponse, DMProfile } from "@/types";
+import { ApiResponse, DMProfile, User } from "@/types";
 import axios from "axios";
+import { useStore } from "@/context/StoreContext";
+import ChannelsDialog from "./ChannelsDialog";
 
 const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedUserLoading, setSearchedUserLoading] =
     useState<boolean>(false);
   const [searchDMProfiles, setSearchDMProfiles] = useState<string>("");
+  const { chatView } = useStore();
+  const [allContacts, setAllContacts] = useState<User[]>([]);
+  const [selectedContacts, setSelectedContacts] = useState<User[]>();
 
   const getProfiles = async () => {
     try {
-      // setSearchedUserLoading(true);
       const response: AxiosResponse<ApiResponse> = await axios.post(
         `${import.meta.env.VITE_SERVER_URI}/api/profiles/getProfiles`,
         { searchTerm },
@@ -71,16 +75,31 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
               }
             />
           </div>
-          <ProfilesDialog
-            users={users}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            searchedUserLoading={searchedUserLoading}
-          >
-            <div className="custom-transition p-2 cursor-pointer rounded-md hover:bg-[hsl(var(--primary))] hover:text-white bg-[hsl(var(--chat-primary))]">
-              <MessageSquarePlus />
-            </div>
-          </ProfilesDialog>
+          {chatView === "person" ? (
+            <ProfilesDialog
+              users={users}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              searchedUserLoading={searchedUserLoading}
+            >
+              <div className="custom-transition p-2 cursor-pointer rounded-md hover:bg-[hsl(var(--primary))] hover:text-white bg-[hsl(var(--chat-primary))]">
+                <MessageSquarePlus />
+              </div>
+            </ProfilesDialog>
+          ) : (
+            <ChannelsDialog
+              users={users}
+              // allContacts={allContacts}
+              // setAllContacts={setAllContacts}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              searchedUserLoading={searchedUserLoading}
+            >
+              <div className="custom-transition p-2 cursor-pointer rounded-md hover:bg-[hsl(var(--primary))] hover:text-white bg-[hsl(var(--chat-primary))]">
+                <MessageSquarePlus />
+              </div>
+            </ChannelsDialog>
+          )}
         </div>
       </div>
       <Chats filteredProfiles={filteredProfiles} />
