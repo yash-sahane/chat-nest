@@ -1,11 +1,12 @@
 import { ChatMsg, Message, User } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
-import { getChatMessages } from "./ChatApi";
+import { createChannel, getChannels, getChatMessages } from "./ChatApi";
 
 type InitialState = {
   selectedChatType: "chat" | "channel" | undefined;
   selectedChatData: User | undefined;
   selectedChatMessages: ChatMsg[] | [];
+  channels: [];
   loading: boolean;
 };
 
@@ -13,6 +14,7 @@ const initialState: InitialState = {
   selectedChatType: undefined,
   selectedChatData: undefined,
   selectedChatMessages: [],
+  channels: [],
   loading: false,
 };
 
@@ -47,6 +49,30 @@ const ChatSlice = createSlice({
         state.loading = false;
       })
       .addCase(getChatMessages.rejected, (state) => {
+        state.loading = false;
+      });
+    // getChannels
+    builder
+      .addCase(getChannels.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getChannels.fulfilled, (state, action) => {
+        state.channels = action.payload;
+        state.loading = false;
+      })
+      .addCase(getChannels.rejected, (state) => {
+        state.loading = false;
+      });
+    // create channel
+    builder
+      .addCase(createChannel.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createChannel.fulfilled, (state, action) => {
+        // state.channels = action.payload;
+        state.loading = false;
+      })
+      .addCase(createChannel.rejected, (state) => {
         state.loading = false;
       });
   },

@@ -133,3 +133,18 @@ export const setup = async (req, res) => {
     console.log(e);
   }
 };
+
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find(
+      { _id: { $ne: req.user._id } },
+      "firstName lastName _id"
+    );
+    res.json({
+      success: true,
+      data: users,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};

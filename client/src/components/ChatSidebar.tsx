@@ -17,8 +17,6 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
     useState<boolean>(false);
   const [searchDMProfiles, setSearchDMProfiles] = useState<string>("");
   const { chatView } = useStore();
-  const [allContacts, setAllContacts] = useState<User[]>([]);
-  const [selectedContacts, setSelectedContacts] = useState<User[]>();
 
   const getProfiles = async () => {
     try {
@@ -41,6 +39,7 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
     return fullName.includes(searchDMProfiles.toLowerCase());
   });
 
+  // redux - add in redux
   useEffect(() => {
     setUsers([]);
 

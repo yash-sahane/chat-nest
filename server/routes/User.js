@@ -1,5 +1,12 @@
 import { Router } from "express";
-import { getInfo, login, logout, setup, signup } from "../controllers/User.js";
+import {
+  getAllUsers,
+  getInfo,
+  login,
+  logout,
+  setup,
+  signup,
+} from "../controllers/User.js";
 import isAuthenticated from "../middleware/auth.js";
 
 import multer from "multer";
@@ -17,6 +24,7 @@ let upload = multer({ storage: storage });
 
 const router = Router();
 
+router.get("/getAllUsers", isAuthenticated, getAllUsers);
 router.post("/login", login);
 router.post("/signup", signup);
 router.get("/", isAuthenticated, getInfo);

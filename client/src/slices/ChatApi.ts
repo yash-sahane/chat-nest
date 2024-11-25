@@ -29,3 +29,49 @@ export const getChatMessages = createAsyncThunk(
     }
   }
 );
+
+export const getChannels = createAsyncThunk(
+  "chat/getChannels",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data }: AxiosResponse<ApiResponse> = await axios.get(
+        `${import.meta.env.VITE_SERVER_URI}/api/chat/getChannels`,
+        { withCredentials: true }
+      );
+      if (data.success) {
+        return data.data;
+      } else {
+        return rejectWithValue(data.message);
+      }
+    } catch (e: any) {
+      console.log(e.message);
+      toast.error(e.response.data.message);
+      return rejectWithValue(e.response.data.mesage);
+    }
+  }
+);
+
+export const createChannel = createAsyncThunk(
+  "chat/createChannel",
+  async (
+    { channelName, members }: { channelName: string; members: string[] },
+    { rejectWithValue }
+  ) => {
+    try {
+      const { data }: AxiosResponse<ApiResponse> = await axios.post(
+        `${import.meta.env.VITE_SERVER_URI}/api/chat/getChannels`,
+        { channelName, members },
+        { withCredentials: true }
+      );
+      if (data.success) {
+        return data.data;
+      } else {
+        return rejectWithValue(data.message);
+      }
+    } catch (e: any) {
+      console.log(e.message);
+      toast.error(e.response.data.message);
+      return rejectWithValue(e.response.data.mesage);
+    }
+  }
+);
