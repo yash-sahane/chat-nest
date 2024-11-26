@@ -93,8 +93,12 @@ const HomeSidebar = () => {
         <img src={appLogo} alt="" className="w-[40px]" />
         <div className="w-[30px] h-[2px] dark:bg-gray-800 bg-gray-300 bottom-[-2px]"></div>
         <div className="flex flex-col gap-4">
-          <MessageSquareText onClick={() => setChatView("person")} />
-          <Users onClick={() => setChatView("channel")} />
+          <div className="cursor-pointer p-1">
+            <MessageSquareText onClick={() => setChatView("person")} />
+          </div>
+          <div className="cursor-pointer p-1">
+            <Users onClick={() => setChatView("channel")} />
+          </div>
         </div>
       </div>
       <div className="flex flex-col items-center gap-4 mb-3">

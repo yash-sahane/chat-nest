@@ -14,6 +14,14 @@ export const channelSchema = new mongoose.Schema({
   messages: [
     { type: mongoose.Schema.ObjectId, ref: "message", required: true },
   ],
+  avatar: {
+    type: String,
+    required: false,
+  },
+  profileTheme: {
+    type: String,
+    required: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

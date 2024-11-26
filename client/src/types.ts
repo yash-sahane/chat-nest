@@ -73,6 +73,8 @@ export type Channel = {
   name: string;
   members: string[];
   admin: string;
+  avatar: string;
+  profileTheme: string;
   createdAt: Date;
   updatedAt: Date;
 };

@@ -31,15 +31,15 @@ export const getChatMessages = createAsyncThunk(
 );
 
 export const getChannels = createAsyncThunk(
-  "chat/getChannels",
+  "channel/getChannels",
   async (_, { rejectWithValue }) => {
     try {
       const { data }: AxiosResponse<ApiResponse> = await axios.get(
-        `${import.meta.env.VITE_SERVER_URI}/api/chat/getChannels`,
+        `${import.meta.env.VITE_SERVER_URI}/api/channel/getChannels`,
         { withCredentials: true }
       );
       if (data.success) {
-        return data.data;
+        return data;
       } else {
         return rejectWithValue(data.message);
       }
@@ -52,19 +52,18 @@ export const getChannels = createAsyncThunk(
 );
 
 export const createChannel = createAsyncThunk(
-  "chat/createChannel",
-  async (
-    { channelName, members }: { channelName: string; members: string[] },
-    { rejectWithValue }
-  ) => {
+  "channel/createChannel",
+  async ({ formData }: { formData: FormData }, { rejectWithValue }) => {
     try {
+      console.log(formData);
+
       const { data }: AxiosResponse<ApiResponse> = await axios.post(
-        `${import.meta.env.VITE_SERVER_URI}/api/chat/getChannels`,
-        { channelName, members },
+        `${import.meta.env.VITE_SERVER_URI}/api/channel/create`,
+        formData,
         { withCredentials: true }
       );
       if (data.success) {
-        return data.data;
+        return data;
       } else {
         return rejectWithValue(data.message);
       }

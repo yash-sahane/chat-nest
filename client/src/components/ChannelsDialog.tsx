@@ -19,7 +19,7 @@ import { useDispatch } from "react-redux";
 import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
 import { getChatMessages } from "@/slices/ChatApi";
 import { Button } from "./ui/button";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import CreateChannel from "./CreateChannel";
 
 function ChannelsDialog({
@@ -37,6 +37,7 @@ function ChannelsDialog({
 }) {
   const dispatch = useDispatch<AppDispatch>();
   const [createChannelView, setCreateChannelView] = useState<boolean>(false);
+  const closeDialogRef = useRef<HTMLButtonElement>();
 
   const chatSelectHandler = async (userProfile: User) => {
     dispatch(setSelectedChatData(userProfile));
@@ -45,12 +46,22 @@ function ChannelsDialog({
     dispatch(getChatMessages({ id: userProfile._id }));
   };
 
+  const createChannelHandler = () => {
+    setCreateChannelView((prev) => !prev);
+    if (closeDialogRef.current) {
+      closeDialogRef.current.click();
+    }
+  };
+
   return (
     <>
       <AlertDialog>
         <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
         <AlertDialogContent className="transition-all">
-          <AlertDialogCancel className="p-1 border-none text-gray-400 absolute top-3 right-3 w-fit h-fit bg-transparent !mt-0">
+          <AlertDialogCancel
+            className="p-1 border-none text-gray-400 absolute top-3 right-3 w-fit h-fit bg-transparent !mt-0"
+            ref={closeDialogRef}
+          >
             <X size={22} className="" />
           </AlertDialogCancel>
           <AlertDialogHeader className="w-full">
@@ -66,10 +77,7 @@ function ChannelsDialog({
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <Button
-                  className="p-2 h-fit"
-                  onClick={() => setCreateChannelView((prev) => !prev)}
-                >
+                <Button className="p-2 h-fit" onClick={createChannelHandler}>
                   <CirclePlus />
                 </Button>
               </div>
@@ -156,7 +164,10 @@ function ChannelsDialog({
             : "opacity-0 hidden pointer-events-none"
         }`}
       >
-        <CreateChannel createChannelView={createChannelView} />
+        <CreateChannel
+          createChannelView={createChannelView}
+          setCreateChannelView={setCreateChannelView}
+        />
       </div>
     </>
   );

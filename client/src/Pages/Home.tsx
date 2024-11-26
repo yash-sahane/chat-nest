@@ -6,8 +6,11 @@ import { ApiResponse, DMProfile } from "@/types";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { AppDispatch, RootState } from "@/store/store";
 import { useStore } from "@/context/StoreContext";
+import { useDispatch } from "react-redux";
+import { createChannel, getChannels } from "@/slices/ChatApi";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const [DMProfiles, setDMProfiles] = useState<DMProfile[] | []>([]);
@@ -15,6 +18,7 @@ const Home = () => {
     (state: RootState) => state.chat
   );
   const { chatView } = useStore();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (chatView === "person") {
@@ -26,8 +30,6 @@ const Home = () => {
           { withCredentials: true }
         );
 
-        // console.log(data);
-
         if (data.success) {
           setDMProfiles(data.data);
         }
@@ -36,8 +38,21 @@ const Home = () => {
       getProfilesForDMList();
     } else {
       setDMProfiles([]);
+      dispatch(getChannels());
+
+      // if (getChannels.fulfilled.match(response)) {
+      //   const { message, data } = response.payload;
+
+      // } else {
+      //   if (response.payload) {
+      //     toast.error(response.payload as string);
+      //   } else {
+      //     toast.error(response.error.message as string);
+      //   }
+      // }
+      //   }
     }
-  }, [chatView, selectedChatMessages]);
+  }, [chatView, selectedChatMessages, chatView]);
 
   return (
     <div className="custom-transition flex gap-3 h-screen p-4 pl-0">

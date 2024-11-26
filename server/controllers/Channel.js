@@ -4,10 +4,15 @@ import User from "../model/User.js";
 
 export const createChannel = async (req, res, next) => {
   try {
-    const { name, members } = req.body;
+    const avatar_filename = req.file?.filename;
+    const { profileTheme, channelName, selectedProfiles } = req.body;
+    const members = JSON.parse(selectedProfiles);
+
     let adminId = req.user._id;
-    adminId = await User.findById(adminId);
-    if (!adminId) {
+
+    const isAdminPresent = await User.findById(adminId);
+
+    if (!isAdminPresent) {
       return next(ErrorHandler(404, "Admin not found"));
     }
 
@@ -16,19 +21,32 @@ export const createChannel = async (req, res, next) => {
       return next(ErrorHandler(404, "Invalid member IDs"));
     }
 
-    const channel = await Channel.create(
-      {
-        name,
-        members,
-        admin: adminId,
-      },
-      { new: true }
-    );
+    const channel = new Channel({
+      name: channelName,
+      members,
+      admin: adminId,
+      avatar: avatar_filename,
+      profileTheme,
+    });
+
+    await channel.save();
 
     return res.json({
       success: true,
       message: "Channel created successfully",
       data: channel,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getAllChannels = async (req, res, next) => {
+  try {
+    const channels = await Channel.find({});
+    res.json({
+      success: true,
+      data: channels,
     });
   } catch (e) {
     console.log(e);

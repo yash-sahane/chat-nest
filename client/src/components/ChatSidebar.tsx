@@ -9,6 +9,9 @@ import { ApiResponse, DMProfile, User } from "@/types";
 import axios from "axios";
 import { useStore } from "@/context/StoreContext";
 import ChannelsDialog from "./ChannelsDialog";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import ChannelChats from "./ChannelChats";
 
 const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
   const [users, setUsers] = useState<User[]>([]);
@@ -16,7 +19,9 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
   const [searchedUserLoading, setSearchedUserLoading] =
     useState<boolean>(false);
   const [searchDMProfiles, setSearchDMProfiles] = useState<string>("");
+  const [searchChannels, setSearchChannels] = useState<string>("");
   const { chatView } = useStore();
+  const { channels } = useSelector((state: RootState) => state.chat);
 
   const getProfiles = async () => {
     try {
@@ -38,6 +43,19 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
     const fullName = `${profile.firstName} ${profile.lastName}`.toLowerCase();
     return fullName.includes(searchDMProfiles.toLowerCase());
   });
+
+  const filteredChannels = channels.filter((channel) => {
+    const channelName = channel.name.toLowerCase();
+    return channelName.includes(searchDMProfiles.toLowerCase());
+  });
+
+  const chatSearchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (chatView === "person") {
+      setSearchDMProfiles(e.target.value);
+    } else {
+      setSearchChannels(e.target.value);
+    }
+  };
 
   // redux - add in redux
   useEffect(() => {
@@ -69,9 +87,7 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
               type="text"
               className="custom-transition pl-[34px] h-full w-full bg-transparent placeholder:text-sm placeholder:text-gray-500 rounded-lg"
               placeholder="Search profile..."
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setSearchDMProfiles(e.target.value)
-              }
+              onChange={chatSearchHandler}
             />
           </div>
           {chatView === "person" ? (
@@ -101,7 +117,10 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
           )}
         </div>
       </div>
-      <Chats filteredProfiles={filteredProfiles} />
+      {chatView === "person" && <Chats filteredProfiles={filteredProfiles} />}
+      {chatView === "person" && (
+        <ChannelChats filteredChannels={filteredChannels} />
+      )}
     </div>
   );
 };
