@@ -10,43 +10,66 @@ import axios from "axios";
 import { useStore } from "@/context/StoreContext";
 import ChannelsDialog from "./ChannelsDialog";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { AppDispatch, RootState } from "@/store/store";
 import ChannelChats from "./ChannelChats";
+import { useDispatch } from "react-redux";
+import { setChannels } from "@/slices/ChatSlice";
+import { getChannels, getUserChannels } from "@/slices/ChatApi";
 
-const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchedUserLoading, setSearchedUserLoading] =
-    useState<boolean>(false);
+const ChatSidebar = () => {
+  const [DMProfiles, setDMProfiles] = useState<DMProfile[] | []>([]);
+  const { selectedChatMessages } = useSelector(
+    (state: RootState) => state.chat
+  );
   const [searchDMProfiles, setSearchDMProfiles] = useState<string>("");
   const [searchChannels, setSearchChannels] = useState<string>("");
   const { chatView } = useStore();
   const { channels } = useSelector((state: RootState) => state.chat);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const getProfiles = async () => {
-    try {
-      const response: AxiosResponse<ApiResponse> = await axios.post(
-        `${import.meta.env.VITE_SERVER_URI}/api/profiles/getProfiles`,
-        { searchTerm },
-        { withCredentials: true }
-      );
-      const { data } = response;
-      setUsers(data.data);
-      setSearchedUserLoading(false);
-    } catch (e: any) {
-      console.log(e.message);
-      toast.error(e.response.data.message);
+  useEffect(() => {
+    if (chatView === "person") {
+      const getProfilesForDMList = async () => {
+        const { data }: AxiosResponse<ApiResponse> = await axios.get(
+          `${
+            import.meta.env.VITE_SERVER_URI
+          }/api/profiles/getProfilesForDMList`,
+          { withCredentials: true }
+        );
+
+        if (data.success) {
+          setDMProfiles(data.data);
+        }
+      };
+
+      getProfilesForDMList();
+    } else {
+      setDMProfiles([]);
+      dispatch(getUserChannels());
+
+      // if (getChannels.fulfilled.match(response)) {
+      //   const { message, data } = response.payload;
+
+      // } else {
+      //   if (response.payload) {
+      //     toast.error(response.payload as string);
+      //   } else {
+      //     toast.error(response.error.message as string);
+      //   }
+      // }
+      //   }
     }
-  };
+  }, [chatView, selectedChatMessages]);
 
   const filteredProfiles = DMProfiles.filter((profile) => {
     const fullName = `${profile.firstName} ${profile.lastName}`.toLowerCase();
     return fullName.includes(searchDMProfiles.toLowerCase());
   });
 
+  // const filteredChannels = channels;
   const filteredChannels = channels.filter((channel) => {
     const channelName = channel.name.toLowerCase();
-    return channelName.includes(searchDMProfiles.toLowerCase());
+    return channelName.includes(searchChannels.toLowerCase());
   });
 
   const chatSearchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,25 +79,6 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
       setSearchChannels(e.target.value);
     }
   };
-
-  // redux - add in redux
-  useEffect(() => {
-    setUsers([]);
-
-    if (searchTerm.length) {
-      setSearchedUserLoading(true);
-    }
-    const timer = setTimeout(() => {
-      if (searchTerm.length) {
-        getProfiles();
-      }
-    }, 2000);
-
-    return () => {
-      clearTimeout(timer);
-      setSearchedUserLoading(false);
-    };
-  }, [searchTerm]);
 
   return (
     <div className="custom-transition bg-[hsl(var(--chat-bg))] w-1/5 min-w-[300px] max-w-[320px] rounded-2xl p-3">
@@ -91,25 +95,13 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
             />
           </div>
           {chatView === "person" ? (
-            <ProfilesDialog
-              users={users}
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              searchedUserLoading={searchedUserLoading}
-            >
+            <ProfilesDialog>
               <div className="custom-transition p-2 cursor-pointer rounded-md hover:bg-[hsl(var(--primary))] hover:text-white bg-[hsl(var(--chat-primary))]">
                 <MessageSquarePlus />
               </div>
             </ProfilesDialog>
           ) : (
-            <ChannelsDialog
-              users={users}
-              // allContacts={allContacts}
-              // setAllContacts={setAllContacts}
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              searchedUserLoading={searchedUserLoading}
-            >
+            <ChannelsDialog>
               <div className="custom-transition p-2 cursor-pointer rounded-md hover:bg-[hsl(var(--primary))] hover:text-white bg-[hsl(var(--chat-primary))]">
                 <MessageSquarePlus />
               </div>
@@ -118,7 +110,7 @@ const ChatSidebar = ({ DMProfiles }: { DMProfiles: DMProfile[] }) => {
         </div>
       </div>
       {chatView === "person" && <Chats filteredProfiles={filteredProfiles} />}
-      {chatView === "person" && (
+      {chatView === "channel" && (
         <ChannelChats filteredChannels={filteredChannels} />
       )}
     </div>

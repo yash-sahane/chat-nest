@@ -1,7 +1,8 @@
+import profileLogo from "@/assets/app-logo.png";
 import { getChatMessages } from "@/slices/ChatApi";
 import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
-import { Channel, DMProfile, User } from "@/types";
+import { Channel, User } from "@/types";
 import UserProfile from "@/utils/UserProfile";
 import { File, Image, Video } from "lucide-react";
 import moment from "moment";
@@ -14,20 +15,20 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
 
   const chatSelectHandler = async () => {
     dispatch(setSelectedChatData(channel));
-    dispatch(setSelectedChatType("chat"));
+    dispatch(setSelectedChatType("channel"));
 
     dispatch(getChatMessages({ id: channel._id }));
   };
 
-  const getMessageType = () => {
-    if (channel.lastMessageType === "image") {
-      return <Image size={18} />;
-    } else if (channel.lastMessageType === "video") {
-      return <Video size={18} />;
-    } else if (channel.lastMessageType === "file") {
-      return <File size={18} />;
-    }
-  };
+  // const getMessageType = () => {
+  //   if (channel.lastMessageType === "image") {
+  //     return <Image size={18} />;
+  //   } else if (channel.lastMessageType === "video") {
+  //     return <Video size={18} />;
+  //   } else if (channel.lastMessageType === "file") {
+  //     return <File size={18} />;
+  //   }
+  // };
 
   return (
     <div
@@ -36,12 +37,12 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
       }`}
       onClick={chatSelectHandler}
     >
-      <UserProfile userProfile={channel} />
+      {/* <UserProfile userProfile={channel} /> */}
       <div className="flex flex-col gap-1 w-full">
         <div className="flex justify-between">
-          <p className="font-semibold text-sm">{channel.name[0]}</p>
+          <p className="font-semibold text-sm">{channel.name}</p>
           <p className="text-sm text-gray-600">
-            {/* {moment(channel.lastMessageTime).fromNow()} */}
+            {moment(channel.updatedAt).fromNow()}
           </p>
         </div>
         <div className="flex justify-between">

@@ -11,7 +11,7 @@ import { Input } from "./ui/input";
 import { CirclePlus, Search, X } from "lucide-react";
 import searchGif from "@/assets/people-search-animate.svg";
 import notFoundSVG from "@/assets/404 Error-cuate.svg";
-import { User } from "@/types";
+import { ApiResponse, User } from "@/types";
 import UserSkeleton from "./UserSkeleton";
 import { AppDispatch, RootState } from "@/store/store";
 import UserProfile from "@/utils/UserProfile";
@@ -19,25 +19,20 @@ import { useDispatch } from "react-redux";
 import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
 import { getChatMessages } from "@/slices/ChatApi";
 import { Button } from "./ui/button";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CreateChannel from "./CreateChannel";
+import toast from "react-hot-toast";
+import { AxiosResponse } from "axios";
 
-function ChannelsDialog({
-  users,
-  children,
-  searchTerm,
-  setSearchTerm,
-  searchedUserLoading,
-}: {
-  children: React.ReactNode;
-  users: User[];
-  searchTerm: string;
-  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
-  searchedUserLoading: boolean;
-}) {
+function ChannelsDialog({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch<AppDispatch>();
   const [createChannelView, setCreateChannelView] = useState<boolean>(false);
   const closeDialogRef = useRef<HTMLButtonElement>();
+
+  const [users, setUsers] = useState<User[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchedUserLoading, setSearchedUserLoading] =
+    useState<boolean>(false);
 
   const chatSelectHandler = async (userProfile: User) => {
     dispatch(setSelectedChatData(userProfile));
@@ -53,6 +48,38 @@ function ChannelsDialog({
     }
   };
 
+  const getProfiles = async () => {
+    try {
+      const response: AxiosResponse<ApiResponse> = await axios.post(
+        `${import.meta.env.VITE_SERVER_URI}/api/profiles/getProfiles`,
+        { searchTerm },
+        { withCredentials: true }
+      );
+      const { data } = response;
+      setUsers(data.data);
+      setSearchedUserLoading(false);
+    } catch (e: any) {
+      console.log(e.message);
+      toast.error(e.response.data.message);
+    }
+  };
+
+  useEffect(() => {
+    if (searchTerm.length) {
+      setSearchedUserLoading(true);
+    }
+    const timer = setTimeout(() => {
+      if (searchTerm.length) {
+        getProfiles();
+      }
+    }, 2000);
+
+    return () => {
+      clearTimeout(timer);
+      setSearchedUserLoading(false);
+    };
+  }, [searchTerm]);
+
   return (
     <>
       <AlertDialog>
@@ -65,7 +92,7 @@ function ChannelsDialog({
             <X size={22} className="" />
           </AlertDialogCancel>
           <AlertDialogHeader className="w-full">
-            <AlertDialogTitle>Users</AlertDialogTitle>
+            <AlertDialogTitle>Channels</AlertDialogTitle>
             <AlertDialogDescription className="hidden"></AlertDialogDescription>
             <div className="flex flex-col gap-3 relative w-full rounded-md max-h-[38rem]">
               <div className="flex gap-2">

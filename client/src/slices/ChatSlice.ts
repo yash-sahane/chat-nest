@@ -1,10 +1,16 @@
 import { Channel, ChatMsg, Message, User } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
-import { createChannel, getChannels, getChatMessages } from "./ChatApi";
+import {
+  createChannel,
+  getChannelChatMessages,
+  getChannels,
+  getChatMessages,
+  getUserChannels,
+} from "./ChatApi";
 
 type InitialState = {
   selectedChatType: "chat" | "channel" | undefined;
-  selectedChatData: User | undefined;
+  selectedChatData: User | Channel | undefined;
   selectedChatMessages: ChatMsg[] | [];
   channels: Channel[] | [];
   loading: boolean;
@@ -34,7 +40,9 @@ const ChatSlice = createSlice({
         {
           ...action.payload,
           sender: action.payload.sender._id,
-          recipient: action.payload.recipient._id,
+          recipient: action.payload.recipient
+            ? action.payload.recipient._id
+            : undefined,
         },
       ];
     },
@@ -54,16 +62,32 @@ const ChatSlice = createSlice({
       .addCase(getChatMessages.rejected, (state) => {
         state.loading = false;
       });
-    // getChannels
+    // getAllChannels
     builder
       .addCase(getChannels.pending, (state) => {
         state.loading = true;
       })
       .addCase(getChannels.fulfilled, (state, action) => {
-        state.channels = action.payload;
+        // console.log(action.payload);
+
+        state.channels = action.payload.data;
         state.loading = false;
       })
       .addCase(getChannels.rejected, (state) => {
+        state.loading = false;
+      });
+    // getUserChannels
+    builder
+      .addCase(getUserChannels.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getUserChannels.fulfilled, (state, action) => {
+        // console.log(action.payload);
+
+        state.channels = action.payload.data;
+        state.loading = false;
+      })
+      .addCase(getUserChannels.rejected, (state) => {
         state.loading = false;
       });
     // create channel
@@ -77,6 +101,17 @@ const ChatSlice = createSlice({
       })
       .addCase(createChannel.rejected, (state) => {
         state.loading = false;
+      })
+      // getChannelChatMessages
+      .addCase(getChannelChatMessages.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getChannelChatMessages.fulfilled, (state, action) => {
+        state.selectedChatMessages = action.payload;
+        state.loading = false;
+      })
+      .addCase(getChannelChatMessages.rejected, (state) => {
+        state.loading = false;
       });
   },
 });
@@ -85,6 +120,7 @@ export const {
   setSelectedChatType,
   setSelectedChatData,
   setSelectedChatMessages,
+  setChannels,
 } = ChatSlice.actions;
 
 export default ChatSlice.reducer;

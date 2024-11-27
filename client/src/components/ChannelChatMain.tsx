@@ -16,12 +16,10 @@ import moment from "moment";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
-import { setSelectedChatType } from "@/slices/ChatSlice";
 
-const ChatMain = () => {
-  const { selectedChatData, selectedChatMessages } = useSelector(
-    (state: RootState) => state.chat
-  );
+const ChannelChatMain = () => {
+  const { selectedChatType, selectedChatData, selectedChatMessages } =
+    useSelector((state: RootState) => state.chat);
   const { user } = useSelector((state: RootState) => state.auth);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>("");
@@ -39,12 +37,12 @@ const ChatMain = () => {
       return;
     }
 
-    socket.emit("sendMessage", {
+    socket.emit("sendChannelMessage", {
       sender: user?._id,
-      recipient: selectedChatData?._id,
       content: msg,
       messageType: "text",
       fileURL: undefined,
+      channelId: selectedChatData?._id,
     });
 
     setMsg("");
@@ -90,12 +88,12 @@ const ChatMain = () => {
           { withCredentials: true }
         );
         if (data.success) {
-          socket.emit("sendMessage", {
+          socket.emit("sendChannelMessage", {
             sender: user?._id,
-            recipient: selectedChatData?._id,
             content: undefined,
             messageType: fileType,
             fileURL: data.data,
+            channelId: selectedChatData?._id,
           });
         }
       } catch (e: any) {
@@ -137,10 +135,10 @@ const ChatMain = () => {
       {selectedChatData && (
         <>
           <div className="rounded-2xl flex gap-3 items-center p-2 py-3 transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]">
-            <UserProfile userProfile={selectedChatData} />
+            {/* <UserProfile userProfile={selectedChatData} /> */}
             <div className="flex flex-col gap-1 w-full">
               <div className="flex justify-between">
-                <p className="font-semibold text-sm">{`${selectedChatData.firstName} ${selectedChatData.lastName}`}</p>
+                <p className="font-semibold text-sm">{`${selectedChatData.name}`}</p>
               </div>
               <div className="flex justify-between">
                 <p className="text-sm text-gray-500">Online</p>
@@ -276,4 +274,4 @@ const ChatMain = () => {
   );
 };
 
-export default ChatMain;
+export default ChannelChatMain;

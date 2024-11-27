@@ -52,3 +52,26 @@ export const getAllChannels = async (req, res, next) => {
     console.log(e);
   }
 };
+
+export const getUserChannels = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const channels = await Channel.find({
+      $or: [
+        {
+          members: userId,
+        },
+        {
+          admin: userId,
+        },
+      ],
+    }).sort({ updatedAt: -1 });
+
+    res.json({
+      success: true,
+      data: channels,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};

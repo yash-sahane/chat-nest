@@ -202,7 +202,10 @@ const CreateChannel = ({
                     <MultiSelectorContent>
                       <MultiSelectorList>
                         {allProfiles.map((profile) => (
-                          <MultiSelectorItem value={profile._id}>
+                          <MultiSelectorItem
+                            value={profile._id}
+                            key={profile._id}
+                          >
                             {profile.firstName} {profile.lastName}
                           </MultiSelectorItem>
                         ))}

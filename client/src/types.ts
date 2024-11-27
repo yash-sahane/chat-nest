@@ -37,7 +37,7 @@ export type User = {
 export type Message = {
   _id: string;
   sender: User;
-  recipient: User;
+  recipient: User | undefined;
   messageType: "text" | "file" | "image" | "video";
   content: string;
   fileURL: string;

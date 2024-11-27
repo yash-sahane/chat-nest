@@ -30,6 +30,32 @@ export const getChatMessages = createAsyncThunk(
   }
 );
 
+export const getChannelChatMessages = createAsyncThunk(
+  "chat/getChannelChatMessages",
+  async ({ id }: { id: string }, { rejectWithValue }) => {
+    try {
+      const { data }: AxiosResponse<ApiResponse> = await axios.post(
+        `${import.meta.env.VITE_SERVER_URI}/api/channel`,
+        { id },
+        { withCredentials: true }
+      );
+
+      // console.log(data);
+
+      if (data.success) {
+        return data.data;
+      } else {
+        toast.error(data.message);
+        return rejectWithValue(data.message);
+      }
+    } catch (e: any) {
+      console.log(e.message);
+      toast.error(e.response.data.message);
+      return rejectWithValue(e.response.data.message);
+    }
+  }
+);
+
 export const getChannels = createAsyncThunk(
   "channel/getChannels",
   async (_, { rejectWithValue }) => {
@@ -39,6 +65,31 @@ export const getChannels = createAsyncThunk(
         { withCredentials: true }
       );
       if (data.success) {
+        console.log(data);
+
+        return data;
+      } else {
+        return rejectWithValue(data.message);
+      }
+    } catch (e: any) {
+      console.log(e.message);
+      toast.error(e.response.data.message);
+      return rejectWithValue(e.response.data.mesage);
+    }
+  }
+);
+
+export const getUserChannels = createAsyncThunk(
+  "channel/getUserChannels",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data }: AxiosResponse<ApiResponse> = await axios.get(
+        `${import.meta.env.VITE_SERVER_URI}/api/channel/getUserChannels`,
+        { withCredentials: true }
+      );
+      if (data.success) {
+        console.log(data);
+
         return data;
       } else {
         return rejectWithValue(data.message);

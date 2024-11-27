@@ -29,20 +29,25 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const [socket, setSocket] = useState<typeof Socket | null>(null);
 
   const receiveMessageHandler = (message: Message) => {
-    // console.log(
-    //   selectedChatDataRef.current !== undefined,
-    //   " ",
-    //   selectedChatDataRef.current?._id === message.sender._id,
-    //   " ",
-    //   selectedChatDataRef.current?._id === message.recipient._id
-    // );
+    if (
+      selectedChatDataRef.current !== undefined &&
+      selectedChatDataRef.current._id === message.sender._id
+    ) {
+      // console.log("working");
+
+      dispatch(setSelectedChatMessages(message));
+    }
+  };
+
+  const receiveChannelMessageHandler = (message: Message) => {
+    console.log(message);
+    console.log(selectedChatDataRef.current._id, message.channelId);
 
     if (
       selectedChatDataRef.current !== undefined &&
-      (selectedChatDataRef.current._id === message.sender._id ||
-        selectedChatDataRef.current._id === message.recipient._id)
+      selectedChatDataRef.current._id === message.channelId
     ) {
-      // console.log("working");
+      console.log("working");
 
       dispatch(setSelectedChatMessages(message));
     }
@@ -63,6 +68,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       });
 
       newSocket.on("receiveMessage", receiveMessageHandler);
+      newSocket.on("receiveChannelMessage", receiveChannelMessageHandler);
 
       return () => {
         newSocket.close();

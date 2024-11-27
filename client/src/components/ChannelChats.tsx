@@ -1,14 +1,17 @@
 import { Channel, DMProfile } from "@/types";
 import Chat from "./Chat";
+import ChannelChat from "./ChannelChat";
 
 const ChannelChats = ({
   filteredChannels,
 }: {
   filteredChannels: Channel[];
 }) => {
+  console.log(filteredChannels);
+
   return filteredChannels.map((channel) => (
     <div key={channel._id} className="mt-4 flex flex-col gap-2">
-      <Chat channel={channel} />
+      <ChannelChat channel={channel} />
     </div>
   ));
 };
