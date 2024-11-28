@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   downloadFile,
+  getChannelChatMessages,
   getChatMessages,
   sendFile,
 } from "../controllers/Chat.js";
@@ -21,6 +22,7 @@ let storage = multer.diskStorage({
 let upload = multer({ storage: storage });
 
 router.post("/", isAuthenticated, getChatMessages);
+router.post("/getChannelMessages", isAuthenticated, getChannelChatMessages);
 router.post("/send_file", isAuthenticated, upload.single("file"), sendFile);
 router.get("/download_file/:filename", isAuthenticated, downloadFile);
 

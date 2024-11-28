@@ -2,7 +2,7 @@ import { Channel, ChatMsg, Message, User } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   createChannel,
-  getChannelChatMessages,
+  getChannelMessages,
   getChannels,
   getChatMessages,
   getUserChannels,
@@ -12,6 +12,7 @@ type InitialState = {
   selectedChatType: "chat" | "channel" | undefined;
   selectedChatData: User | Channel | undefined;
   selectedChatMessages: ChatMsg[] | [];
+  selectedChannelMessages: ChatMsg[] | [];
   channels: Channel[] | [];
   loading: boolean;
 };
@@ -20,6 +21,7 @@ const initialState: InitialState = {
   selectedChatType: undefined,
   selectedChatData: undefined,
   selectedChatMessages: [],
+  selectedChannelMessages: [],
   channels: [],
   loading: false,
 };
@@ -43,6 +45,15 @@ const ChatSlice = createSlice({
           recipient: action.payload.recipient
             ? action.payload.recipient._id
             : undefined,
+        },
+      ];
+    },
+    setSelectedChannelMessages: (state, action) => {
+      state.selectedChatMessages = [
+        ...state.selectedChatMessages,
+        {
+          ...action.payload,
+          sender: action.payload.sender,
         },
       ];
     },
@@ -103,14 +114,14 @@ const ChatSlice = createSlice({
         state.loading = false;
       })
       // getChannelChatMessages
-      .addCase(getChannelChatMessages.pending, (state) => {
+      .addCase(getChannelMessages.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getChannelChatMessages.fulfilled, (state, action) => {
+      .addCase(getChannelMessages.fulfilled, (state, action) => {
         state.selectedChatMessages = action.payload;
         state.loading = false;
       })
-      .addCase(getChannelChatMessages.rejected, (state) => {
+      .addCase(getChannelMessages.rejected, (state) => {
         state.loading = false;
       });
   },
@@ -121,6 +132,7 @@ export const {
   setSelectedChatData,
   setSelectedChatMessages,
   setChannels,
+  setSelectedChannelMessages,
 } = ChatSlice.actions;
 
 export default ChatSlice.reducer;

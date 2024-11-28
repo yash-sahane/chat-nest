@@ -30,17 +30,17 @@ export const getChatMessages = createAsyncThunk(
   }
 );
 
-export const getChannelChatMessages = createAsyncThunk(
+export const getChannelMessages = createAsyncThunk(
   "chat/getChannelChatMessages",
   async ({ id }: { id: string }, { rejectWithValue }) => {
     try {
       const { data }: AxiosResponse<ApiResponse> = await axios.post(
-        `${import.meta.env.VITE_SERVER_URI}/api/channel`,
+        `${import.meta.env.VITE_SERVER_URI}/api/chat/getChannelMessages`,
         { id },
         { withCredentials: true }
       );
 
-      // console.log(data);
+      console.log(data);
 
       if (data.success) {
         return data.data;

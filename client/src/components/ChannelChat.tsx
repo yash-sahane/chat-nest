@@ -1,5 +1,5 @@
 import profileLogo from "@/assets/app-logo.png";
-import { getChatMessages } from "@/slices/ChatApi";
+import { getChannelMessages, getChatMessages } from "@/slices/ChatApi";
 import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { Channel, User } from "@/types";
@@ -17,7 +17,7 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
     dispatch(setSelectedChatData(channel));
     dispatch(setSelectedChatType("channel"));
 
-    dispatch(getChatMessages({ id: channel._id }));
+    dispatch(getChannelMessages({ id: channel._id }));
   };
 
   // const getMessageType = () => {
@@ -37,7 +37,7 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
       }`}
       onClick={chatSelectHandler}
     >
-      {/* <UserProfile userProfile={channel} /> */}
+      <UserProfile userProfile={channel} />
       <div className="flex flex-col gap-1 w-full">
         <div className="flex justify-between">
           <p className="font-semibold text-sm">{channel.name}</p>

@@ -39,6 +39,7 @@ const setupSocket = (server) => {
     console.log(message);
 
     const { sender, content, messageType, fileURL, channelId } = message;
+    console.log(channelId);
 
     const senderSocketId = userSocketMap.get(message.sender);
 
@@ -56,12 +57,16 @@ const setupSocket = (server) => {
       .exec();
 
     await Channel.findByIdAndUpdate(channelId, {
-      $push: { messages: message._id },
+      $push: { messages: newMessage._id },
     });
 
     const channel = await Channel.findById(channelId).populate("members");
 
+    console.log(channel);
+
     const finalData = { ...messageData._doc, channelId: channel._id };
+
+    console.log(finalData);
 
     if (channel && channel.members) {
       channel.members.forEach((member) => {

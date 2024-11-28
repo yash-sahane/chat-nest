@@ -2,6 +2,7 @@ import { fileURLToPath } from "url";
 import ErrorHandler from "../middleware/error.js";
 import Message from "../model/Message.js";
 import path from "path";
+import Channel from "../model/Channel.js";
 
 export const getChatMessages = async (req, res, next) => {
   try {
@@ -22,6 +23,31 @@ export const getChatMessages = async (req, res, next) => {
     return res.json({
       success: true,
       data: messages,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getChannelChatMessages = async (req, res, next) => {
+  try {
+    const channelId = req.body.id;
+
+    if (!channelId) {
+      return next(new ErrorHandler(400, "Channel is required"));
+    }
+
+    const channel = await Channel.findById(channelId).populate({
+      path: "messages",
+      populate: {
+        path: "sender",
+        select: "firstName lastName email _id avatar profileTheme",
+      },
+    });
+
+    return res.json({
+      success: true,
+      data: channel.messages,
     });
   } catch (e) {
     console.log(e);

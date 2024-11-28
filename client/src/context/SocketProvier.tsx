@@ -1,4 +1,7 @@
-import { setSelectedChatMessages } from "@/slices/ChatSlice";
+import {
+  setSelectedChannelMessages,
+  setSelectedChatMessages,
+} from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { Message } from "@/types";
 import {
@@ -49,7 +52,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     ) {
       console.log("working");
 
-      dispatch(setSelectedChatMessages(message));
+      dispatch(setSelectedChannelMessages(message));
     }
   };
 

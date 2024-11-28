@@ -7,8 +7,6 @@ const ChannelChats = ({
 }: {
   filteredChannels: Channel[];
 }) => {
-  console.log(filteredChannels);
-
   return filteredChannels.map((channel) => (
     <div key={channel._id} className="mt-4 flex flex-col gap-2">
       <ChannelChat channel={channel} />

@@ -135,7 +135,7 @@ const ChannelChatMain = () => {
       {selectedChatData && (
         <>
           <div className="rounded-2xl flex gap-3 items-center p-2 py-3 transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]">
-            {/* <UserProfile userProfile={selectedChatData} /> */}
+            <UserProfile userProfile={selectedChatData} />
             <div className="flex flex-col gap-1 w-full">
               <div className="flex justify-between">
                 <p className="font-semibold text-sm">{`${selectedChatData.name}`}</p>
@@ -147,7 +147,7 @@ const ChannelChatMain = () => {
           </div>
           <div className="h-[calc(100%-134px)] flex flex-col gap-3 pr-2 mt-2 overflow-y-auto">
             {selectedChatMessages.map((chatMsg, idx) => {
-              // console.log(chatMsg.messageType);
+              console.log(chatMsg);
 
               return (
                 <React.Fragment key={chatMsg._id}>
@@ -158,60 +158,81 @@ const ChannelChatMain = () => {
                     }
                   >
                     <div
+                      style={{
+                        margin:
+                          user?._id === chatMsg.sender._id
+                            ? "0 0 0 auto"
+                            : "0 auto 0 0",
+                      }}
                       className={`${
                         chatMsg.fileURL
                           ? "max-w-[500px]"
                           : "py-[6px] max-w-[80%]"
-                      } rounded-md p-3 text-sm w-fit`}
-                      style={{
-                        background:
-                          user?._id === chatMsg.sender
-                            ? "hsl(var(--message-background))"
-                            : "hsl(var(--chat-primary))",
-                        margin:
-                          user?._id === chatMsg.sender
-                            ? "0 0 0 auto"
-                            : "0 auto 0 0",
-                      }}
+                      } w-fit rounded-md text-sm flex gap-2 items-center py-3 transition-all duration-150 ease-linear`}
                     >
-                      {chatMsg.messageType === "text" && (
-                        <p>{chatMsg.content}</p>
-                      )}
-                      {chatMsg.messageType === "image" && (
-                        <img
-                          src={`${import.meta.env.VITE_SERVER_URI}/files/${
-                            chatMsg.fileURL
-                          }`}
-                          className="w-full h-full object-contain rounded-md"
-                        />
-                      )}
-                      {chatMsg.messageType === "video" && (
-                        <video
-                          src={`${import.meta.env.VITE_SERVER_URI}/files/${
-                            chatMsg.fileURL
-                          }`}
-                          className="w-full h-full object-contain rounded-md"
-                          controls
-                        />
-                      )}
-                      {chatMsg.messageType === "file" && (
-                        <div className="flex gap-2 items-center">
-                          <div className="flex justify-center rounded-md p-2 bg-[hsl(var(--background))]">
-                            <File size={19} />
+                      <div className="flex gap-2 w-full">
+                        <UserProfile userProfile={chatMsg.sender} />
+                        <div
+                          className={`${
+                            chatMsg.fileURL ? "max-w-[500px]" : "py-[6px]"
+                          } rounded-md p-3 text-sm w-fit`}
+                          style={{
+                            background:
+                              user?._id === chatMsg.sender._id
+                                ? "hsl(var(--message-background))"
+                                : "hsl(var(--chat-primary))",
+                            // margin:
+                            //   user?._id === chatMsg.sender._id
+                            //     ? "0 0 0 auto"
+                            //     : "0 auto 0 0",
+                          }}
+                        >
+                          <div className="flex flex-col gap-1">
+                            <p className="font-semibold text-sm">{`${chatMsg.sender.firstName} ${chatMsg.sender.lastName}`}</p>
+                            {chatMsg.messageType === "text" && (
+                              <p>{chatMsg.content}</p>
+                            )}
+                            {chatMsg.messageType === "image" && (
+                              <img
+                                src={`${
+                                  import.meta.env.VITE_SERVER_URI
+                                }/files/${chatMsg.fileURL}`}
+                                className="w-full h-full object-contain rounded-md"
+                              />
+                            )}
+                            {chatMsg.messageType === "video" && (
+                              <video
+                                src={`${
+                                  import.meta.env.VITE_SERVER_URI
+                                }/files/${chatMsg.fileURL}`}
+                                className="w-full h-full object-contain rounded-md"
+                                controls
+                              />
+                            )}
+                            {chatMsg.messageType === "file" && (
+                              <div className="flex gap-2 items-center">
+                                <div className="flex justify-center rounded-md p-2 bg-[hsl(var(--background))]">
+                                  <File size={19} />
+                                </div>
+                                <p>{chatMsg.fileURL}</p>
+                                <Button className="h-fit flex justify-center rounded-md p-2">
+                                  <Download
+                                    size={20}
+                                    onClick={() =>
+                                      downloadHandler(chatMsg.fileURL)
+                                    }
+                                  />
+                                </Button>
+                              </div>
+                            )}
                           </div>
-                          <p>{chatMsg.fileURL}</p>
-                          <Button className="h-fit flex justify-center rounded-md p-2">
-                            <Download
-                              size={20}
-                              onClick={() => downloadHandler(chatMsg.fileURL)}
-                            />
-                          </Button>
                         </div>
-                      )}
+                      </div>
                     </div>
+
                     <p
                       className={`text-xs text-gray-500 w-full ${
-                        user?._id === chatMsg.sender
+                        user?._id === chatMsg.sender._id
                           ? "text-right "
                           : "text-left"
                       }`}
