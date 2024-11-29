@@ -5,7 +5,7 @@ import EmojiPicker, {
   EmojiStyle,
   Theme,
 } from "emoji-picker-react";
-import { Download, File, Image, Paperclip, Send, Smile } from "lucide-react";
+import { Download, File, Paperclip, Send, Smile } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Input } from "./ui/input";
@@ -16,7 +16,6 @@ import moment from "moment";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
-import { setSelectedChatType } from "@/slices/ChatSlice";
 
 const ChatMain = () => {
   const { selectedChatData, selectedChatMessages } = useSelector(

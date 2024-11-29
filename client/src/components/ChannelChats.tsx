@@ -1,5 +1,4 @@
-import { Channel, DMProfile } from "@/types";
-import Chat from "./Chat";
+import { Channel } from "@/types";
 import ChannelChat from "./ChannelChat";
 
 const ChannelChats = ({

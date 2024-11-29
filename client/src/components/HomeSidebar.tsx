@@ -7,10 +7,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useStore } from "@/context/StoreContext";
 import { useTheme } from "@/context/ThemeProvider";
 import { logout } from "@/slices/AuthApi";
 import {
+  setChatView,
   setSelectedChatData,
   setSelectedChatMessages,
   setSelectedChatType,
@@ -26,7 +26,6 @@ import { useNavigate } from "react-router-dom";
 const HomeSidebar = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
-  const { setChatView } = useStore();
   const { theme } = useTheme();
   const navigate = useNavigate();
 
@@ -94,10 +93,12 @@ const HomeSidebar = () => {
         <div className="w-[30px] h-[2px] dark:bg-gray-800 bg-gray-300 bottom-[-2px]"></div>
         <div className="flex flex-col gap-4">
           <div className="cursor-pointer p-1">
-            <MessageSquareText onClick={() => setChatView("person")} />
+            <MessageSquareText
+              onClick={() => dispatch(setChatView("person"))}
+            />
           </div>
           <div className="cursor-pointer p-1">
-            <Users onClick={() => setChatView("channel")} />
+            <Users onClick={() => dispatch(setChatView("channel"))} />
           </div>
         </div>
       </div>

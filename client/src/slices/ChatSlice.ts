@@ -1,4 +1,4 @@
-import { Channel, ChatMsg, Message, User } from "@/types";
+import { Channel, ChatMsg, User } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   createChannel,
@@ -15,6 +15,7 @@ type InitialState = {
   selectedChannelMessages: ChatMsg[] | [];
   channels: Channel[] | [];
   loading: boolean;
+  chatView: "person" | "channel";
 };
 
 const initialState: InitialState = {
@@ -24,6 +25,7 @@ const initialState: InitialState = {
   selectedChannelMessages: [],
   channels: [],
   loading: false,
+  chatView: "person",
 };
 
 const ChatSlice = createSlice({
@@ -57,8 +59,8 @@ const ChatSlice = createSlice({
         },
       ];
     },
-    setChannels: (state, action) => {
-      state.channels = action.payload;
+    setChatView: (state, action) => {
+      state.chatView = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -131,8 +133,8 @@ export const {
   setSelectedChatType,
   setSelectedChatData,
   setSelectedChatMessages,
-  setChannels,
   setSelectedChannelMessages,
+  setChatView,
 } = ChatSlice.actions;
 
 export default ChatSlice.reducer;

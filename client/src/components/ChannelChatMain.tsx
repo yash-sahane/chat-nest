@@ -112,14 +112,18 @@ const ChannelChatMain = () => {
   };
 
   useEffect(() => {
-    const handleClickOutside = () => {
-      if (emojiRef.current && !emojiRef.current.contains(event?.target)) {
+    const handleClickOutside = (event: Event) => {
+      if (
+        emojiRef.current &&
+        event.target instanceof Node &&
+        !emojiRef.current.contains(event?.target)
+      ) {
         setShowEmojiPicker(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => handleClickOutside();
+    return () => document.addEventListener("mousedown", handleClickOutside);
   }, [useRef]);
 
   useEffect(() => {
@@ -147,7 +151,7 @@ const ChannelChatMain = () => {
           </div>
           <div className="h-[calc(100%-134px)] flex flex-col gap-3 pr-2 mt-2 overflow-y-auto">
             {selectedChatMessages.map((chatMsg, idx) => {
-              console.log(chatMsg);
+              // console.log(chatMsg);
 
               return (
                 <React.Fragment key={chatMsg._id}>

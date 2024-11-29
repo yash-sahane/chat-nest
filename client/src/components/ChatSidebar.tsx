@@ -3,18 +3,15 @@ import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import ProfilesDialog from "./ProfilesDialog";
 import Chats from "./Chats";
-import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
-import { ApiResponse, DMProfile, User } from "@/types";
+import { ApiResponse, DMProfile } from "@/types";
 import axios from "axios";
-import { useStore } from "@/context/StoreContext";
 import ChannelsDialog from "./ChannelsDialog";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import ChannelChats from "./ChannelChats";
 import { useDispatch } from "react-redux";
-import { setChannels } from "@/slices/ChatSlice";
-import { getChannels, getUserChannels } from "@/slices/ChatApi";
+import { getUserChannels } from "@/slices/ChatApi";
 
 const ChatSidebar = () => {
   const [DMProfiles, setDMProfiles] = useState<DMProfile[] | []>([]);
@@ -23,7 +20,7 @@ const ChatSidebar = () => {
   );
   const [searchDMProfiles, setSearchDMProfiles] = useState<string>("");
   const [searchChannels, setSearchChannels] = useState<string>("");
-  const { chatView } = useStore();
+  const { chatView } = useSelector((state: RootState) => state.chat);
   const { channels } = useSelector((state: RootState) => state.chat);
   const dispatch = useDispatch<AppDispatch>();
 

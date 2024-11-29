@@ -1,8 +1,7 @@
-import profileLogo from "@/assets/app-logo.png";
 import { getChatMessages } from "@/slices/ChatApi";
 import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
-import { DMProfile, User } from "@/types";
+import { DMProfile } from "@/types";
 import UserProfile from "@/utils/UserProfile";
 import { File, Image, Video } from "lucide-react";
 import moment from "moment";

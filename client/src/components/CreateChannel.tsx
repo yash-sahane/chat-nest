@@ -24,7 +24,6 @@ import axios from "axios";
 import { createChannel } from "@/slices/ChatApi";
 
 const CreateChannel = ({
-  createChannelView,
   setCreateChannelView,
 }: {
   createChannelView: boolean;
@@ -70,7 +69,7 @@ const CreateChannel = ({
 
     const response = await dispatch(createChannel({ formData }));
     if (createChannel.fulfilled.match(response)) {
-      const { message, data } = response.payload;
+      const { message } = response.payload;
 
       toast.success(message);
       setCreateChannelView(false);

@@ -40,10 +40,6 @@ const Auth = () => {
       toast.error("Password is required");
       return false;
     }
-    // if (password.length < 8) {
-    //   toast.error("Password should be at least 8 characters long");
-    //   return false;
-    // }
     return true;
   };
 
@@ -69,41 +65,6 @@ const Auth = () => {
         toast.error(response.error.message as string);
       }
     }
-    // try {
-    //   const response: AxiosResponse<ApiResponse> = await axios.post(
-    //     `${import.meta.env.VITE_SERVER_URI}/api/user/signup`,
-    //     {
-    //       email,
-    //       password,
-    //     },
-    //     {
-    //       withCredentials: true,
-    //     }
-    //   );
-    //   const { data } = response;
-    //   // console.log(data);
-
-    //   if (data.success) {
-    //     toast.success(data.message);
-    //     setUser(data.data);
-    //     setEmail("");
-    //     setPassword("");
-    //     setConfirmPassword("");
-    //     setIsAuthenticated(true);
-
-    //     if (data.data.profileSetup) {
-    //       navigate("/");
-    //     } else {
-    //       navigate(`/profile?email=${email}`);
-    //       // console.log("going into false");
-    //     }
-    //   }
-    // } catch (e: any) {
-    //   console.log(e);
-    //   if (e.response.data.message) {
-    //     toast.error(e.response.data.message);
-    //   }
-    // }
   };
 
   const loginHandler = async () => {
@@ -112,11 +73,7 @@ const Auth = () => {
     }
 
     const response = await dispatch(login({ email, password }));
-
-    // console.log(response);
     if (login.fulfilled.match(response)) {
-      // console.log("matched");
-
       const { firstName, profileSetup } = response.payload;
 
       toast.success(`Welcome back ${firstName}`);
@@ -134,43 +91,6 @@ const Auth = () => {
         toast.error(response.error.message as string);
       }
     }
-
-    // try {
-    //   const response: AxiosResponse<ApiResponse> = await axios.post(
-    //     `${import.meta.env.VITE_SERVER_URI}/api/user/login`,
-    //     {
-    //       email,
-    //       password,
-    //     },
-    //     {
-    //       withCredentials: true,
-    //     }
-    //   );
-    //   const { data } = response;
-    //   console.log(data);
-
-    //   if (data.success) {
-    //     setUser(data.data);
-    //     setEmail("");
-    //     setPassword("");
-    //     setConfirmPassword("");
-    //     toast.success(`Welcome back, ${data.data.firstName}`);
-    //     setIsAuthenticated(true);
-
-    //     if (data.data.profileSetup) {
-    //       // console.log("going into true");
-    //       navigate("/");
-    //     } else {
-    //       navigate(`/profile?email=${email}`);
-    //       // console.log("going into false");
-    //     }
-    //   }
-    // } catch (e: any) {
-    //   console.log(e);
-    //   if (e.response.data.message) {
-    //     toast.error(e.response.data.message);
-    //   }
-    // }
   };
 
   return (

@@ -1,10 +1,8 @@
-import profileLogo from "@/assets/app-logo.png";
-import { getChannelMessages, getChatMessages } from "@/slices/ChatApi";
+import { getChannelMessages } from "@/slices/ChatApi";
 import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
-import { Channel, User } from "@/types";
+import { Channel } from "@/types";
 import UserProfile from "@/utils/UserProfile";
-import { File, Image, Video } from "lucide-react";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -14,9 +12,10 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
   const { selectedChatData } = useSelector((state: RootState) => state.chat);
 
   const chatSelectHandler = async () => {
+    console.log(channel);
+
     dispatch(setSelectedChatData(channel));
     dispatch(setSelectedChatType("channel"));
-
     dispatch(getChannelMessages({ id: channel._id }));
   };
 

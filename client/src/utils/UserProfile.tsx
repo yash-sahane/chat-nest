@@ -6,7 +6,8 @@ import { RootState } from "@/store/store";
 
 const UserProfile = ({ userProfile }: { userProfile: User | Channel }) => {
   let { user } = useSelector((state: RootState) => state.auth);
-  user = userProfile ? userProfile : user;
+  user = userProfile._id ? userProfile : user;
+
   const { theme } = useTheme();
   const borderColor = user?.avatar
     ? `${
