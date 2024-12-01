@@ -11,11 +11,12 @@ import { useSelector } from "react-redux";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useSocket } from "@/context/SocketProvier";
-import { ApiResponse, ChatMsg } from "@/types";
+import { ApiResponse, ChannelChatMsg, ChatMsg } from "@/types";
 import moment from "moment";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
+import { isChannel, isChannelChatMsg, isChatMsg } from "@/utils/type";
 
 const ChannelChatMain = () => {
   const { selectedChatType, selectedChatData, selectedChatMessages } =
@@ -24,7 +25,7 @@ const ChannelChatMain = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>("");
   const { socket } = useSocket();
-  const emojiRef = useRef<null | HTMLElement>(null);
+  const emojiRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<null | HTMLElement>(null);
 
   const emojiHandler = (emoji: EmojiClickData) => {
@@ -49,7 +50,7 @@ const ChannelChatMain = () => {
   };
 
   let lastDate: string | null = null;
-  const renderDate = (chatMsg: ChatMsg) => {
+  const renderDate = (chatMsg: ChannelChatMsg | ChatMsg) => {
     const messageDate = moment(chatMsg.timeStamp).format("YYYY-MM-DD");
     const showDate = messageDate !== lastDate;
     lastDate = messageDate;
@@ -142,7 +143,9 @@ const ChannelChatMain = () => {
             <UserProfile userProfile={selectedChatData} />
             <div className="flex flex-col gap-1 w-full">
               <div className="flex justify-between">
-                <p className="font-semibold text-sm">{`${selectedChatData.name}`}</p>
+                <p className="font-semibold text-sm">{`${
+                  isChannel(selectedChatData) && selectedChatData.name
+                }`}</p>
               </div>
               <div className="flex justify-between">
                 <p className="text-sm text-gray-500">Online</p>
@@ -164,7 +167,8 @@ const ChannelChatMain = () => {
                     <div
                       style={{
                         margin:
-                          user?._id === chatMsg.sender._id
+                          user?._id ===
+                          (isChannelChatMsg(chatMsg) && chatMsg.sender._id)
                             ? "0 0 0 auto"
                             : "0 auto 0 0",
                       }}
@@ -182,7 +186,8 @@ const ChannelChatMain = () => {
                           } rounded-md p-3 text-sm w-fit`}
                           style={{
                             background:
-                              user?._id === chatMsg.sender._id
+                              user?._id ===
+                              (isChannelChatMsg(chatMsg) && chatMsg.sender._id)
                                 ? "hsl(var(--message-background))"
                                 : "hsl(var(--chat-primary))",
                             // margin:
@@ -192,7 +197,9 @@ const ChannelChatMain = () => {
                           }}
                         >
                           <div className="flex flex-col gap-1">
-                            <p className="font-semibold text-sm">{`${chatMsg.sender.firstName} ${chatMsg.sender.lastName}`}</p>
+                            {isChannelChatMsg(chatMsg) && (
+                              <p className="font-semibold text-sm">{`${chatMsg.sender.firstName} ${chatMsg.sender.lastName}`}</p>
+                            )}
                             {chatMsg.messageType === "text" && (
                               <p>{chatMsg.content}</p>
                             )}
@@ -236,7 +243,8 @@ const ChannelChatMain = () => {
 
                     <p
                       className={`text-xs text-gray-500 w-full ${
-                        user?._id === chatMsg.sender._id
+                        user?._id ===
+                        (isChannelChatMsg(chatMsg) && chatMsg.sender._id)
                           ? "text-right "
                           : "text-left"
                       }`}

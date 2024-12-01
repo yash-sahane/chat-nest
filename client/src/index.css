@@ -42,14 +42,14 @@
 
   .dark {
     /* custom */
-    --status-online: 142, 75%, 36%;
-    --status-offline: 0, 1%, 53%;
-    --chat-bg: 250, 47%, 10%;
-    --chat-primary: 253, 51%, 13%;
-    --chat-secondary: 252, 50%, 20%;
-    --message-background: 250, 52%, 17%;
+    --status-online: 142 75% 36%;
+    --status-offline: 0 1% 53%;
+    --chat-bg: 250 47% 10%;
+    --chat-primary: 253 51% 13%;
+    --chat-secondary: 252 50% 20%;
+    --message-background: 250 52% 17%;
     /* custom */
-    --chat-card: 253, 49%, 15%;
+    --chat-card: 253 49% 15%;
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
     --card: 224 71.4% 4.1%;

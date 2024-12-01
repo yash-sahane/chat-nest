@@ -20,8 +20,7 @@ import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
 import { getChatMessages } from "@/slices/ChatApi";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { AxiosResponse } from "axios";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 function ProfilesDialog({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch<AppDispatch>();

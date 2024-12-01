@@ -23,6 +23,7 @@ import React, { useEffect, useRef, useState } from "react";
 import CreateChannel from "./CreateChannel";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
+import axios from "axios";
 
 function ChannelsDialog({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch<AppDispatch>();
@@ -51,7 +52,7 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
   const getProfiles = async () => {
     try {
       const response: AxiosResponse<ApiResponse> = await axios.post(
-        `${import.meta.env.VITE_SERVER_URI}/api/profiles/getProfiles`,
+        `${import.meta.env.VITE_SERVER_URI}/api/channel/getSearchedChannels`,
         { searchTerm },
         { withCredentials: true }
       );

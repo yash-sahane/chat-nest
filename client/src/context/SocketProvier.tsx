@@ -33,17 +33,16 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const receiveMessageHandler = (message: Message) => {
     if (
       selectedChatDataRef.current !== undefined &&
-      selectedChatDataRef.current._id === message.sender._id
+      (selectedChatDataRef.current._id === message.sender._id ||
+        selectedChatDataRef.current._id === message.recipient?._id)
     ) {
-      // console.log("working");
-
       dispatch(setSelectedChatMessages(message));
     }
   };
 
   const receiveChannelMessageHandler = (message: Message) => {
-    console.log(message);
-    console.log(selectedChatDataRef.current._id, message.channelId);
+    // console.log(message);
+    // console.log(selectedChatDataRef.current._id, message.channelId);
 
     if (
       selectedChatDataRef.current !== undefined &&

@@ -3,6 +3,7 @@ import { useTheme } from "@/context/ThemeProvider";
 import { Channel, User } from "@/types";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { isChannel, isUser } from "./type";
 
 const UserProfile = ({ userProfile }: { userProfile: User | Channel }) => {
   let { user } = useSelector((state: RootState) => state.auth);
@@ -49,9 +50,9 @@ const UserProfile = ({ userProfile }: { userProfile: User | Channel }) => {
           className={`text-sm flex items-center justify-center h-full`}
         >{`${user?.firstName[0].toUpperCase()}${user?.lastName[0].toUpperCase()}`}</p>
       ) : (
-        <p
-          className={`text-sm flex items-center justify-center h-full`}
-        >{`${user?.name[0].toUpperCase()}`}</p>
+        <p className={`text-sm flex items-center justify-center h-full`}>{`${
+          isChannel(user) && user?.name[0].toUpperCase()
+        }`}</p>
       )}
     </div>
   );

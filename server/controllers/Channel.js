@@ -53,6 +53,27 @@ export const getAllChannels = async (req, res, next) => {
   }
 };
 
+export const getSearchedChannels = async (req, res, next) => {
+  try {
+    const { searchTerm } = req.body;
+
+    const regexSearchTerm = searchTerm.replace(
+      /[~`!#$%^&*(){}\[\];:"'<,>?\/\\|_+=-]/g,
+      ""
+    );
+    const regex = new RegExp(regexSearchTerm, "i");
+    // console.log(regex);
+
+    const channels = await Channel.find({ name: regex });
+    res.json({
+      success: true,
+      data: channels,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const getUserChannels = async (req, res, next) => {
   try {
     const userId = req.user._id;

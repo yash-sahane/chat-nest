@@ -1,4 +1,4 @@
-import { Channel, ChatMsg, User } from "@/types";
+import { Channel, ChannelChatMsg, ChatMsg, User } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   createChannel,
@@ -11,7 +11,7 @@ import {
 type InitialState = {
   selectedChatType: "chat" | "channel" | undefined;
   selectedChatData: User | Channel | undefined;
-  selectedChatMessages: ChatMsg[] | [];
+  selectedChatMessages: ChatMsg[] | ChannelChatMsg[] | [];
   selectedChannelMessages: ChatMsg[] | [];
   channels: Channel[] | [];
   loading: boolean;

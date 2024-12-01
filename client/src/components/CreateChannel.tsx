@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
 import axios from "axios";
-import { createChannel } from "@/slices/ChatApi";
+import { createChannel, getUserChannels } from "@/slices/ChatApi";
 
 const CreateChannel = ({
   setCreateChannelView,
@@ -73,6 +73,7 @@ const CreateChannel = ({
 
       toast.success(message);
       setCreateChannelView(false);
+      dispatch(getUserChannels());
     } else {
       if (response.payload) {
         toast.error(response.payload as string);

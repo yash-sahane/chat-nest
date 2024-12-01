@@ -4,7 +4,7 @@ import ChatSidebar from "@/components/ChatSidebar";
 import ChannelChatMain from "@/components/ChannelChatMain";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import GradientBackgroud from "@/components/GradientBackgroud";
+import GradientBackground from "@/components/GradientBackground";
 
 const Home = () => {
   const { selectedChatType, selectedChatData } = useSelector(
@@ -22,7 +22,7 @@ const Home = () => {
       ) : (
         selectedChatData && <ChannelChatMain />
       )}
-      {!selectedChatType && <GradientBackgroud />}
+      {!selectedChatType && <GradientBackground />}
     </div>
   );
 };

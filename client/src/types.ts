@@ -54,6 +54,15 @@ export type ChatMsg = {
   timeStamp: Date;
 };
 
+export type ChannelChatMsg = {
+  _id: string;
+  sender: User;
+  messageType: "text" | "file" | "image" | "video";
+  content: string;
+  fileURL: string;
+  timeStamp: Date;
+};
+
 export type DMProfile = {
   _id: string;
   lastMessageTime: string;

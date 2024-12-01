@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createChannel,
   getAllChannels,
+  getSearchedChannels,
   getUserChannels,
 } from "../controllers/Channel.js";
 import isAuthenticated from "../middleware/auth.js";
@@ -23,6 +24,7 @@ export let upload = multer({ storage: storage });
 
 router.post("/create", isAuthenticated, upload.single("image"), createChannel);
 router.get("/getChannels", isAuthenticated, getAllChannels);
+router.post("/getSearchedChannels", isAuthenticated, getSearchedChannels);
 router.get("/getUserChannels", isAuthenticated, getUserChannels);
 
 export default router;

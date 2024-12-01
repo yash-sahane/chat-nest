@@ -11,11 +11,12 @@ import { useSelector } from "react-redux";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useSocket } from "@/context/SocketProvier";
-import { ApiResponse, ChatMsg } from "@/types";
+import { ApiResponse, ChannelChatMsg, ChatMsg } from "@/types";
 import moment from "moment";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
+import { isUser } from "@/utils/type";
 
 const ChatMain = () => {
   const { selectedChatData, selectedChatMessages } = useSelector(
@@ -50,7 +51,7 @@ const ChatMain = () => {
   };
 
   let lastDate: string | null = null;
-  const renderDate = (chatMsg: ChatMsg) => {
+  const renderDate = (chatMsg: ChannelChatMsg | ChatMsg) => {
     const messageDate = moment(chatMsg.timeStamp).format("YYYY-MM-DD");
     const showDate = messageDate !== lastDate;
     lastDate = messageDate;
@@ -114,7 +115,10 @@ const ChatMain = () => {
 
   useEffect(() => {
     const handleClickOutside = () => {
-      if (emojiRef.current && !emojiRef.current.contains(event?.target)) {
+      if (
+        emojiRef.current &&
+        !emojiRef.current.contains(event?.target as Node)
+      ) {
         setShowEmojiPicker(false);
       }
     };
@@ -139,7 +143,9 @@ const ChatMain = () => {
             <UserProfile userProfile={selectedChatData} />
             <div className="flex flex-col gap-1 w-full">
               <div className="flex justify-between">
-                <p className="font-semibold text-sm">{`${selectedChatData.firstName} ${selectedChatData.lastName}`}</p>
+                {isUser(selectedChatData) && (
+                  <p className="font-semibold text-sm">{`${selectedChatData.firstName} ${selectedChatData.lastName}`}</p>
+                )}
               </div>
               <div className="flex justify-between">
                 <p className="text-sm text-gray-500">Online</p>
