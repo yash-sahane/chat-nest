@@ -105,7 +105,7 @@ const Auth = () => {
       </div>
 
       {/* Main Content */}
-      <div className="custom-transition shadow-2xl dark:shadow-inner-bottom relative z-10 p-4 w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] max-w-[60rem]  min-h-[32rem] max-h-[40rem] rounded-xl flex bg-opacity-90 bg-white dark:bg-[hsl(var(--background))]">
+      <div className="custom-transition shadow-2xl dark:shadow-inner-bottom relative z-10 p-4 w-[90vw] xsm:w-[90vw] msm:w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] max-w-[60rem]  min-h-[32rem] max-h-[40rem] rounded-xl flex bg-opacity-90 bg-white dark:bg-[hsl(var(--background))]">
         <div className="flex justify-center items-center flex-col w-full md:w-2/4">
           <div>
             <img src={appLogo} alt="applogo" className="w-16" />

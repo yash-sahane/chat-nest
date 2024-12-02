@@ -3,6 +3,7 @@ import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { Channel } from "@/types";
 import UserProfile from "@/utils/UserProfile";
+import { File, Image, Video } from "lucide-react";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -19,15 +20,15 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
     dispatch(getChannelMessages({ id: channel._id }));
   };
 
-  // const getMessageType = () => {
-  //   if (channel.lastMessageType === "image") {
-  //     return <Image size={18} />;
-  //   } else if (channel.lastMessageType === "video") {
-  //     return <Video size={18} />;
-  //   } else if (channel.lastMessageType === "file") {
-  //     return <File size={18} />;
-  //   }
-  // };
+  const getMessageType = () => {
+    if (channel.lastMessageType === "image") {
+      return <Image size={18} />;
+    } else if (channel.lastMessageType === "video") {
+      return <Video size={18} />;
+    } else if (channel.lastMessageType === "file") {
+      return <File size={18} />;
+    }
+  };
 
   return (
     <div
@@ -46,7 +47,7 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
         </div>
         <div className="flex justify-between">
           <div className="w-[180px] text-sm text-gray-500 text-ellipsis text-nowrap overflow-hidden">
-            {/* {channel.lastMessage ? (
+            {channel.lastMessage ? (
               channel.lastMessage
             ) : (
               <div className="flex gap-1">
@@ -54,7 +55,7 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
                 {channel.lastMessageType[0].toUpperCase() +
                   channel.lastMessageType.slice(1)}
               </div>
-            )} */}
+            )}
           </div>
           <span className="flex items-center justify-center px-[6px] rounded-full bg-[hsl(var(--primary))]">
             <p className="text-xs text-white">1</p>

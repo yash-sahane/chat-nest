@@ -93,7 +93,7 @@ const Profile = () => {
       </div>
 
       {/* Main Content */}
-      <div className="custom-transition shadow-2xl dark:shadow-inner-bottom relative z-10 p-4 pr-8 w-[60vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] max-w-[50rem] min-h-[28rem] max-h-[28rem] rounded-xl flex bg-opacity-90 bg-white dark:bg-[hsl(var(--background))]">
+      <div className="custom-transition shadow-2xl dark:shadow-inner-bottom relative z-10 p-4 pr-8 w-[90vw] msm:w-[90vw] sm:w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] max-w-[50rem] min-h-[28rem] max-h-full sm:max-h-[28rem] rounded-xl flex bg-opacity-90 bg-white dark:bg-[hsl(var(--background))]">
         <div className="flex justify-center items-center flex-col gap-6 w-full">
           <div className="flex flex-col items-center">
             <img src={appLogo} alt="applogo" className="w-16" />
@@ -102,10 +102,12 @@ const Profile = () => {
             </p>
           </div>
           <div className="w-full">
-            <div className="flex gap-4">
-              <div className={`w-2/4 flex justify-center items-center`}>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div
+                className={`w-full sm:w-2/4 flex justify-center items-center`}
+              >
                 <div
-                  className="bg-[hsl(var(--secondary))] text-5xl w-48 h-48 flex items-center justify-center border border-border rounded-full transition-all duration-300 ease-linear custom-transition relative overflow-hidden"
+                  className="bg-[hsl(var(--secondary))] text-5xl sm:w-48 w-36 sm:h-48 h-36 flex items-center justify-center border border-border rounded-full transition-all duration-300 ease-linear custom-transition relative overflow-hidden"
                   style={{
                     background:
                       theme === "dark"
@@ -140,25 +142,29 @@ const Profile = () => {
                     <label
                       htmlFor="profile-pic"
                       className={`transition-all duration-150 ease-linear absolute hover:bottom-0
-                        -bottom-[32px] rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[73px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer`}
+                        -bottom-[42px] sm:-bottom-[28px] rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[73px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer`}
                     >
                       <Camera />
-                      <p className="text-base">Add Profile Picture</p>
+                      <p className="text-sm sm:text-base">
+                        Add Profile Picture
+                      </p>
                     </label>
                   ) : (
                     <div
-                      className={`transition-all duration-150 ease-linear absolute hover:bottom-0 -bottom-[60px] rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[100px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer`}
+                      className={`transition-all duration-150 ease-linear absolute hover:bottom-0  -bottom-[50px] sm:-bottom-[60px]  rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[80px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer`}
                       onClick={() => {
                         setProfileImg(undefined);
                       }}
                     >
                       <Trash />
-                      <p className="text-base">Remove Profile Picture</p>
+                      <p className="text-sm text-center sm:text-base">
+                        Remove Profile Picture
+                      </p>
                     </div>
                   )}
                 </div>
               </div>
-              <div className="flex flex-col gap-3 mt-4 w-2/4">
+              <div className="flex flex-col gap-3 mt-4 w-full sm:w-2/4">
                 <Input
                   value={email || ""}
                   disabled

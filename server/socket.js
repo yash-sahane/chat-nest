@@ -48,6 +48,7 @@ const setupSocket = (server) => {
       content,
       messageType,
       fileURL,
+      channel: channelId,
       recipient: null,
       timeStamp: new Date(),
     });
@@ -61,8 +62,6 @@ const setupSocket = (server) => {
     });
 
     const channel = await Channel.findById(channelId).populate("members");
-
-    console.log(channel);
 
     const finalData = { ...messageData._doc, channelId: channel._id };
 

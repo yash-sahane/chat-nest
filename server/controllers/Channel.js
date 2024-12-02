@@ -1,5 +1,6 @@
 import ErrorHandler from "../middleware/error.js";
 import Channel from "../model/Channel.js";
+import Message from "../model/Message.js";
 import User from "../model/User.js";
 
 export const createChannel = async (req, res, next) => {
@@ -77,16 +78,59 @@ export const getSearchedChannels = async (req, res, next) => {
 export const getUserChannels = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const channels = await Channel.find({
-      $or: [
-        {
-          members: userId,
+    // const channels = await Channel.find({
+    //   $or: [
+    //     {
+    //       members: userId,
+    //     },
+    //     {
+    //       admin: userId,
+    //     },
+    //   ],
+    // }).sort({ updatedAt: -1 });
+
+    const channels = await Channel.aggregate([
+      // Step 1: Match Channels
+      {
+        $match: {
+          $or: [{ members: userId }, { admin: userId }],
         },
-        {
-          admin: userId,
+      },
+      // Step 2: Lookup Messages
+      {
+        $lookup: {
+          from: "messages", // Assuming the collection name is 'messages'
+          localField: "_id", // Field from the Channel collection
+          foreignField: "channel", // Field from the Message collection
+          as: "messages",
         },
-      ],
-    }).sort({ updatedAt: -1 });
+      },
+      // Step 3: Add a field to get the last message in each channel
+      {
+        $addFields: {
+          lastMessage: { $arrayElemAt: ["$messages", -1] }, // Get the last message
+        },
+      },
+      // Step 4: Project the required fields
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          admin: 1,
+          members: 1,
+          profileTheme: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          lastMessage: "$lastMessage.content",
+          lastMessageType: "$lastMessage.messageType",
+          lastMessageTimeStamp: "$lastMessage.timeStamp",
+        },
+      },
+      // Optional: Sort by last message timestamp
+      {
+        $sort: { lastMessageTimeStamp: -1 },
+      },
+    ]);
 
     res.json({
       success: true,

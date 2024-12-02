@@ -34,6 +34,8 @@ const ChatSidebar = () => {
           { withCredentials: true }
         );
 
+        console.log(data);
+
         if (data.success) {
           setDMProfiles(data.data);
         }
@@ -87,7 +89,9 @@ const ChatSidebar = () => {
             <Input
               type="text"
               className="custom-transition pl-[34px] h-full w-full bg-transparent placeholder:text-sm placeholder:text-gray-500 rounded-lg"
-              placeholder="Search profile..."
+              placeholder={`${
+                chatView === "person" ? "Search profile" : "Search channel"
+              }...`}
               onChange={chatSearchHandler}
             />
           </div>

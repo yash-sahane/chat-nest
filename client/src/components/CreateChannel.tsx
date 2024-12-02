@@ -115,7 +115,7 @@ const CreateChannel = ({
   }, []);
 
   return (
-    <div className="transition-all w-full h-full flex items-center justify-center z-50 absolute top-0 left-0 backdrop-blur-md">
+    <div className="z-[99] transition-all w-full h-full flex items-center justify-center absolute top-0 left-0 backdrop-blur-md">
       <div className="relative">
         <div className="absolute top-4 right-4 cursor-pointer hover:bg-[#1f2937] p-1 rounded-md">
           <X size={22} onClick={() => setCreateChannelView((prev) => !prev)} />
