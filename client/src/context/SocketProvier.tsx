@@ -1,6 +1,7 @@
 import {
   setSelectedChannelMessages,
   setSelectedChatMessages,
+  setStatusChanged,
 } from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { Message } from "@/types";
@@ -54,6 +55,10 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const statusChangeHandler = () => {
+    dispatch(setStatusChanged(true));
+  };
+
   useEffect(() => {
     if (user) {
       let newSocket = io(
@@ -68,6 +73,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         console.log("connected to the server");
       });
 
+      newSocket.emit("userOnline");
+      newSocket.on("userStatusChanged", statusChangeHandler);
       newSocket.on("receiveMessage", receiveMessageHandler);
       newSocket.on("receiveChannelMessage", receiveChannelMessageHandler);
 

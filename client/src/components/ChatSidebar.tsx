@@ -12,6 +12,7 @@ import { AppDispatch, RootState } from "@/store/store";
 import ChannelChats from "./ChannelChats";
 import { useDispatch } from "react-redux";
 import { getUserChannels } from "@/slices/ChatApi";
+import { setStatusChanged } from "@/slices/ChatSlice";
 
 const ChatSidebar = () => {
   const [DMProfiles, setDMProfiles] = useState<DMProfile[] | []>([]);
@@ -20,11 +21,14 @@ const ChatSidebar = () => {
   );
   const [searchDMProfiles, setSearchDMProfiles] = useState<string>("");
   const [searchChannels, setSearchChannels] = useState<string>("");
-  const { chatView } = useSelector((state: RootState) => state.chat);
-  const { channels } = useSelector((state: RootState) => state.chat);
+  const { chatView, channels, statusChaged } = useSelector(
+    (state: RootState) => state.chat
+  );
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
+    console.log("running");
+
     if (chatView === "person") {
       const getProfilesForDMList = async () => {
         const { data }: AxiosResponse<ApiResponse> = await axios.get(
@@ -42,23 +46,17 @@ const ChatSidebar = () => {
       };
 
       getProfilesForDMList();
+      dispatch(setStatusChanged(false));
     } else {
       setDMProfiles([]);
       dispatch(getUserChannels());
-
-      // if (getChannels.fulfilled.match(response)) {
-      //   const { message, data } = response.payload;
-
-      // } else {
-      //   if (response.payload) {
-      //     toast.error(response.payload as string);
-      //   } else {
-      //     toast.error(response.error.message as string);
-      //   }
-      // }
-      //   }
     }
-  }, [chatView, selectedChatMessages]);
+  }, [chatView, selectedChatMessages, statusChaged]);
+
+  useEffect(() => {
+    console.log("running for status");
+    return () => {};
+  }, [statusChaged]);
 
   const filteredProfiles = DMProfiles.filter((profile) => {
     const fullName = `${profile.firstName} ${profile.lastName}`.toLowerCase();

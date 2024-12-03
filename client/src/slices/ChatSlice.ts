@@ -16,6 +16,7 @@ type InitialState = {
   channels: Channel[] | [];
   loading: boolean;
   chatView: "person" | "channel";
+  statusChaged: boolean;
 };
 
 const initialState: InitialState = {
@@ -26,6 +27,7 @@ const initialState: InitialState = {
   channels: [],
   loading: false,
   chatView: "person",
+  statusChaged: false,
 };
 
 const ChatSlice = createSlice({
@@ -37,6 +39,9 @@ const ChatSlice = createSlice({
     },
     setSelectedChatData: (state, action) => {
       state.selectedChatData = action.payload;
+    },
+    setStatusChanged: (state, action) => {
+      state.statusChaged = true;
     },
     setSelectedChatMessages: (state, action) => {
       state.selectedChatMessages = [
@@ -135,6 +140,7 @@ export const {
   setSelectedChatMessages,
   setSelectedChannelMessages,
   setChatView,
+  setStatusChanged,
 } = ChatSlice.actions;
 
 export default ChatSlice.reducer;

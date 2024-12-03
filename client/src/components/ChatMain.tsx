@@ -148,7 +148,9 @@ const ChatMain = () => {
                 )}
               </div>
               <div className="flex justify-between">
-                <p className="text-sm text-gray-500">Online</p>
+                <p className="text-sm text-gray-500">
+                  {selectedChatData.status}
+                </p>
               </div>
             </div>
           </div>

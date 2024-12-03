@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import Message from "./model/Message.js";
 import Channel from "./model/Channel.js";
+import User from "./model/User.js";
 
 const setupSocket = (server) => {
   const io = new Server(server, {
@@ -82,6 +83,11 @@ const setupSocket = (server) => {
   };
 
   io.on("connection", (socket) => {
+    socket.on("userOnline", async () => {
+      await User.findByIdAndUpdate(userId, { status: "online" });
+      io.emit("userStatusChanged", { userId, status: "online" });
+    });
+
     const userId = socket.handshake.query.userId;
     if (userId) {
       userSocketMap.set(userId, socket.id);
@@ -93,7 +99,9 @@ const setupSocket = (server) => {
     socket.on("sendMessage", sendMessage);
     socket.on("sendChannelMessage", sendChannelMessage);
 
-    socket.on("disconnect", () => {
+    socket.on("disconnect", async () => {
+      await User.findByIdAndUpdate(userId, { status: "offline" });
+      io.emit("userStatusChanged", { userId, status: "offline" });
       console.log(`Client disconnected : ${socket.id}`);
       userSocketMap.delete(userId);
     });

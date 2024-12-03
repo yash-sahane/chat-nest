@@ -32,6 +32,7 @@ export type User = {
   lastName: string;
   profileTheme: ProfileThemeKeys;
   avatar: string;
+  status: "online" | "offline";
 };
 
 export type Message = {
@@ -73,6 +74,7 @@ export type DMProfile = {
   profileTheme: ProfileThemeKeys;
   avatar: string;
   lastMessage: string;
+  status: "online" | "offline";
 };
 
 export type View = "person" | "channel";
@@ -86,4 +88,6 @@ export type Channel = {
   profileTheme: string;
   createdAt: Date;
   updatedAt: Date;
+  lastMessageType: "image" | "video" | "file";
+  lastMessage: string;
 };

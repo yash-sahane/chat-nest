@@ -17,6 +17,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
 import { isChannel, isChannelChatMsg, isChatMsg } from "@/utils/type";
+import { useTheme } from "@/context/ThemeProvider";
 
 const ChannelChatMain = () => {
   const { selectedChatType, selectedChatData, selectedChatMessages } =
@@ -27,6 +28,7 @@ const ChannelChatMain = () => {
   const { socket } = useSocket();
   const emojiRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<null | HTMLElement>(null);
+  const { theme } = useTheme();
 
   const emojiHandler = (emoji: EmojiClickData) => {
     setMsg((msg) => msg + emoji.emoji);
@@ -198,7 +200,13 @@ const ChannelChatMain = () => {
                         >
                           <div className="flex flex-col gap-1">
                             {isChannelChatMsg(chatMsg) && (
-                              <p className="font-semibold text-sm">{`${chatMsg.sender.firstName} ${chatMsg.sender.lastName}`}</p>
+                              <p
+                                className={` font-semibold text-sm ${
+                                  theme === "light"
+                                    ? "text-gray-800"
+                                    : "text-gray-300"
+                                }`}
+                              >{`${chatMsg.sender.firstName} ${chatMsg.sender.lastName}`}</p>
                             )}
                             {chatMsg.messageType === "text" && (
                               <p>{chatMsg.content}</p>

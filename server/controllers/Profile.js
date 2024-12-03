@@ -83,6 +83,7 @@ export const getAllProfilesForDMList = async (req, res, next) => {
           lastName: "$user.lastName",
           avatar: "$user.avatar",
           profileTheme: "$user.profileTheme",
+          status: "$user.status",
         },
       },
       {
