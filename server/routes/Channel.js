@@ -4,6 +4,7 @@ import {
   getAllChannels,
   getSearchedChannels,
   getUserChannels,
+  joinChannel,
 } from "../controllers/Channel.js";
 import isAuthenticated from "../middleware/auth.js";
 
@@ -23,6 +24,7 @@ let storage = multer.diskStorage({
 export let upload = multer({ storage: storage });
 
 router.post("/create", isAuthenticated, upload.single("image"), createChannel);
+router.post("/join", isAuthenticated, joinChannel);
 router.get("/getChannels", isAuthenticated, getAllChannels);
 router.post("/getSearchedChannels", isAuthenticated, getSearchedChannels);
 router.get("/getUserChannels", isAuthenticated, getUserChannels);

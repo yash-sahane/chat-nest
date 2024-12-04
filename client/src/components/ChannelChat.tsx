@@ -47,15 +47,15 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
         </div>
         <div className="flex justify-between">
           <div className="w-[180px] text-sm text-gray-500 text-ellipsis text-nowrap overflow-hidden">
-            {channel.lastMessage ? (
-              channel.lastMessage
-            ) : (
-              <div className="flex gap-1">
-                {getMessageType()}
-                {channel.lastMessageType[0].toUpperCase() +
-                  channel.lastMessageType.slice(1)}
-              </div>
-            )}
+            {channel.lastMessage
+              ? channel.lastMessage
+              : channel.lastMessageType && (
+                  <div className="flex gap-1">
+                    {getMessageType()}
+                    {channel?.lastMessageType[0].toUpperCase() +
+                      channel?.lastMessageType.slice(1)}
+                  </div>
+                )}
           </div>
           <span className="flex items-center justify-center px-[6px] rounded-full bg-[hsl(var(--primary))]">
             <p className="text-xs text-white">1</p>

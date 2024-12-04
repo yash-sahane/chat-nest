@@ -42,6 +42,34 @@ export const createChannel = async (req, res, next) => {
   }
 };
 
+export const joinChannel = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const channelId = req.body.id;
+
+    const channel = await Channel.findById(channelId);
+    if (!channel) {
+      return next(new ErrorHandler(404, "Channel not found"));
+    }
+
+    if (!channel.members.includes(userId)) {
+      channel.members.push(userId);
+      await channel.save();
+    } else {
+      return next(
+        new ErrorHandler(400, "You are already a member of this channel")
+      );
+    }
+
+    return res.json({
+      success: true,
+      message: "Channel joined successfully",
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const getAllChannels = async (req, res, next) => {
   try {
     const channels = await Channel.find({});

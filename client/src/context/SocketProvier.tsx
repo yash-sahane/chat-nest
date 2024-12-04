@@ -1,7 +1,7 @@
+import { getDMProfiles } from "@/slices/ChatApi";
 import {
   setSelectedChannelMessages,
   setSelectedChatMessages,
-  setStatusChanged,
 } from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { Message } from "@/types";
@@ -26,7 +26,9 @@ const SocketContext = createContext<SocketContextType | undefined>(undefined);
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
-  const { selectedChatData } = useSelector((state: RootState) => state.chat);
+  const { selectedChatData, chatView, DMProfiles } = useSelector(
+    (state: RootState) => state.chat
+  );
   const selectedChatDataRef = useRef(selectedChatData);
 
   const [socket, setSocket] = useState<typeof Socket | null>(null);
@@ -56,7 +58,9 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const statusChangeHandler = () => {
-    dispatch(setStatusChanged(true));
+    if (chatView === "person") {
+      dispatch(getDMProfiles());
+    }
   };
 
   useEffect(() => {

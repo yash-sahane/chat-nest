@@ -11,13 +11,13 @@ import { Input } from "./ui/input";
 import { CirclePlus, Search, X } from "lucide-react";
 import searchGif from "@/assets/people-search-animate.svg";
 import notFoundSVG from "@/assets/404 Error-cuate.svg";
-import { ApiResponse, User } from "@/types";
+import { ApiResponse, Channel, User } from "@/types";
 import UserSkeleton from "./UserSkeleton";
 import { AppDispatch, RootState } from "@/store/store";
 import UserProfile from "@/utils/UserProfile";
 import { useDispatch } from "react-redux";
 import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
-import { getChatMessages } from "@/slices/ChatApi";
+import { getChannelMessages, getChatMessages } from "@/slices/ChatApi";
 import { Button } from "./ui/button";
 import React, { useEffect, useRef, useState } from "react";
 import CreateChannel from "./CreateChannel";
@@ -29,17 +29,16 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch<AppDispatch>();
   const [createChannelView, setCreateChannelView] = useState<boolean>(false);
   const closeDialogRef = useRef<HTMLButtonElement>();
-
-  const [users, setUsers] = useState<User[]>([]);
+  const [channels, setChannels] = useState<Channel[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchedUserLoading, setSearchedUserLoading] =
+  const [searchedChannelLoading, setSearchedChannelLoading] =
     useState<boolean>(false);
 
-  const chatSelectHandler = async (userProfile: User) => {
-    dispatch(setSelectedChatData(userProfile));
-    dispatch(setSelectedChatType("chat"));
+  const chatSelectHandler = async (channel: Channel) => {
+    dispatch(setSelectedChatData(channel));
+    dispatch(setSelectedChatType("channel"));
 
-    dispatch(getChatMessages({ id: userProfile._id }));
+    dispatch(getChannelMessages({ id: channel._id }));
   };
 
   const createChannelHandler = () => {
@@ -57,17 +56,37 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
         { withCredentials: true }
       );
       const { data } = response;
-      setUsers(data.data);
-      setSearchedUserLoading(false);
+      console.log(data);
+
+      setChannels(data.data);
+      setSearchedChannelLoading(false);
     } catch (e: any) {
       console.log(e.message);
       toast.error(e.response.data.message);
     }
   };
 
+  const joinChannelHandler = async (id: string) => {
+    try {
+      const { data }: AxiosResponse<ApiResponse> = await axios.post(
+        `${import.meta.env.VITE_SERVER_URI}/api/channel/join`,
+        { id },
+        { withCredentials: true }
+      );
+      if (data.success) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.mesage);
+      }
+    } catch (e: any) {
+      console.log(e.response.data.message);
+      toast.error(e.response.data.message);
+    }
+  };
+
   useEffect(() => {
     if (searchTerm.length) {
-      setSearchedUserLoading(true);
+      setSearchedChannelLoading(true);
     }
     const timer = setTimeout(() => {
       if (searchTerm.length) {
@@ -77,7 +96,7 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
 
     return () => {
       clearTimeout(timer);
-      setSearchedUserLoading(false);
+      setSearchedChannelLoading(false);
     };
   }, [searchTerm]);
 
@@ -109,29 +128,41 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
                   <CirclePlus />
                 </Button>
               </div>
-              {users.length ? (
+              {channels.length ? (
                 <p className="text-sm text-gray-400 -mt-1">
-                  Showing {users.length} results
+                  Showing {channels.length} results
                 </p>
               ) : (
                 ""
               )}
-              {users.map((user) => {
+              {channels.map((channel) => {
                 return (
-                  <AlertDialogCancel className="reset-classes" key={user._id}>
+                  <AlertDialogCancel
+                    className="reset-classes"
+                    key={channel._id}
+                  >
                     <div
                       className="rounded-2xl flex gap-3 items-center p-2 py-3 cursor-pointer transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]"
-                      onClick={() => chatSelectHandler(user)}
+                      // onClick={() => chatSelectHandler(channel)}
                     >
-                      <UserProfile userProfile={user} />
+                      <UserProfile userProfile={channel} />
                       <div className="flex flex-col gap-1 w-full">
                         <div className="flex justify-between">
-                          <p className="font-semibold text-sm">{`${user.firstName} ${user.lastName}`}</p>
+                          <p className="font-semibold text-sm">{`${channel.name}`}</p>
                         </div>
                         <div className="flex justify-between">
-                          <p className="text-sm text-gray-500">Online</p>
+                          <p className="text-sm text-gray-500">
+                            {channel.members.length} member
+                            {channel.members.length > 1 ? "s" : ""}
+                          </p>
                         </div>
                       </div>
+                      <Button
+                        className="h-fit py-2 px-4"
+                        onClick={() => joinChannelHandler(channel._id)}
+                      >
+                        Join
+                      </Button>
                     </div>
                   </AlertDialogCancel>
                 );
@@ -139,14 +170,14 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
               <div>
                 <img
                   className={`${
-                    !users.length && !searchTerm ? "w-full" : "w-0"
+                    !channels.length && !searchTerm ? "w-full" : "w-0"
                   } transition-all`}
                   src={searchGif}
                 />
                 <div className={`flex flex-col items-center`}>
                   <img
                     className={`${
-                      !users.length && searchTerm && !searchedUserLoading
+                      !channels.length && searchTerm && !searchedChannelLoading
                         ? "w-full"
                         : "w-0 opacity-0"
                     } transition-all`}
@@ -154,7 +185,7 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
                   />
                   <p
                     className={`${
-                      !users.length && searchTerm && !searchedUserLoading
+                      !channels.length && searchTerm && !searchedChannelLoading
                         ? "flex"
                         : "hidden"
                     } flex-col gap-1 items-center mb-2`}
@@ -173,7 +204,7 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
                 </div>
                 <div
                   className={`${
-                    searchedUserLoading ? "h-fit" : "h-0"
+                    searchedChannelLoading ? "h-fit" : "h-0"
                   } flex flex-col overflow-hidden`}
                 >
                   <UserSkeleton />

@@ -128,12 +128,17 @@ const ChatMain = () => {
   }, [useRef]);
 
   useEffect(() => {
-    // console.log(selectedChatMessages.length);
-
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [selectedChatMessages]);
+
+  // useEffect(() => {
+
+  //   return () => {
+
+  //   };
+  // }, []);
 
   return (
     <div className="custom-transition bg-[hsl(var(--chat-bg))] w-4/5 rounded-2xl p-3">

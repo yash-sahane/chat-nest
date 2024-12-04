@@ -36,7 +36,15 @@ const Chat = ({ DMProfile }: { DMProfile: DMProfile }) => {
       }`}
       onClick={chatSelectHandler}
     >
-      <UserProfile userProfile={DMProfile} />
+      <div className="relative">
+        <UserProfile userProfile={DMProfile} />
+        <span
+          className="absolute right-0 bottom-0 w-1 h-1"
+          style={{
+            background: DMProfile.status === "online" ? "green" : "gray",
+          }}
+        ></span>
+      </div>
       <div className="flex flex-col gap-1 w-full">
         <div className="flex justify-between">
           <p className="font-semibold text-sm">

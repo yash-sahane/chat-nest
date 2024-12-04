@@ -1,22 +1,23 @@
-import { Channel, ChannelChatMsg, ChatMsg, User } from "@/types";
+import { Channel, ChannelChatMsg, ChatMsg, DMProfile, User } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   createChannel,
   getChannelMessages,
   getChannels,
   getChatMessages,
+  getDMProfiles,
   getUserChannels,
 } from "./ChatApi";
 
 type InitialState = {
   selectedChatType: "chat" | "channel" | undefined;
   selectedChatData: User | Channel | undefined;
-  selectedChatMessages: ChatMsg[] | ChannelChatMsg[] | [];
+  selectedChatMessages: ChatMsg[] | [];
   selectedChannelMessages: ChatMsg[] | [];
   channels: Channel[] | [];
+  DMProfiles: DMProfile[] | [];
   loading: boolean;
   chatView: "person" | "channel";
-  statusChaged: boolean;
 };
 
 const initialState: InitialState = {
@@ -25,9 +26,9 @@ const initialState: InitialState = {
   selectedChatMessages: [],
   selectedChannelMessages: [],
   channels: [],
+  DMProfiles: [],
   loading: false,
   chatView: "person",
-  statusChaged: false,
 };
 
 const ChatSlice = createSlice({
@@ -39,9 +40,6 @@ const ChatSlice = createSlice({
     },
     setSelectedChatData: (state, action) => {
       state.selectedChatData = action.payload;
-    },
-    setStatusChanged: (state, action) => {
-      state.statusChaged = true;
     },
     setSelectedChatMessages: (state, action) => {
       state.selectedChatMessages = [
@@ -70,66 +68,28 @@ const ChatSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getChatMessages.pending, (state) => {
-        state.loading = true;
+      .addCase(getDMProfiles.fulfilled, (state, action) => {
+        state.DMProfiles = action.payload.data;
       })
       .addCase(getChatMessages.fulfilled, (state, action) => {
         state.selectedChatMessages = action.payload;
         state.loading = false;
       })
-      .addCase(getChatMessages.rejected, (state) => {
-        state.loading = false;
-      });
-    // getAllChannels
-    builder
-      .addCase(getChannels.pending, (state) => {
-        state.loading = true;
-      })
+      // getAllChannels
       .addCase(getChannels.fulfilled, (state, action) => {
-        // console.log(action.payload);
-
         state.channels = action.payload.data;
-        state.loading = false;
       })
-      .addCase(getChannels.rejected, (state) => {
-        state.loading = false;
-      });
-    // getUserChannels
-    builder
-      .addCase(getUserChannels.pending, (state) => {
-        state.loading = true;
-      })
+      // getUserChannels
       .addCase(getUserChannels.fulfilled, (state, action) => {
-        // console.log(action.payload);
-
         state.channels = action.payload.data;
-        state.loading = false;
       })
-      .addCase(getUserChannels.rejected, (state) => {
-        state.loading = false;
-      });
-    // create channel
-    builder
-      .addCase(createChannel.pending, (state) => {
-        state.loading = true;
-      })
+      // create channel
       .addCase(createChannel.fulfilled, (state, action) => {
-        // state.channels = action.payload;
-        state.loading = false;
-      })
-      .addCase(createChannel.rejected, (state) => {
         state.loading = false;
       })
       // getChannelChatMessages
-      .addCase(getChannelMessages.pending, (state) => {
-        state.loading = true;
-      })
       .addCase(getChannelMessages.fulfilled, (state, action) => {
         state.selectedChatMessages = action.payload;
-        state.loading = false;
-      })
-      .addCase(getChannelMessages.rejected, (state) => {
-        state.loading = false;
       });
   },
 });
@@ -140,7 +100,6 @@ export const {
   setSelectedChatMessages,
   setSelectedChannelMessages,
   setChatView,
-  setStatusChanged,
 } = ChatSlice.actions;
 
 export default ChatSlice.reducer;
