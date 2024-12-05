@@ -1,11 +1,18 @@
-import { RootState } from "@/store/store";
+import { AppDispatch, RootState } from "@/store/store";
 import UserProfile from "@/utils/UserProfile";
 import EmojiPicker, {
   EmojiClickData,
   EmojiStyle,
   Theme,
 } from "emoji-picker-react";
-import { Download, File, Paperclip, Send, Smile } from "lucide-react";
+import {
+  ArrowLeft,
+  Download,
+  File,
+  Paperclip,
+  Send,
+  Smile,
+} from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Input } from "./ui/input";
@@ -17,6 +24,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
 import { isUser } from "@/utils/type";
+import { useDispatch } from "react-redux";
+import { setSelectedChatData } from "@/slices/ChatSlice";
 
 const ChatMain = () => {
   const { selectedChatData, selectedChatMessages } = useSelector(
@@ -28,6 +37,7 @@ const ChatMain = () => {
   const { socket } = useSocket();
   const emojiRef = useRef<null | HTMLElement>(null);
   const scrollRef = useRef<null | HTMLElement>(null);
+  const dispatch = useDispatch<AppDispatch>();
 
   const emojiHandler = (emoji: EmojiClickData) => {
     setMsg((msg) => msg + emoji.emoji);
@@ -113,6 +123,10 @@ const ChatMain = () => {
     }/api/chat/download_file/${fileUrl.split("/").pop()}`;
   };
 
+  const clearSelectedChatData = () => {
+    dispatch(setSelectedChatData(undefined));
+  };
+
   useEffect(() => {
     const handleClickOutside = () => {
       if (
@@ -133,18 +147,23 @@ const ChatMain = () => {
     }
   }, [selectedChatMessages]);
 
-  // useEffect(() => {
-
-  //   return () => {
-
-  //   };
-  // }, []);
-
   return (
-    <div className="custom-transition bg-[hsl(var(--chat-bg))] w-4/5 rounded-2xl p-3">
+    <div
+      className={`${
+        selectedChatData
+          ? "max-sm:w-[calc(100%-60px)]"
+          : "max-sm:hidden max-sm:w-0"
+      } sm:w-4/5 custom-transition bg-[hsl(var(--chat-bg))] rounded-2xl p-3`}
+    >
       {selectedChatData && (
         <>
           <div className="rounded-2xl flex gap-3 items-center p-2 py-3 transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]">
+            <div
+              className="sm:hidden bg-[hsl(var(--chat-bg))] p-2 rounded-lg cursor-pointer"
+              onClick={clearSelectedChatData}
+            >
+              <ArrowLeft size={18} />
+            </div>
             <UserProfile userProfile={selectedChatData} />
             <div className="flex flex-col gap-1 w-full">
               <div className="flex justify-between">
@@ -154,7 +173,7 @@ const ChatMain = () => {
               </div>
               <div className="flex justify-between">
                 <p className="text-sm text-gray-500">
-                  {selectedChatData.status}
+                  {isUser(selectedChatData) && selectedChatData.status}
                 </p>
               </div>
             </div>
@@ -246,10 +265,13 @@ const ChatMain = () => {
                 className="hidden"
                 accept="*"
               />
-              <label htmlFor="upload-file">
-                <Paperclip size={20}></Paperclip>
+              <label htmlFor="upload-file" className="cursor-pointer">
+                <Paperclip size={20} className="cursor-pointer"></Paperclip>
               </label>
-              <Smile onClick={() => setShowEmojiPicker((prev) => !prev)} />
+              <Smile
+                onClick={() => setShowEmojiPicker((prev) => !prev)}
+                className="cursor-pointer"
+              />
             </div>
             {showEmojiPicker && (
               <div

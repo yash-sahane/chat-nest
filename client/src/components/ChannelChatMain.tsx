@@ -1,11 +1,19 @@
-import { RootState } from "@/store/store";
+import { AppDispatch, RootState } from "@/store/store";
 import UserProfile from "@/utils/UserProfile";
 import EmojiPicker, {
   EmojiClickData,
   EmojiStyle,
   Theme,
 } from "emoji-picker-react";
-import { Download, File, Image, Paperclip, Send, Smile } from "lucide-react";
+import {
+  ArrowLeft,
+  Download,
+  File,
+  Image,
+  Paperclip,
+  Send,
+  Smile,
+} from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Input } from "./ui/input";
@@ -18,10 +26,14 @@ import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
 import { isChannel, isChannelChatMsg, isChatMsg } from "@/utils/type";
 import { useTheme } from "@/context/ThemeProvider";
+import { useDispatch } from "react-redux";
+import { setSelectedChatData } from "@/slices/ChatSlice";
 
 const ChannelChatMain = () => {
-  const { selectedChatType, selectedChatData, selectedChatMessages } =
-    useSelector((state: RootState) => state.chat);
+  const { selectedChatData, selectedChatMessages } = useSelector(
+    (state: RootState) => state.chat
+  );
+  const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>("");
@@ -114,6 +126,10 @@ const ChannelChatMain = () => {
     }/api/chat/download_file/${fileUrl.split("/").pop()}`;
   };
 
+  const clearSelectedChatData = () => {
+    dispatch(setSelectedChatData(undefined));
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: Event) => {
       if (
@@ -142,6 +158,12 @@ const ChannelChatMain = () => {
       {selectedChatData && (
         <>
           <div className="rounded-2xl flex gap-3 items-center p-2 py-3 transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]">
+            <div
+              className="sm:hidden bg-[hsl(var(--chat-bg))] p-2 rounded-lg cursor-pointer"
+              onClick={clearSelectedChatData}
+            >
+              <ArrowLeft size={18} />
+            </div>
             <UserProfile userProfile={selectedChatData} />
             <div className="flex flex-col gap-1 w-full">
               <div className="flex justify-between">

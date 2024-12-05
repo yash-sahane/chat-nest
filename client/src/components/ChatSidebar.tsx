@@ -15,7 +15,7 @@ import { getDMProfiles, getUserChannels } from "@/slices/ChatApi";
 import { setStatusChanged } from "@/slices/ChatSlice";
 
 const ChatSidebar = () => {
-  const { selectedChatMessages } = useSelector(
+  const { selectedChatMessages, selectedChatData } = useSelector(
     (state: RootState) => state.chat
   );
   const [searchDMProfiles, setSearchDMProfiles] = useState<string>("");
@@ -53,7 +53,11 @@ const ChatSidebar = () => {
   };
 
   return (
-    <div className="custom-transition bg-[hsl(var(--chat-bg))] w-1/5 min-w-[300px] max-w-[320px] rounded-2xl p-3">
+    <div
+      className={`${
+        selectedChatData ? "max-sm:hidden max-sm:w-0" : "max-sm:w-full"
+      } custom-transition bg-[hsl(var(--chat-bg))] w-full sm:w-1/5 min-w-[300px] sm:max-w-[320px] rounded-2xl p-3`}
+    >
       <div>
         <p className="text-lg tracking-wide font-bold">Chats</p>
         <div className="flex items-center gap-2 mt-2">

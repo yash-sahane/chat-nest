@@ -12,8 +12,12 @@ const Home = () => {
   );
 
   return (
-    <div className="custom-transition flex gap-3 h-screen p-4 pl-0">
-      <div className="flex gap-1">
+    <div className="custom-transition flex gap-1 sm:gap-3 h-screen p-4 pl-0">
+      <div
+        className={`transition-all flex gap-1 max-sm:overflow-hidden ${
+          !selectedChatData ? "max-sm:w-full" : "max-sm:w-16"
+        }`}
+      >
         <HomeSidebar />
         <ChatSidebar />
       </div>

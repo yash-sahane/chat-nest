@@ -42,7 +42,8 @@
 
   .dark {
     /* custom */
-    --status-online: 142 75% 36%;
+    /* --status-online: 142 75% 36%; */
+    --status-online: 146 68% 46%;
     --status-offline: 0 1% 53%;
     --chat-bg: 250 47% 10%;
     --chat-primary: 253 51% 13%;
@@ -107,6 +108,7 @@
 
   ::-webkit-scrollbar {
     width: 5px;
+    height: 5px;
   }
 
   /* Track */

@@ -24,8 +24,10 @@ import CreateChannel from "./CreateChannel";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function ChannelsDialog({ children }: { children: React.ReactNode }) {
+  const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const [createChannelView, setCreateChannelView] = useState<boolean>(false);
   const closeDialogRef = useRef<HTMLButtonElement>();
@@ -66,15 +68,16 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const joinChannelHandler = async (id: string) => {
+  const joinChannelHandler = async (channel: Channel) => {
     try {
       const { data }: AxiosResponse<ApiResponse> = await axios.post(
         `${import.meta.env.VITE_SERVER_URI}/api/channel/join`,
-        { id },
+        { id: channel._id },
         { withCredentials: true }
       );
       if (data.success) {
         toast.success(data.message);
+        chatSelectHandler(channel);
       } else {
         toast.error(data.mesage);
       }
@@ -136,35 +139,45 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
                 ""
               )}
               {channels.map((channel) => {
+                console.log(
+                  channel.members.includes(user?._id as string),
+                  " ",
+                  channel.admin === user?._id
+                );
+
                 return (
-                  <AlertDialogCancel
-                    className="reset-classes"
+                  <div
                     key={channel._id}
+                    className="rounded-2xl flex gap-3 items-center p-2 py-3 transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]"
                   >
-                    <div
-                      className="rounded-2xl flex gap-3 items-center p-2 py-3 cursor-pointer transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]"
-                      // onClick={() => chatSelectHandler(channel)}
-                    >
-                      <UserProfile userProfile={channel} />
-                      <div className="flex flex-col gap-1 w-full">
-                        <div className="flex justify-between">
-                          <p className="font-semibold text-sm">{`${channel.name}`}</p>
-                        </div>
-                        <div className="flex justify-between">
-                          <p className="text-sm text-gray-500">
-                            {channel.members.length} member
-                            {channel.members.length > 1 ? "s" : ""}
-                          </p>
-                        </div>
+                    <UserProfile userProfile={channel} />
+                    <div className="flex flex-col gap-1 w-full">
+                      <div className="flex justify-between">
+                        <p className="font-semibold text-sm">{`${channel.name}`}</p>
                       </div>
-                      <Button
-                        className="h-fit py-2 px-4"
-                        onClick={() => joinChannelHandler(channel._id)}
-                      >
-                        Join
-                      </Button>
+                      <div className="flex justify-between">
+                        <p className="text-sm text-gray-500">
+                          {channel.members.length + 1} member
+                          {channel.members.length > 1 ? "s" : ""}
+                        </p>
+                      </div>
                     </div>
-                  </AlertDialogCancel>
+                    {!channel.members.includes(user?._id as string) &&
+                    channel.admin !== user?._id ? (
+                      <AlertDialogCancel className="reset-classes">
+                        <Button
+                          className="h-fit py-2 px-4 cursor-pointer"
+                          onClick={() => joinChannelHandler(channel)}
+                        >
+                          Join
+                        </Button>
+                      </AlertDialogCancel>
+                    ) : (
+                      <Button disabled className="h-fit py-2 px-4">
+                        Already Joined
+                      </Button>
+                    )}
+                  </div>
                 );
               })}
               <div>

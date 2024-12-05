@@ -39,10 +39,16 @@ const Chat = ({ DMProfile }: { DMProfile: DMProfile }) => {
       <div className="relative">
         <UserProfile userProfile={DMProfile} />
         <span
-          className="absolute right-0 bottom-0 w-1 h-1"
           style={{
-            background: DMProfile.status === "online" ? "green" : "gray",
+            background:
+              DMProfile.status === "online"
+                ? "hsl(var(--status-online))"
+                : "hsl(var(--status-offline))",
           }}
+          className={`absolute -right-[2px] -bottom-[0px] w-[14px] h-[14px] rounded-full border-2 border-[hsl(var(--chat-card))]`}
+          // style={{
+          //   background: DMProfile.status === "online" ? "green" : "gray",
+          // }}
         ></span>
       </div>
       <div className="flex flex-col gap-1 w-full">
@@ -65,6 +71,7 @@ const Chat = ({ DMProfile }: { DMProfile: DMProfile }) => {
                   DMProfile.lastMessageType.slice(1)}
               </div>
             )}
+            {!DMProfile.lastMessageType && "No messages yet!"}
           </div>
           <span className="flex items-center justify-center px-[6px] rounded-full bg-[hsl(var(--primary))]">
             <p className="text-xs text-white">1</p>
