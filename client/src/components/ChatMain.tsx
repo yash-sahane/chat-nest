@@ -68,7 +68,7 @@ const ChatMain = () => {
 
     return (
       showDate && (
-        <div className="bg-[hsl(var(--chat-primary))] p-2 rounded-lg text-sm w-fit mx-auto">
+        <div className="custom-transition bg-[hsl(var(--chat-primary))] p-2 rounded-lg text-sm w-fit mx-auto">
           {messageDate}
         </div>
       )
@@ -150,14 +150,12 @@ const ChatMain = () => {
   return (
     <div
       className={`${
-        selectedChatData
-          ? "max-sm:w-[calc(100%-60px)]"
-          : "max-sm:hidden max-sm:w-0"
+        selectedChatData ? "max-sm:w-full" : "max-sm:hidden max-sm:w-0"
       } sm:w-4/5 custom-transition bg-[hsl(var(--chat-bg))] rounded-2xl p-3`}
     >
       {selectedChatData && (
         <>
-          <div className="rounded-2xl flex gap-3 items-center p-2 py-3 transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]">
+          <div className="rounded-2xl flex gap-3 items-center p-2 py-3 custom-transition bg-[hsl(var(--chat-primary))]">
             <div
               className="sm:hidden bg-[hsl(var(--chat-bg))] p-2 rounded-lg cursor-pointer"
               onClick={clearSelectedChatData}
@@ -191,7 +189,7 @@ const ChatMain = () => {
                     }
                   >
                     <div
-                      className={`${
+                      className={`custom-transition ${
                         chatMsg.fileURL
                           ? "max-w-[500px]"
                           : "py-[6px] max-w-[80%]"
@@ -256,7 +254,7 @@ const ChatMain = () => {
               );
             })}
           </div>
-          <div className="relative transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))] h-[52px] rounded-2xl mt-2">
+          <div className="relative custom-transition bg-[hsl(var(--chat-primary))] h-[52px] rounded-2xl mt-2">
             <div className="absolute h-full flex gap-3 items-center right-[95px]">
               <input
                 type="file"
@@ -289,7 +287,7 @@ const ChatMain = () => {
             )}
             <Input
               type="text"
-              className="custom-transition pr-[160px] h-full w-full bg-transparent placeholder:text-sm placeholder:text-gray-500 rounded-lg"
+              className="pr-[160px] h-full w-full bg-transparent placeholder:text-sm placeholder:text-gray-500 rounded-lg"
               placeholder="Search message..."
               onChange={(e) => setMsg(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMsgHandler()}

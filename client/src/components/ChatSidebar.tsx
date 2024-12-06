@@ -59,13 +59,15 @@ const ChatSidebar = () => {
       } custom-transition bg-[hsl(var(--chat-bg))] w-full sm:w-1/5 min-w-[300px] sm:max-w-[320px] rounded-2xl p-3`}
     >
       <div>
-        <p className="text-lg tracking-wide font-bold">Chats</p>
+        <p className="text-lg tracking-wide font-bold custom-transition">
+          Chats
+        </p>
         <div className="flex items-center gap-2 mt-2">
-          <div className="relative transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))] h-[42px] w-full rounded-md">
+          <div className="custom-transition relative ease-linear bg-[hsl(var(--chat-primary))] h-[42px] w-full rounded-md">
             <Search size={20} className="absolute left-2 top-[10px]" />
             <Input
               type="text"
-              className="custom-transition pl-[34px] h-full w-full bg-transparent placeholder:text-sm placeholder:text-gray-500 rounded-lg"
+              className="pl-[34px] h-full w-full bg-transparent placeholder:text-sm placeholder:text-gray-500 rounded-lg"
               placeholder={`${
                 chatView === "person" ? "Search profile" : "Search channel"
               }...`}

@@ -31,7 +31,7 @@ const Chat = ({ DMProfile }: { DMProfile: DMProfile }) => {
 
   return (
     <div
-      className={`rounded-2xl flex gap-3 items-center p-2 py-3 cursor-pointer transition-all duration-150 ease-linear hover:bg-[hsl(var(--chat-card))] ${
+      className={`rounded-2xl flex gap-3 items-center p-2 py-3 cursor-pointer custom-transition hover:bg-[hsl(var(--chat-card))] ${
         selectedChatData?._id === DMProfile._id && " bg-[hsl(var(--chat-card))]"
       }`}
       onClick={chatSelectHandler}
@@ -45,7 +45,7 @@ const Chat = ({ DMProfile }: { DMProfile: DMProfile }) => {
                 ? "hsl(var(--status-online))"
                 : "hsl(var(--status-offline))",
           }}
-          className={`absolute -right-[2px] -bottom-[0px] w-[14px] h-[14px] rounded-full border-2 border-[hsl(var(--chat-card))]`}
+          className={`custom-transition absolute -right-[2px] -bottom-[0px] w-[14px] h-[14px] rounded-full border-2 border-[hsl(var(--chat-card))]`}
           // style={{
           //   background: DMProfile.status === "online" ? "green" : "gray",
           // }}

@@ -74,6 +74,12 @@ const CreateChannel = ({
       toast.success(message);
       setCreateChannelView(false);
       dispatch(getUserChannels());
+
+      // clean up fields
+      setChannelName("");
+      setProfileImg(undefined);
+      setAllProfiles([]);
+      setSelectedProfiles([]);
     } else {
       if (response.payload) {
         toast.error(response.payload as string);
@@ -99,9 +105,6 @@ const CreateChannel = ({
           { withCredentials: true }
         );
         if (data.success) {
-          // data.data.map((user: User) => {
-          //   setAllProfiles((prev) => [...prev, user._id]);
-          // });
           setAllProfiles(data.data);
         } else {
           toast.error(data.message);
@@ -148,9 +151,7 @@ const CreateChannel = ({
                         className="h-full object-contain"
                       />
                     ) : (
-                      `${channelName?.[0]?.toUpperCase() ?? ""}${
-                        channelName?.[0]?.toUpperCase() ?? ""
-                      }`
+                      `${channelName?.[0]?.toUpperCase() ?? ""}`
                     )}
                     {!profileImg && (
                       <input

@@ -94,11 +94,15 @@ const HomeSidebar = () => {
         <div className="flex flex-col gap-4">
           <div className="cursor-pointer p-1">
             <MessageSquareText
+              className="custom-transition"
               onClick={() => dispatch(setChatView("person"))}
             />
           </div>
           <div className="cursor-pointer p-1">
-            <Users onClick={() => dispatch(setChatView("channel"))} />
+            <Users
+              onClick={() => dispatch(setChatView("channel"))}
+              className="custom-transition"
+            />
           </div>
         </div>
       </div>
@@ -109,12 +113,12 @@ const HomeSidebar = () => {
             {userProfile()}
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-48 ml-3">
-            <DropdownMenuGroup>
+            {/* <DropdownMenuGroup>
               <DropdownMenuItem className="focus:bg-[hsl(var(--chat-primary))] cursor-pointer">
                 <User />
                 <span>Profile</span>
               </DropdownMenuItem>
-            </DropdownMenuGroup>
+            </DropdownMenuGroup> */}
             <DropdownMenuItem
               className="focus:bg-[hsl(var(--chat-primary))] cursor-pointer"
               onClick={logoutHandler}

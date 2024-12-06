@@ -2,6 +2,7 @@ import User from "../model/User.js";
 import ErrorHandler from "../middleware/error.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const maxAge = 3 * 24 * 60 * 60 * 1000;
 const createToken = (id) => {
@@ -92,6 +93,8 @@ export const signup = async (req, res, next) => {
 
     const newUser = await User.create({ email, password: hashedPassword });
 
+    console.log("new user is ", newUser);
+
     res
       .cookie("jwt", createToken(newUser._id), {
         maxAge,
@@ -108,12 +111,23 @@ export const signup = async (req, res, next) => {
   }
 };
 
+const isValidObjectId = (id) => {
+  return mongoose.Types.ObjectId.isValid(id);
+};
+
 export const setup = async (req, res) => {
   try {
     const avatar_filename = req.file?.filename;
     const { firstName, lastName, profileTheme } = req.body;
+    console.log(avatar_filename, firstName, lastName, profileTheme);
+    console.log("user is ", req.user);
+
+    if (!mongoose.Types.ObjectId.isValid(req.user._id)) {
+      return next(new ErrorHandler(400, " Invalid user id"));
+    }
+
     const user = await User.findByIdAndUpdate(
-      req.user.id,
+      req.user._id,
       {
         firstName,
         lastName,
@@ -124,13 +138,20 @@ export const setup = async (req, res) => {
       { new: true }
     );
 
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     return res.json({
       success: true,
       message: "Setup completed",
       data: user,
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
+    return res
+      .status(500)
+      .json({ error: "An error occurred while setting up the profile" });
   }
 };
 

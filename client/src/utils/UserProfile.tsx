@@ -37,12 +37,12 @@ const UserProfile = ({ userProfile }: { userProfile: User | Channel }) => {
   return user?.avatar ? (
     <img
       src={`http://localhost:3000/profiles/${user?.avatar}`}
-      className={`p-[2px] rounded-full object-contain w-[40px] h-[40px] min-w-[40px]`}
+      className={`custom-transition p-[2px] rounded-full object-contain w-[40px] h-[40px] min-w-[40px]`}
       style={{ border: `1px solid ${borderColor}`, background: bg }}
     />
   ) : (
     <div
-      className={`p-[2px] rounded-full object-contain w-[40px] h-[40px] min-w-[40px]`}
+      className={`custom-transition p-[2px] rounded-full object-contain w-[40px] h-[40px] min-w-[40px]`}
       style={{ border: `2px solid ${borderColor}`, background: bg }}
     >
       {user?.firstName ? (

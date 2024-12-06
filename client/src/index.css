@@ -5,8 +5,8 @@
 @layer base {
   :root {
     /* custom light theme */
-    --status-online: 142, 55%, 76%;
-    --status-offline: 0, 1%, 93%;
+    --status-online: 106 60% 52%;
+    --status-offline: 0, 0%, 61%;
     --chat-bg: 260, 100%, 96%;
     --chat-primary: 261, 100%, 93%;
     --chat-secondary: 262, 100%, 92%;
@@ -121,6 +121,7 @@
   ::-webkit-scrollbar-thumb {
     background: hsl(var(--chat-primary));
     border-radius: 10px;
+    transition: all 0.3s ease-linear;
   }
 
   /* Handle on hover */

@@ -87,9 +87,15 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const closeDialogHandler = () => {
+    setSearchTerm("");
+    setChannels([]);
+  };
+
   useEffect(() => {
     if (searchTerm.length) {
       setSearchedChannelLoading(true);
+      setChannels([]);
     }
     const timer = setTimeout(() => {
       if (searchTerm.length) {
@@ -109,7 +115,8 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
         <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
         <AlertDialogContent className="transition-all">
           <AlertDialogCancel
-            className="p-1 border-none text-gray-400 absolute top-3 right-3 w-fit h-fit bg-transparent !mt-0"
+            onClick={closeDialogHandler}
+            className="p-1 border-none dark:text-gray-400 text-gray-600 absolute top-3 right-3 w-fit h-fit bg-transparent !mt-0 hover:bg-[hsl(var(--chat-primary))]"
             ref={closeDialogRef}
           >
             <X size={22} className="" />
@@ -164,7 +171,10 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
                     </div>
                     {!channel.members.includes(user?._id as string) &&
                     channel.admin !== user?._id ? (
-                      <AlertDialogCancel className="reset-classes">
+                      <AlertDialogCancel
+                        className="reset-classes"
+                        onClick={closeDialogHandler}
+                      >
                         <Button
                           className="h-fit py-2 px-4 cursor-pointer"
                           onClick={() => joinChannelHandler(channel)}

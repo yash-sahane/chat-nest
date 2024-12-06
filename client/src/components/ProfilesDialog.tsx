@@ -52,8 +52,16 @@ function ProfilesDialog({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const closeDialogHandler = () => {
+    console.log("working");
+
+    setSearchTerm("");
+    setUsers([]);
+  };
+
   useEffect(() => {
     if (searchTerm.length) {
+      setUsers([]);
       setSearchedUserLoading(true);
     }
     const timer = setTimeout(() => {
@@ -72,8 +80,11 @@ function ProfilesDialog({ children }: { children: React.ReactNode }) {
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent className="transition-all">
-        <AlertDialogCancel className="p-1 border-none text-gray-400 absolute top-3 right-3 w-fit h-fit bg-transparent !mt-0">
-          <X size={22} className="" />
+        <AlertDialogCancel
+          onClick={closeDialogHandler}
+          className="p-1 border-none text-gray-400 absolute top-3 right-3 w-fit h-fit bg-transparent !mt-0 hover:bg-[hsl(var(--chat-primary))]"
+        >
+          <X size={22} />
         </AlertDialogCancel>
         <AlertDialogHeader className="w-full">
           <AlertDialogTitle>Users</AlertDialogTitle>
@@ -96,7 +107,11 @@ function ProfilesDialog({ children }: { children: React.ReactNode }) {
             )}
             {users.map((user) => {
               return (
-                <AlertDialogCancel className="reset-classes" key={user._id}>
+                <AlertDialogCancel
+                  className="reset-classes"
+                  key={user._id}
+                  onClick={closeDialogHandler}
+                >
                   <div
                     className="rounded-2xl flex gap-3 items-center p-2 py-3 cursor-pointer transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]"
                     onClick={() => chatSelectHandler(user)}

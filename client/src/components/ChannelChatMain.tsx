@@ -154,7 +154,7 @@ const ChannelChatMain = () => {
   }, [selectedChatMessages]);
 
   return (
-    <div className="custom-transition bg-[hsl(var(--chat-bg))] w-4/5 rounded-2xl p-3">
+    <div className="custom-transition bg-[hsl(var(--chat-bg))] w-full sm:w-4/5 rounded-2xl p-3">
       {selectedChatData && (
         <>
           <div className="rounded-2xl flex gap-3 items-center p-2 py-3 transition-all duration-150 ease-linear bg-[hsl(var(--chat-primary))]">
