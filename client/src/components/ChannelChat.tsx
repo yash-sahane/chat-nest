@@ -13,7 +13,7 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
   const { selectedChatData } = useSelector((state: RootState) => state.chat);
 
   const chatSelectHandler = async () => {
-    console.log(channel);
+    // console.log(channel);
 
     dispatch(setSelectedChatData(channel));
     dispatch(setSelectedChatType("channel"));
@@ -58,9 +58,9 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
                 )}
             {!channel.lastMessage && "No messages yet!"}
           </div>
-          <span className="flex items-center justify-center px-[6px] rounded-full bg-[hsl(var(--primary))]">
+          {/* <span className="flex items-center justify-center px-[6px] rounded-full bg-[hsl(var(--primary))]">
             <p className="text-xs text-white">1</p>
-          </span>
+          </span> */}
         </div>
       </div>
     </div>

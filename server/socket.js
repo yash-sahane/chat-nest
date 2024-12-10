@@ -37,10 +37,10 @@ const setupSocket = (server) => {
   };
 
   const sendChannelMessage = async (message) => {
-    console.log(message);
+    // console.log(message);
 
     const { sender, content, messageType, fileURL, channelId } = message;
-    console.log(channelId);
+    // console.log(channelId);
 
     const senderSocketId = userSocketMap.get(message.sender);
 
@@ -66,7 +66,7 @@ const setupSocket = (server) => {
 
     const finalData = { ...messageData._doc, channelId: channel._id };
 
-    console.log(finalData);
+    // console.log(finalData);
 
     if (channel && channel.members) {
       channel.members.forEach((member) => {

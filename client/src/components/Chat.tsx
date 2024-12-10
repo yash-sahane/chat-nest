@@ -73,9 +73,9 @@ const Chat = ({ DMProfile }: { DMProfile: DMProfile }) => {
             )}
             {!DMProfile.lastMessageType && "No messages yet!"}
           </div>
-          <span className="flex items-center justify-center px-[6px] rounded-full bg-[hsl(var(--primary))]">
+          {/* <span className="flex items-center justify-center px-[6px] rounded-full bg-[hsl(var(--primary))]">
             <p className="text-xs text-white">1</p>
-          </span>
+          </span> */}
         </div>
       </div>
     </div>

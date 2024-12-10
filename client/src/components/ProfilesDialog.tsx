@@ -18,7 +18,7 @@ import UserProfile from "@/utils/UserProfile";
 import { useDispatch } from "react-redux";
 import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
 import { getChatMessages } from "@/slices/ChatApi";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios, { AxiosResponse } from "axios";
 
@@ -53,7 +53,7 @@ function ProfilesDialog({ children }: { children: React.ReactNode }) {
   };
 
   const closeDialogHandler = () => {
-    console.log("working");
+    // console.log("working");
 
     setSearchTerm("");
     setUsers([]);
@@ -180,4 +180,4 @@ function ProfilesDialog({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default ProfilesDialog;
+export default memo(ProfilesDialog);

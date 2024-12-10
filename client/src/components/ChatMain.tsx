@@ -13,7 +13,7 @@ import {
   Send,
   Smile,
 } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -308,4 +308,4 @@ const ChatMain = () => {
   );
 };
 
-export default ChatMain;
+export default memo(ChatMain);

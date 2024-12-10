@@ -24,10 +24,7 @@ export const getInfo = async (req, res) => {
 
 export const login = async (req, res, next) => {
   try {
-    // console.log("working");
-
     const { email, password } = req.body;
-    // console.log(email, password);
 
     if (!email || !password) {
       return next(new ErrorHandler(400, "Please provide email and password"));
@@ -93,8 +90,6 @@ export const signup = async (req, res, next) => {
 
     const newUser = await User.create({ email, password: hashedPassword });
 
-    console.log("new user is ", newUser);
-
     res
       .cookie("jwt", createToken(newUser._id), {
         maxAge,
@@ -111,16 +106,10 @@ export const signup = async (req, res, next) => {
   }
 };
 
-const isValidObjectId = (id) => {
-  return mongoose.Types.ObjectId.isValid(id);
-};
-
 export const setup = async (req, res) => {
   try {
     const avatar_filename = req.file?.filename;
     const { firstName, lastName, profileTheme } = req.body;
-    console.log(avatar_filename, firstName, lastName, profileTheme);
-    console.log("user is ", req.user);
 
     if (!mongoose.Types.ObjectId.isValid(req.user._id)) {
       return next(new ErrorHandler(400, " Invalid user id"));

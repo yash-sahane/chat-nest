@@ -42,7 +42,7 @@ export const getChannelMessages = createAsyncThunk(
         { withCredentials: true }
       );
 
-      console.log(data);
+      // console.log(data);
 
       if (data.success) {
         return data.data;
@@ -67,7 +67,7 @@ export const getChannels = createAsyncThunk(
         { withCredentials: true }
       );
       if (data.success) {
-        console.log(data);
+        // console.log(data);
 
         return data;
       } else {
@@ -123,7 +123,7 @@ export const getUserChannels = createAsyncThunk(
         { withCredentials: true }
       );
       if (data.success) {
-        console.log(data);
+        // console.log(data);
 
         return data;
       } else {
@@ -141,7 +141,7 @@ export const createChannel = createAsyncThunk(
   "channel/createChannel",
   async ({ formData }: { formData: FormData }, { rejectWithValue }) => {
     try {
-      console.log(formData);
+      // console.log(formData);
 
       const { data }: AxiosResponse<ApiResponse> = await axios.post(
         `${import.meta.env.VITE_SERVER_URI}/api/channel/create`,

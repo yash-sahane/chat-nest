@@ -1,4 +1,4 @@
-import { Channel, ChannelChatMsg, ChatMsg, DMProfile, User } from "@/types";
+import { Channel, ChatMsg, DMProfile, User } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   createChannel,

@@ -1,13 +1,17 @@
 import { darkProfileTheme, lightProfileTheme } from "@/utils/profileTheme";
 import { useTheme } from "@/context/ThemeProvider";
-import { Channel, User } from "@/types";
+import { Channel, DMProfile, User } from "@/types";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { isChannel, isUser } from "./type";
+import { isChannel } from "./type";
 
-const UserProfile = ({ userProfile }: { userProfile: User | Channel }) => {
+const UserProfile = ({
+  userProfile,
+}: {
+  userProfile: User | Channel | DMProfile | undefined;
+}) => {
   let { user } = useSelector((state: RootState) => state.auth);
-  user = userProfile._id ? userProfile : user;
+  user = userProfile?._id ? userProfile : user;
 
   const { theme } = useTheme();
   const borderColor = user?.avatar

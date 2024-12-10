@@ -1,18 +1,14 @@
 import { MessageSquarePlus, Search } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { Input } from "./ui/input";
 import ProfilesDialog from "./ProfilesDialog";
 import Chats from "./Chats";
-import { AxiosResponse } from "axios";
-import { ApiResponse, DMProfile } from "@/types";
-import axios from "axios";
 import ChannelsDialog from "./ChannelsDialog";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import ChannelChats from "./ChannelChats";
 import { useDispatch } from "react-redux";
 import { getDMProfiles, getUserChannels } from "@/slices/ChatApi";
-import { setStatusChanged } from "@/slices/ChatSlice";
 
 const ChatSidebar = () => {
   const { selectedChatMessages, selectedChatData } = useSelector(
@@ -24,6 +20,8 @@ const ChatSidebar = () => {
     (state: RootState) => state.chat
   );
   const dispatch = useDispatch<AppDispatch>();
+
+  console.log("chatsidebar");
 
   useEffect(() => {
     if (chatView === "person") {
@@ -97,4 +95,4 @@ const ChatSidebar = () => {
   );
 };
 
-export default ChatSidebar;
+export default memo(ChatSidebar);

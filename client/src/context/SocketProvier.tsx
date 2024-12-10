@@ -26,7 +26,7 @@ const SocketContext = createContext<SocketContextType | undefined>(undefined);
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
-  const { selectedChatData, chatView, DMProfiles } = useSelector(
+  const { selectedChatData, chatView } = useSelector(
     (state: RootState) => state.chat
   );
   const selectedChatDataRef = useRef(selectedChatData);
@@ -51,7 +51,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       selectedChatDataRef.current !== undefined &&
       selectedChatDataRef.current._id === message.channelId
     ) {
-      console.log("working");
+      // console.log("working");
 
       dispatch(setSelectedChannelMessages(message));
     }
@@ -64,7 +64,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    console.log(user);
+    // console.log(user);
     if (user) {
       let newSocket = io(
         import.meta.env.VITE_SERVER_URI || "http://localhost:3000",

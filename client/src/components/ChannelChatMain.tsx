@@ -9,12 +9,11 @@ import {
   ArrowLeft,
   Download,
   File,
-  Image,
   Paperclip,
   Send,
   Smile,
 } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -24,7 +23,7 @@ import moment from "moment";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
-import { isChannel, isChannelChatMsg, isChatMsg } from "@/utils/type";
+import { isChannel, isChannelChatMsg } from "@/utils/type";
 import { useTheme } from "@/context/ThemeProvider";
 import { useDispatch } from "react-redux";
 import { setSelectedChatData } from "@/slices/ChatSlice";
@@ -171,9 +170,9 @@ const ChannelChatMain = () => {
                   isChannel(selectedChatData) && selectedChatData.name
                 }`}</p>
               </div>
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <p className="text-sm text-gray-500">Online</p>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="h-[calc(100%-134px)] flex flex-col gap-3 pr-2 mt-2 overflow-y-auto">
@@ -214,10 +213,6 @@ const ChannelChatMain = () => {
                               (isChannelChatMsg(chatMsg) && chatMsg.sender._id)
                                 ? "hsl(var(--message-background))"
                                 : "hsl(var(--chat-primary))",
-                            // margin:
-                            //   user?._id === chatMsg.sender._id
-                            //     ? "0 0 0 auto"
-                            //     : "0 auto 0 0",
                           }}
                         >
                           <div className="flex flex-col gap-1">
@@ -337,4 +332,4 @@ const ChannelChatMain = () => {
   );
 };
 
-export default ChannelChatMain;
+export default memo(ChannelChatMain);

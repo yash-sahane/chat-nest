@@ -11,15 +11,15 @@ import { Input } from "./ui/input";
 import { CirclePlus, Search, X } from "lucide-react";
 import searchGif from "@/assets/people-search-animate.svg";
 import notFoundSVG from "@/assets/404 Error-cuate.svg";
-import { ApiResponse, Channel, User } from "@/types";
+import { ApiResponse, Channel } from "@/types";
 import UserSkeleton from "./UserSkeleton";
 import { AppDispatch, RootState } from "@/store/store";
 import UserProfile from "@/utils/UserProfile";
 import { useDispatch } from "react-redux";
 import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
-import { getChannelMessages, getChatMessages } from "@/slices/ChatApi";
+import { getChannelMessages } from "@/slices/ChatApi";
 import { Button } from "./ui/button";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, memo } from "react";
 import CreateChannel from "./CreateChannel";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
@@ -58,7 +58,7 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
         { withCredentials: true }
       );
       const { data } = response;
-      console.log(data);
+      // console.log(data);
 
       setChannels(data.data);
       setSearchedChannelLoading(false);
@@ -146,12 +146,6 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
                 ""
               )}
               {channels.map((channel) => {
-                console.log(
-                  channel.members.includes(user?._id as string),
-                  " ",
-                  channel.admin === user?._id
-                );
-
                 return (
                   <div
                     key={channel._id}
@@ -255,4 +249,4 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default ChannelsDialog;
+export default memo(ChannelsDialog);

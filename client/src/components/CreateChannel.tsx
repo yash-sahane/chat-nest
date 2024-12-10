@@ -17,7 +17,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import { ApiResponse, User } from "@/types";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
 import axios from "axios";
@@ -256,4 +256,4 @@ const CreateChannel = ({
   );
 };
 
-export default CreateChannel;
+export default memo(CreateChannel);
