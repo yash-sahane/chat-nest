@@ -28,8 +28,9 @@ import { useDispatch } from "react-redux";
 import { setSelectedChatData } from "@/slices/ChatSlice";
 
 const ChannelChatMain = () => {
-  const { selectedChatData, selectedChatMessages, selectedChannelMessages } =
-    useSelector((state: RootState) => state.chat);
+  const { selectedChatData, selectedChannelMessages } = useSelector(
+    (state: RootState) => state.chat
+  );
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
