@@ -1,6 +1,5 @@
 import { RootState } from "@/store/store";
-import getCookie from "@/utils/getCookie";
-import React, { ReactNode } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 

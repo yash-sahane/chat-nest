@@ -60,7 +60,7 @@ const Profile = () => {
       setLname("");
 
       const { message, data } = response.payload;
-      toast.success(message);
+      toast.success(message as string);
       if (data.profileSetup) {
         navigate("/");
       }

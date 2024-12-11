@@ -11,6 +11,7 @@ import { useTheme } from "@/context/ThemeProvider";
 import { logout } from "@/slices/AuthApi";
 import {
   setChatView,
+  setSelectedChannelMessages,
   setSelectedChatData,
   setSelectedChatMessages,
   setSelectedChatType,
@@ -36,10 +37,11 @@ const HomeSidebar = () => {
     const response = await dispatch(logout());
 
     if (logout.fulfilled.match(response)) {
-      toast.success(response.payload.message);
+      toast.success(response.payload.message as string);
       navigate("/auth");
       dispatch(setSelectedChatData(undefined));
       dispatch(setSelectedChatMessages([]));
+      dispatch(setSelectedChannelMessages([]));
       dispatch(setSelectedChatType(undefined));
     } else {
       toast.error(response.payload as string);

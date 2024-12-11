@@ -22,7 +22,6 @@ import { ApiResponse, ChannelChatMsg, ChatMsg } from "@/types";
 import moment from "moment";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { AxiosResponse } from "axios";
 import { isUser } from "@/utils/type";
 import { useDispatch } from "react-redux";
 import { setSelectedChatData } from "@/slices/ChatSlice";
@@ -35,8 +34,8 @@ const ChatMain = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>("");
   const { socket } = useSocket();
-  const emojiRef = useRef<null | HTMLElement>(null);
-  const scrollRef = useRef<null | HTMLElement>(null);
+  const emojiRef = useRef<null | HTMLDivElement>(null);
+  const scrollRef = useRef<null | HTMLDivElement>(null);
   const dispatch = useDispatch<AppDispatch>();
 
   const emojiHandler = (emoji: EmojiClickData) => {
@@ -49,7 +48,7 @@ const ChatMain = () => {
       return;
     }
 
-    socket.emit("sendMessage", {
+    socket?.emit("sendMessage", {
       sender: user?._id,
       recipient: selectedChatData?._id,
       content: msg,
@@ -94,13 +93,13 @@ const ChatMain = () => {
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
 
-        const { data }: AxiosResponse<ApiResponse> = await axios.post(
+        const { data } = await axios.post<ApiResponse>(
           `${import.meta.env.VITE_SERVER_URI}/api/chat/send_file`,
           formData,
           { withCredentials: true }
         );
         if (data.success) {
-          socket.emit("sendMessage", {
+          socket?.emit("sendMessage", {
             sender: user?._id,
             recipient: selectedChatData?._id,
             content: undefined,

@@ -1,13 +1,12 @@
 import { ApiResponse } from "@/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { AxiosResponse } from "axios";
 
 export const fetchUser = createAsyncThunk(
   "auth/fetchUser",
   async (_, { rejectWithValue }) => {
     try {
-      const { data }: AxiosResponse<ApiResponse> = await axios.get(
+      const { data } = await axios.get<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/user`,
         { withCredentials: true }
       );
@@ -31,7 +30,7 @@ export const login = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const { data }: AxiosResponse<ApiResponse> = await axios.post(
+      const { data } = await axios.post<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/user/login`,
         { email, password },
         { withCredentials: true }
@@ -56,7 +55,7 @@ export const signup = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const { data }: AxiosResponse<ApiResponse> = await axios.post(
+      const { data } = await axios.post<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/user/signup`,
         { email, password },
         { withCredentials: true }
@@ -80,7 +79,7 @@ export const logout = createAsyncThunk(
   "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
-      const { data }: AxiosResponse<ApiResponse> = await axios.get(
+      const { data } = await axios.get<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/user/logout`,
         { withCredentials: true }
       );
@@ -101,7 +100,7 @@ export const setup = createAsyncThunk(
   "/auth/setup",
   async ({ formData }: { formData: FormData }, { rejectWithValue }) => {
     try {
-      const { data }: AxiosResponse<ApiResponse> = await axios.post(
+      const { data } = await axios.post<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/user/setup`,
         formData,
         { withCredentials: true }

@@ -22,7 +22,6 @@ import { Button } from "./ui/button";
 import React, { useEffect, useRef, useState, memo } from "react";
 import CreateChannel from "./CreateChannel";
 import toast from "react-hot-toast";
-import { AxiosResponse } from "axios";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
@@ -30,7 +29,7 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const [createChannelView, setCreateChannelView] = useState<boolean>(false);
-  const closeDialogRef = useRef<HTMLButtonElement>();
+  const closeDialogRef = useRef<HTMLButtonElement | null>(null);
   const [channels, setChannels] = useState<Channel[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchedChannelLoading, setSearchedChannelLoading] =
@@ -52,7 +51,7 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
 
   const getProfiles = async () => {
     try {
-      const response: AxiosResponse<ApiResponse> = await axios.post(
+      const response = await axios.post<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/channel/getSearchedChannels`,
         { searchTerm },
         { withCredentials: true }
@@ -70,16 +69,16 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
 
   const joinChannelHandler = async (channel: Channel) => {
     try {
-      const { data }: AxiosResponse<ApiResponse> = await axios.post(
+      const { data } = await axios.post<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/channel/join`,
         { id: channel._id },
         { withCredentials: true }
       );
       if (data.success) {
-        toast.success(data.message);
+        toast.success(data.message as string);
         chatSelectHandler(channel);
       } else {
-        toast.error(data.mesage);
+        toast.error(data.message as string);
       }
     } catch (e: any) {
       console.log(e.response.data.message);

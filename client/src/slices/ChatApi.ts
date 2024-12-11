@@ -3,14 +3,13 @@ import { RootState } from "@/store/store";
 import { ApiResponse, DMProfile } from "@/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 
 export const getChatMessages = createAsyncThunk(
   "chat/getChatMessages",
   async ({ id }: { id: string }, { rejectWithValue }) => {
     try {
-      const { data }: AxiosResponse<ApiResponse> = await axios.post(
+      const { data } = await axios.post<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/chat`,
         { id },
         { withCredentials: true }
@@ -21,7 +20,6 @@ export const getChatMessages = createAsyncThunk(
       if (data.success) {
         return data.data;
       } else {
-        toast.error(data.message);
         return rejectWithValue(data.message);
       }
     } catch (e: any) {
@@ -36,18 +34,15 @@ export const getChannelMessages = createAsyncThunk(
   "chat/getChannelChatMessages",
   async ({ id }: { id: string }, { rejectWithValue }) => {
     try {
-      const { data }: AxiosResponse<ApiResponse> = await axios.post(
+      const { data } = await axios.post<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/chat/getChannelMessages`,
         { id },
         { withCredentials: true }
       );
 
-      // console.log(data);
-
       if (data.success) {
         return data.data;
       } else {
-        toast.error(data.message);
         return rejectWithValue(data.message);
       }
     } catch (e: any) {
@@ -62,7 +57,7 @@ export const getChannels = createAsyncThunk(
   "channel/getChannels",
   async (_, { rejectWithValue }) => {
     try {
-      const { data }: AxiosResponse<ApiResponse> = await axios.get(
+      const { data } = await axios.get<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/channel/getChannels`,
         { withCredentials: true }
       );
@@ -85,7 +80,7 @@ export const getDMProfiles = createAsyncThunk(
   "chat/getDMProfiles",
   async (_, { rejectWithValue, getState, dispatch }) => {
     try {
-      const { data }: AxiosResponse<ApiResponse> = await axios.get(
+      const { data } = await axios.get<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/profiles/getProfilesForDMList`,
         { withCredentials: true }
       );
@@ -118,7 +113,7 @@ export const getUserChannels = createAsyncThunk(
   "channel/getUserChannels",
   async (_, { rejectWithValue }) => {
     try {
-      const { data }: AxiosResponse<ApiResponse> = await axios.get(
+      const { data } = await axios.get<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/channel/getUserChannels`,
         { withCredentials: true }
       );
@@ -143,7 +138,7 @@ export const createChannel = createAsyncThunk(
     try {
       // console.log(formData);
 
-      const { data }: AxiosResponse<ApiResponse> = await axios.post(
+      const { data } = await axios.post<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/channel/create`,
         formData,
         { withCredentials: true }

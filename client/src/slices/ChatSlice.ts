@@ -1,7 +1,6 @@
-import { Channel, ChatMsg, DMProfile, User } from "@/types";
+import { Channel, ChannelChatMsg, ChatMsg, DMProfile, User } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  createChannel,
   getChannelMessages,
   getChannels,
   getChatMessages,
@@ -13,7 +12,7 @@ type InitialState = {
   selectedChatType: "chat" | "channel" | undefined;
   selectedChatData: User | Channel | undefined;
   selectedChatMessages: ChatMsg[] | [];
-  selectedChannelMessages: ChatMsg[] | [];
+  selectedChannelMessages: ChannelChatMsg[] | [];
   channels: Channel[] | [];
   DMProfiles: DMProfile[] | [];
   loading: boolean;
@@ -54,8 +53,8 @@ const ChatSlice = createSlice({
       ];
     },
     setSelectedChannelMessages: (state, action) => {
-      state.selectedChatMessages = [
-        ...state.selectedChatMessages,
+      state.selectedChannelMessages = [
+        ...state.selectedChannelMessages,
         {
           ...action.payload,
           sender: action.payload.sender,
@@ -69,7 +68,7 @@ const ChatSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getDMProfiles.fulfilled, (state, action) => {
-        state.DMProfiles = action.payload.data;
+        state.DMProfiles = action.payload?.data;
       })
       .addCase(getChatMessages.fulfilled, (state, action) => {
         state.selectedChatMessages = action.payload;
@@ -83,13 +82,8 @@ const ChatSlice = createSlice({
       .addCase(getUserChannels.fulfilled, (state, action) => {
         state.channels = action.payload.data;
       })
-      // create channel
-      .addCase(createChannel.fulfilled, (state, action) => {
-        state.loading = false;
-      })
-      // getChannelChatMessages
       .addCase(getChannelMessages.fulfilled, (state, action) => {
-        state.selectedChatMessages = action.payload;
+        state.selectedChannelMessages = action.payload;
       });
   },
 });

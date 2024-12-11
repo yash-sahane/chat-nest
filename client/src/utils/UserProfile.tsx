@@ -11,7 +11,7 @@ const UserProfile = ({
   userProfile: User | Channel | DMProfile | undefined;
 }) => {
   let { user } = useSelector((state: RootState) => state.auth);
-  user = userProfile?._id ? userProfile : user;
+  user = userProfile?._id ? (userProfile as User) : (user as User);
 
   const { theme } = useTheme();
   const borderColor = user?.avatar

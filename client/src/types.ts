@@ -43,6 +43,7 @@ export type Message = {
   content: string;
   fileURL: string;
   timeStamp: Date;
+  channel: string;
 };
 
 export type ChatMsg = {

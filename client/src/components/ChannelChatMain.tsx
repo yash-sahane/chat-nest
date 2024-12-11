@@ -22,23 +22,21 @@ import { ApiResponse, ChannelChatMsg, ChatMsg } from "@/types";
 import moment from "moment";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { AxiosResponse } from "axios";
 import { isChannel, isChannelChatMsg } from "@/utils/type";
 import { useTheme } from "@/context/ThemeProvider";
 import { useDispatch } from "react-redux";
 import { setSelectedChatData } from "@/slices/ChatSlice";
 
 const ChannelChatMain = () => {
-  const { selectedChatData, selectedChatMessages } = useSelector(
-    (state: RootState) => state.chat
-  );
+  const { selectedChatData, selectedChatMessages, selectedChannelMessages } =
+    useSelector((state: RootState) => state.chat);
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>("");
   const { socket } = useSocket();
   const emojiRef = useRef<HTMLDivElement | null>(null);
-  const scrollRef = useRef<null | HTMLElement>(null);
+  const scrollRef = useRef<null | HTMLDivElement>(null);
   const { theme } = useTheme();
 
   const emojiHandler = (emoji: EmojiClickData) => {
@@ -51,7 +49,7 @@ const ChannelChatMain = () => {
       return;
     }
 
-    socket.emit("sendChannelMessage", {
+    socket?.emit("sendChannelMessage", {
       sender: user?._id,
       content: msg,
       messageType: "text",
@@ -96,13 +94,13 @@ const ChannelChatMain = () => {
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
 
-        const { data }: AxiosResponse<ApiResponse> = await axios.post(
+        const { data } = await axios.post<ApiResponse>(
           `${import.meta.env.VITE_SERVER_URI}/api/chat/send_file`,
           formData,
           { withCredentials: true }
         );
         if (data.success) {
-          socket.emit("sendChannelMessage", {
+          socket?.emit("sendChannelMessage", {
             sender: user?._id,
             content: undefined,
             messageType: fileType,
@@ -150,7 +148,7 @@ const ChannelChatMain = () => {
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [selectedChatMessages]);
+  }, [selectedChannelMessages]);
 
   return (
     <div className="custom-transition bg-[hsl(var(--chat-bg))] w-full sm:w-4/5 rounded-2xl p-3">
@@ -176,7 +174,7 @@ const ChannelChatMain = () => {
             </div>
           </div>
           <div className="h-[calc(100%-134px)] flex flex-col gap-3 pr-2 mt-2 overflow-y-auto">
-            {selectedChatMessages.map((chatMsg, idx) => {
+            {selectedChannelMessages.map((chatMsg, idx) => {
               // console.log(chatMsg);
 
               return (
@@ -184,7 +182,9 @@ const ChannelChatMain = () => {
                   {renderDate(chatMsg)}
                   <div
                     ref={
-                      selectedChatMessages.length === idx + 1 ? scrollRef : null
+                      selectedChannelMessages.length === idx + 1
+                        ? scrollRef
+                        : null
                     }
                   >
                     <div

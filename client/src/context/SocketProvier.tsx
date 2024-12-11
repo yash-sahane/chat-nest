@@ -15,7 +15,7 @@ import {
 } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { io, Socket } from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 
 type SocketContextType = {
   socket: typeof Socket | null;
@@ -44,15 +44,10 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const receiveChannelMessageHandler = (message: Message) => {
-    // console.log(message);
-    // console.log(selectedChatDataRef.current._id, message.channelId);
-
     if (
       selectedChatDataRef.current !== undefined &&
-      selectedChatDataRef.current._id === message.channelId
+      selectedChatDataRef.current._id === message.channel
     ) {
-      // console.log("working");
-
       dispatch(setSelectedChannelMessages(message));
     }
   };
@@ -69,7 +64,6 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       let newSocket = io(
         import.meta.env.VITE_SERVER_URI || "http://localhost:3000",
         {
-          withCredentials: true,
           query: { userId: user._id },
         }
       );
@@ -101,5 +95,9 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useSocket = () => {
-  return useContext(SocketContext);
+  const context = useContext(SocketContext);
+  if (!context) {
+    throw new Error("useSocket must be used within a SocketProvider");
+  }
+  return context;
 };

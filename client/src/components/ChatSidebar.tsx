@@ -11,9 +11,8 @@ import { useDispatch } from "react-redux";
 import { getDMProfiles, getUserChannels } from "@/slices/ChatApi";
 
 const ChatSidebar = () => {
-  const { selectedChatMessages, selectedChatData } = useSelector(
-    (state: RootState) => state.chat
-  );
+  const { selectedChatMessages, selectedChatData, selectedChannelMessages } =
+    useSelector((state: RootState) => state.chat);
   const [searchDMProfiles, setSearchDMProfiles] = useState<string>("");
   const [searchChannels, setSearchChannels] = useState<string>("");
   const { chatView, channels, DMProfiles } = useSelector(
@@ -29,7 +28,7 @@ const ChatSidebar = () => {
     } else {
       dispatch(getUserChannels());
     }
-  }, [chatView, selectedChatMessages]);
+  }, [chatView, selectedChatMessages, selectedChannelMessages]);
 
   const filteredProfiles = DMProfiles.filter((profile) => {
     const fullName = `${profile.firstName} ${profile.lastName}`.toLowerCase();

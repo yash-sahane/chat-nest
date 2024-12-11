@@ -20,7 +20,7 @@ import { setSelectedChatData, setSelectedChatType } from "@/slices/ChatSlice";
 import { getChatMessages } from "@/slices/ChatApi";
 import { memo, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
 function ProfilesDialog({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch<AppDispatch>();
@@ -38,13 +38,15 @@ function ProfilesDialog({ children }: { children: React.ReactNode }) {
 
   const getProfiles = async () => {
     try {
-      const response: AxiosResponse<ApiResponse> = await axios.post(
+      const response = await axios.post<ApiResponse>(
         `${import.meta.env.VITE_SERVER_URI}/api/profiles/getProfiles`,
         { searchTerm },
         { withCredentials: true }
       );
       const { data } = response;
       setUsers(data.data);
+      console.log(data.data);
+
       setSearchedUserLoading(false);
     } catch (e: any) {
       console.log(e.message);

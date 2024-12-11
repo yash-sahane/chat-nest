@@ -19,7 +19,6 @@ import { useSelector } from "react-redux";
 import { ApiResponse, User } from "@/types";
 import { memo, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { AxiosResponse } from "axios";
 import axios from "axios";
 import { createChannel, getUserChannels } from "@/slices/ChatApi";
 
@@ -71,7 +70,7 @@ const CreateChannel = ({
     if (createChannel.fulfilled.match(response)) {
       const { message } = response.payload;
 
-      toast.success(message);
+      toast.success(message as string);
       setCreateChannelView(false);
       dispatch(getUserChannels());
 
@@ -100,14 +99,14 @@ const CreateChannel = ({
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const { data }: AxiosResponse<ApiResponse> = await axios.get(
+        const { data } = await axios.get<ApiResponse>(
           `${import.meta.env.VITE_SERVER_URI}/api/user/getAllUsers`,
           { withCredentials: true }
         );
         if (data.success) {
           setAllProfiles(data.data);
         } else {
-          toast.error(data.message);
+          toast.error(data.message as string);
         }
       } catch (e: any) {
         console.log(e);
