@@ -177,8 +177,6 @@ const ChatMain = () => {
           </div>
           <div className="h-[calc(100%-134px)] flex flex-col gap-3 pr-2 mt-2 overflow-y-auto">
             {selectedChatMessages.map((chatMsg, idx) => {
-              // console.log(chatMsg.messageType);
-
               return (
                 <React.Fragment key={chatMsg._id}>
                   {renderDate(chatMsg)}

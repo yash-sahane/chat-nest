@@ -17,8 +17,6 @@ const ToggleTheme = ({
   const themeHandler = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
-  // console.log(position, top, right);
-
   return (
     <Button
       style={{ position, top: `${top}px`, right: `${right}px` }}

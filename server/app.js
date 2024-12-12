@@ -10,6 +10,9 @@ import chatRouter from "./routes/Chat.js";
 import channelRouter from "./routes/Channel.js";
 import { createServer } from "http";
 import setupSocket from "./socket.js";
+import job from "./cron/cron.js";
+
+job.start();
 
 config();
 
@@ -33,9 +36,7 @@ app.use(
 );
 
 app.use(cookieParser());
-
 app.use(express.json());
-
 app.use("/api/user", userRouter);
 app.use("/api/profiles", profileRouter);
 app.use("/api/chat", chatRouter);

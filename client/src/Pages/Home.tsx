@@ -11,8 +11,6 @@ const Home = () => {
     (state: RootState) => state.chat
   );
 
-  console.log("home");
-
   return (
     <div className="custom-transition bg-[hsl(var(--background))] flex gap-[10px] sm:gap-3 h-screen p-4 pl-0">
       <div

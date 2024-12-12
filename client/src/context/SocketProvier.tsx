@@ -59,7 +59,6 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    // console.log(user);
     if (user) {
       let newSocket = io(
         import.meta.env.VITE_SERVER_URI || "http://localhost:3000",

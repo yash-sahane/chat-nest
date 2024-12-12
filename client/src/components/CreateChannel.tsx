@@ -89,8 +89,6 @@ const CreateChannel = ({
   };
 
   const profileImgHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log("profileimghandler");
-
     if (e.target.files && e.target.files.length > 0) {
       setProfileImg(e.target.files[0]);
     }

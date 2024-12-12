@@ -45,8 +45,6 @@ function ProfilesDialog({ children }: { children: React.ReactNode }) {
       );
       const { data } = response;
       setUsers(data.data);
-      console.log(data.data);
-
       setSearchedUserLoading(false);
     } catch (e: any) {
       console.log(e.message);
@@ -55,8 +53,6 @@ function ProfilesDialog({ children }: { children: React.ReactNode }) {
   };
 
   const closeDialogHandler = () => {
-    // console.log("working");
-
     setSearchTerm("");
     setUsers([]);
   };

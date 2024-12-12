@@ -15,8 +15,6 @@ const setupSocket = (server) => {
   const userSocketMap = new Map();
 
   const sendMessage = async (message) => {
-    // console.log(message);
-
     const senderSocketId = userSocketMap.get(message.sender);
     const recipientSocketId = userSocketMap.get(message.recipient);
 
@@ -37,11 +35,7 @@ const setupSocket = (server) => {
   };
 
   const sendChannelMessage = async (message) => {
-    // console.log(message);
-
     const { sender, content, messageType, fileURL, channelId } = message;
-    // console.log(channelId);
-
     const senderSocketId = userSocketMap.get(message.sender);
 
     const newMessage = await Message.create({
@@ -65,8 +59,6 @@ const setupSocket = (server) => {
     const channel = await Channel.findById(channelId).populate("members");
 
     const finalData = { ...messageData._doc, channel: channel._id };
-
-    // console.log(finalData);
 
     if (channel && channel.members) {
       channel.members.forEach((member) => {

@@ -31,8 +31,6 @@ const HomeSidebar = () => {
   const navigate = useNavigate();
   const { chatView } = useSelector((state: RootState) => state.chat);
 
-  console.log("homesidebar");
-
   const logoutHandler = async () => {
     const response = await dispatch(logout());
 

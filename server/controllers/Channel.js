@@ -91,8 +91,6 @@ export const getSearchedChannels = async (req, res, next) => {
       ""
     );
     const regex = new RegExp(regexSearchTerm, "i");
-    // console.log(regex);
-
     const channels = await Channel.find({ name: regex });
     res.json({
       success: true,

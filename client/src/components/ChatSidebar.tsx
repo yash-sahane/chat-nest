@@ -20,8 +20,6 @@ const ChatSidebar = () => {
   );
   const dispatch = useDispatch<AppDispatch>();
 
-  console.log("chatsidebar");
-
   useEffect(() => {
     if (chatView === "person") {
       dispatch(getDMProfiles());

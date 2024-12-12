@@ -57,7 +57,6 @@ function ChannelsDialog({ children }: { children: React.ReactNode }) {
         { withCredentials: true }
       );
       const { data } = response;
-      // console.log(data);
 
       setChannels(data.data);
       setSearchedChannelLoading(false);

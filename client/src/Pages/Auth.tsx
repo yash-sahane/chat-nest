@@ -149,6 +149,7 @@ const Auth = () => {
                 />
                 <Input
                   value={password}
+                  type="password"
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                   className="custom-transition border-2 focus:border-purple-500 focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-0"
@@ -168,11 +169,13 @@ const Auth = () => {
                 />
                 <Input
                   value={password}
+                  type="password"
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                   className=" custom-transition border-2 focus:border-purple-500 focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-0"
                 />
                 <Input
+                  type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm Password"

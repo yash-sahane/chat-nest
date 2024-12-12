@@ -1,18 +1,12 @@
-# 🍽️ Epic Eats - Food Ordering MERN Application
+# 💬️ ChatNest - Real-time Chat Application with MERN Stack
 
-Welcome to Epic Eats! This food ordering application is designed to provide a seamless experience from browsing the menu to placing an order. Developed using the powerful MERN stack (MongoDB, Express.js, React.js, Node.js), Epic Eats offers a smooth and efficient platform for both users and administrators.
-
-Whether you're a customer looking to order your favorite meal or an admin managing the menu and orders, Epic Eats has you covered!
+Welcome to ChatNest! ChatNest is your go-to chat application, designed to offer a seamless and engaging experience for connecting with friends, family, and colleagues. Developed using the powerful MERN stack (MongoDB, Express.js, React.js, Node.js), ChatNest ensures a smooth and efficient platform for real-time communication.
 
 ## 🔗 Links
 
-- GitHub: [Epic Eats](https://github.com/yash-sahane/epic-eats)
+- GitHub: [Epic Eats](https://github.com/yash-sahane/chat-nest)
 
-- User Interface: [Epic Eats User](https://epic-eats-client.vercel.app/)
-
-- Admin Interface: [Epic Eats Admin](https://epic-eats-admin.vercel.app/)
-
-  - (Email: yashsahane23@gmail.com | Password: 12345678)
+- User Interface: [Epic Eats User](https://chat-nest-domniic.vercel.app/)
 
 - Components Flow: [Flow](https://miro.com/app/board/uXjVKimg8ZA=/?moveToWidget=3458764599264814558&cot=14)
 

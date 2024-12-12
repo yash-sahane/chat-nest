@@ -13,8 +13,6 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
   const { selectedChatData } = useSelector((state: RootState) => state.chat);
 
   const chatSelectHandler = async () => {
-    // console.log(channel);
-
     dispatch(setSelectedChatData(channel));
     dispatch(setSelectedChatType("channel"));
     dispatch(getChannelMessages({ id: channel._id }));

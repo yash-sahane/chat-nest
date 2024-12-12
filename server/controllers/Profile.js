@@ -11,8 +11,6 @@ export const getAllProfiles = async (req, res, next) => {
       ""
     );
     const regex = new RegExp(regexSearchTerm, "i");
-    // console.log(regex);
-
     const profiles = await User.find({
       $and: [
         { _id: { $ne: req.user.id } },
@@ -20,9 +18,6 @@ export const getAllProfiles = async (req, res, next) => {
         { $or: [{ firstName: regex }, { lastName: regex }] },
       ],
     });
-
-    // console.log("working");
-    // console.log(profiles);
 
     return res.json({
       success: true,
