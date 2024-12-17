@@ -45,7 +45,7 @@ export const login = async (req, res, next) => {
       .cookie("jwt", createToken(user._id), {
         maxAge,
         secure: true,
-        sameSite: "none",
+        sameSite: "None",
       })
       .json({
         success: true,
@@ -60,7 +60,7 @@ export const login = async (req, res, next) => {
 export const logout = async (req, res) => {
   try {
     return res
-      .cookie("jwt", "", { maxAge: 1, sameSite: "none", secure: true })
+      .cookie("jwt", "", { maxAge: 1, sameSite: "None", secure: true })
       .json({
         success: true,
         message: "User Logged out successfully",
@@ -94,7 +94,7 @@ export const signup = async (req, res, next) => {
       .cookie("jwt", createToken(newUser._id), {
         maxAge,
         secure: true,
-        sameSite: "none",
+        sameSite: "None",
       })
       .json({
         success: true,
