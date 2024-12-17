@@ -1,9 +1,9 @@
 import cron from "cron";
 import https from "https";
 
-const URL = "https://chat-nest-0id6.onrender.com";
+const URL = process.env.SERVER_URI;
 
-const job = new cron.CronJob("5 * * * *", function () {
+const job = new cron.CronJob("*/5 * * * *", function () {
   https
     .get(URL, (res) => {
       if (res.statusCode === 200) {
