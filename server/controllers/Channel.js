@@ -137,6 +137,7 @@ export const getUserChannels = async (req, res, next) => {
           profileTheme: 1,
           createdAt: 1,
           updatedAt: 1,
+          avatar: 1,
           lastMessage: "$lastMessage.content",
           lastMessageType: "$lastMessage.messageType",
           lastMessageTimeStamp: "$lastMessage.timeStamp",
