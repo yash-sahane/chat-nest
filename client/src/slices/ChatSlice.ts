@@ -15,7 +15,6 @@ type InitialState = {
   selectedChannelMessages: ChannelChatMsg[] | [];
   channels: Channel[] | [];
   DMProfiles: DMProfile[] | [];
-  loading: boolean;
   chatView: "person" | "channel";
 };
 
@@ -26,7 +25,6 @@ const initialState: InitialState = {
   selectedChannelMessages: [],
   channels: [],
   DMProfiles: [],
-  loading: false,
   chatView: "person",
 };
 
@@ -72,7 +70,6 @@ const ChatSlice = createSlice({
       })
       .addCase(getChatMessages.fulfilled, (state, action) => {
         state.selectedChatMessages = action.payload;
-        state.loading = false;
       })
       // getAllChannels
       .addCase(getChannels.fulfilled, (state, action) => {

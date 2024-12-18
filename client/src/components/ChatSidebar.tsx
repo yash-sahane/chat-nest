@@ -32,8 +32,6 @@ const ChatSidebar = () => {
     const fullName = `${profile.firstName} ${profile.lastName}`.toLowerCase();
     return fullName.includes(searchDMProfiles.toLowerCase());
   });
-
-  // const filteredChannels = channels;
   const filteredChannels = channels.filter((channel) => {
     const channelName = channel.name.toLowerCase();
     return channelName.includes(searchChannels.toLowerCase());

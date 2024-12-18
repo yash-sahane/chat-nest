@@ -46,9 +46,6 @@ const Chat = ({ DMProfile }: { DMProfile: DMProfile }) => {
                 : "hsl(var(--status-offline))",
           }}
           className={`custom-transition absolute -right-[2px] -bottom-[0px] w-[14px] h-[14px] rounded-full border-2 border-[hsl(var(--chat-card))]`}
-          // style={{
-          //   background: DMProfile.status === "online" ? "green" : "gray",
-          // }}
         ></span>
       </div>
       <div className="flex flex-col gap-1 w-full">

@@ -104,16 +104,6 @@ export const getSearchedChannels = async (req, res, next) => {
 export const getUserChannels = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    // const channels = await Channel.find({
-    //   $or: [
-    //     {
-    //       members: userId,
-    //     },
-    //     {
-    //       admin: userId,
-    //     },
-    //   ],
-    // }).sort({ updatedAt: -1 });
 
     const channels = await Channel.aggregate([
       // Step 1: Match Channels

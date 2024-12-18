@@ -20,6 +20,10 @@ const app = express();
 export const server = createServer(app);
 connectDB();
 
+app.get("/", (req, res) => {
+  res.send("Hello from Express.js");
+});
+
 const port = process.env.PORT || 3001;
 server.listen(port, () => {
   console.log("Server is running on port " + port);

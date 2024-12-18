@@ -36,13 +36,6 @@ const CreateChannel = ({
   const [allProfiles, setAllProfiles] = useState<User[]>([]);
   const [selectedProfiles, setSelectedProfiles] = useState<string[]>([]);
 
-  // const chatSelectHandler = async (userProfile: User) => {
-  //   dispatch(setSelectedChatData(userProfile));
-  //   dispatch(setSelectedChatType("chat"));
-
-  //   dispatch(getChatMessages({ id: userProfile._id }));
-  // };
-
   const validChannel = () => {
     if (!channelName) {
       toast.error("Channel name is required");
@@ -73,8 +66,6 @@ const CreateChannel = ({
       toast.success(message as string);
       setCreateChannelView(false);
       dispatch(getUserChannels());
-
-      // clean up fields
       setChannelName("");
       setProfileImg(undefined);
       setAllProfiles([]);

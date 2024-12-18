@@ -144,8 +144,6 @@ const ChannelChatMain = () => {
   }, [useRef]);
 
   useEffect(() => {
-    // console.log(selectedChatMessages.length);
-
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
@@ -176,8 +174,6 @@ const ChannelChatMain = () => {
           </div>
           <div className="h-[calc(100%-134px)] flex flex-col gap-3 pr-2 mt-2 overflow-y-auto">
             {selectedChannelMessages.map((chatMsg, idx) => {
-              // console.log(chatMsg);
-
               return (
                 <React.Fragment key={chatMsg._id}>
                   {renderDate(chatMsg)}
