@@ -24,10 +24,10 @@ let upload = multer({ storage: storage });
 
 const router = Router();
 
-router.get("/getAllUsers", isAuthenticated, getAllUsers);
 router.post("/login", login);
 router.post("/signup", signup);
 router.get("/", isAuthenticated, getInfo);
+router.get("/getAllUsers", isAuthenticated, getAllUsers);
 router.post("/setup", isAuthenticated, upload.single("image"), setup);
 router.get("/logout", isAuthenticated, logout);
 

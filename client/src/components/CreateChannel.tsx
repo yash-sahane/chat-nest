@@ -108,10 +108,10 @@ const CreateChannel = ({
   return (
     <div className="z-[99] transition-all w-full h-full flex items-center justify-center absolute top-0 left-0 backdrop-blur-md">
       <div className="relative">
-        <div className="absolute top-4 right-4 cursor-pointer hover:bg-[#1f2937] p-1 rounded-md">
+        <div className="z-[100] cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:text-accent-foreground sm:mt-0 p-1 border-none text-gray-600 absolute top-3 right-3 w-fit h-fit bg-transparent hover:bg-[hsl(var(--chat-primary))]">
           <X size={22} onClick={() => setCreateChannelView((prev) => !prev)} />
         </div>
-        <div className="custom-transition shadow-2xl z-10 p-4 pb-6 pr-8 w-[60vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] max-w-[40rem] min-h-[20rem] max-h-[24rem] rounded-xl flex bg-opacity-90 bg-white dark:bg-[hsl(var(--background))]">
+        <div className="custom-transition shadow-2xl dark:shadow-inner-bottom relative z-10 p-4 pr-8 w-[90vw] msm:w-[90vw] sm:w-[80vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] max-w-[50rem] min-h-[21rem] max-h-full sm:max-h-[28rem] rounded-xl flex bg-opacity-90 bg-white dark:bg-[hsl(var(--background))]">
           <div className="flex justify-center items-center flex-col gap-6 w-full">
             <div className="flex flex-col items-center">
               {/* <img src={appLogo} alt="applogo" className="w-16" /> */}
@@ -120,10 +120,12 @@ const CreateChannel = ({
               </p>
             </div>
             <div className="w-full">
-              <div className="flex gap-4">
-                <div className={`w-2/4 flex justify-center items-center`}>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div
+                  className={`w-full sm:w-2/4 flex justify-center items-center`}
+                >
                   <div
-                    className="bg-[hsl(var(--secondary))] text-5xl w-48 h-48 flex items-center justify-center border border-border rounded-full transition-all duration-300 ease-linear custom-transition relative overflow-hidden"
+                    className="bg-[hsl(var(--secondary))] text-5xl sm:w-48 w-36 sm:h-48 h-36 flex items-center justify-center border border-border rounded-full transition-all duration-300 ease-linear custom-transition relative overflow-hidden"
                     style={{
                       background:
                         theme === "dark"
@@ -154,25 +156,29 @@ const CreateChannel = ({
                       <label
                         htmlFor="profile-pic"
                         className={`transition-all duration-150 ease-linear absolute hover:bottom-0
-                        -bottom-[32px] rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[73px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer`}
+                        -bottom-[42px] sm:-bottom-[28px] rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[73px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer`}
                       >
                         <Camera />
-                        <p className="text-base">Add Profile Picture</p>
+                        <p className="text-sm sm:text-base">
+                          Add Profile Picture
+                        </p>
                       </label>
                     ) : (
                       <div
-                        className={`transition-all duration-150 ease-linear absolute hover:bottom-0 -bottom-[60px] rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[100px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer`}
+                        className={`transition-all duration-150 ease-linear absolute hover:bottom-0  -bottom-[50px] sm:-bottom-[60px]  rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[80px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer`}
                         onClick={() => {
                           setProfileImg(undefined);
                         }}
                       >
                         <Trash />
-                        <p className="text-base">Remove Profile Picture</p>
+                        <p className="text-sm text-center sm:text-base">
+                          Remove Profile Picture
+                        </p>
                       </div>
                     )}
                   </div>
                 </div>
-                <div className="flex flex-col gap-3 mt-4 w-2/4">
+                <div className="flex flex-col gap-3 mt-4 w-full sm:w-2/4">
                   <Input
                     value={channelName}
                     onChange={(e) => setChannelName(e.target.value)}
@@ -183,7 +189,7 @@ const CreateChannel = ({
                     values={selectedProfiles}
                     onValuesChange={setSelectedProfiles}
                     loop
-                    className="max-w-xs"
+                    className="sm:max-w-xs"
                   >
                     <MultiSelectorTrigger>
                       <MultiSelectorInput placeholder="Select profiles" />

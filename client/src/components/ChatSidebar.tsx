@@ -53,7 +53,7 @@ const ChatSidebar = () => {
     >
       <div>
         <p className="text-lg tracking-wide font-bold custom-transition">
-          Chats
+          {chatView === "person" ? "Chats" : "Channels"}
         </p>
         <div className="flex items-center gap-2 mt-2">
           <div className="custom-transition relative ease-linear bg-[hsl(var(--chat-primary))] h-[42px] w-full rounded-md">

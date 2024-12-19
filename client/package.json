@@ -28,7 +28,6 @@
     "cmdk": "^1.0.4",
     "command": "^0.0.5",
     "emoji-picker-react": "^4.12.0",
-    "firebase": "^11.1.0",
     "framer-motion": "^11.11.9",
     "lucide-react": "^0.453.0",
     "moment": "^2.30.1",

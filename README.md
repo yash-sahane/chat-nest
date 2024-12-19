@@ -1,20 +1,18 @@
+# 💬️ ChatNest - Real-time Chat Application with MERN Stack and Socket.io
 
-# 🍽️ Epic Eats - Food Ordering MERN Application
+Welcome to ChatNest! ChatNest is your go-to chat application, designed to offer a seamless and engaging experience for connecting with friends, family, and colleagues. Developed using the MERN stack (MongoDB, Express.js, React.js, Node.js) & Socket.io, ChatNest ensures a smooth and efficient platform for real-time communication.
 
-Welcome to Epic Eats! This food ordering application is designed to provide a seamless experience from browsing the menu to placing an order. Developed using the powerful MERN stack (MongoDB, Express.js, React.js, Node.js), Epic Eats offers a smooth and efficient platform for both users and administrators.
-
-Whether you're a customer looking to order your favorite meal or an admin managing the menu and orders, Epic Eats has you covered!
 ## 🔗 Links
 
-- GitHub: [Epic Eats](https://github.com/yash-sahane/epic-eats)
+- GitHub: [Chat Nest](https://github.com/yash-sahane/chat-nest)
 
-- User Interface: [Epic Eats User](https://epic-eats-client.vercel.app/)
+- User Interface: [Chat Nest](https://chat-nest-domniic.vercel.app/)
 
-- Admin Interface: [Epic Eats Admin](https://epic-eats-admin.vercel.app/) 
-    - (Email: yashsahane23@gmail.com | Password: 12345678)
-
-- Components Flow: [Flow](https://miro.com/app/board/uXjVKimg8ZA=/?moveToWidget=3458764599264814558&cot=14) 
 ## 📸 Screenshots
+
+- Component Tree :
+
+![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/0.png)
 
 ![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/1.png)
 
@@ -36,39 +34,42 @@ Whether you're a customer looking to order your favorite meal or an admin managi
 
 ![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/10.png)
 
-
+![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/11.png)
 
 ## 🌟 Features
 
-- **User Authentication**: Secure user registration and login.
-- **Browse Menu**: Explore a variety of delicious food items.
-- **Cart Management**: Add or remove items from your cart effortlessly.
-- **Order Placement**: Seamlessly place orders and track their status.
-- **Admin Console**: Manage menu items, users, and order statuses efficiently.
-- **Stripe Integration**: Secure payment processing with Stripe.
-- **Image Upload**: Upload food item images using Multer.
-
+- **User Authentication**: Secure user registration and login using JWT.
+- **Real-time Messaging**: Instant messaging with real-time updates powered by Socket.io.
+- **User Presence**: See which users are online and active.
+- **Direct and Group Chats**: Create and manage direct messages and group chats.
+- **Emoji Support**: Send and receive emojis in messages.
+- **Media Sharing**: Share images, videos, and files within the chat.
+- **Message History**: Persistent message history for continuous conversations.
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React.js (Context API, React Router), Tailwind CSS
-- **Backend**: Node.js, Express.js, Multer, Stripe
+- **Frontend**: React.js (React Router), TypeScript, Tailwind CSS, Emoji Picker React
+- **Backend**: Node.js, Express.js, Socket.io, Multer
 - **Database**: MongoDB
+- **State Management**: Redux Toolkit (RTK), Context Api (Theme, Socket)
+- **UI Components**: Aceternity UI, Chadcn
 - **Authentication**: JWT (JSON Web Tokens)
-
 
 ## 🛠️ Installation
 
 #### Prerequisites
+
 - Node.js
 - MongoDB
 
 #### Steps:
+
 - Clone the repository:
 
 ```bash
-  https://github.com/yash-sahane/epic-eats.git
+  https://github.com/yash-sahane/chat-nest.git
 ```
+
 - Install dependencies for client, server and admin:
 
 ```bash
@@ -80,25 +81,27 @@ npm install
 cd ../client
 npm install
 
-# Install admin dependencies
-cd ../admin
-npm install
 ```
 
-- Create a `config.env` file in the `server/database` directory and add the following:
+- Create a `.env` file in the `server` directory and add the following:
 
 ```bash
-PORT = <port_for_development> 
+PORT = <port_for_development>
 
-FRONTEND_URI = <frontend_uri_for_development>
+ORIGIN = <frontend_uri_for_development>
+
+SERVER_URI = <backend_uri_for_development>
 
 MONGO_URI = <your_mongo_db_connection_string>
 
 SECRET_KEY = <your_jwt_secret>
+```
 
-STRIPE_SECRET_KEY = <your_stripe_secret_key>
+- Create a `.env` file in the `client` directory and add the following:
 
-ADMIN_SECRET_KEY = <secret_key_for_admin_registration>
+```bash
+VITE_SERVER_URI = <backend_uri_for_development>
+
 ```
 
 - Run the application:
@@ -111,14 +114,8 @@ npm run dev
 # Run client
 cd ../client
 npm run dev
-
-# Run admin
-cd ../admin
-npm run dev
 ```
 
-
-    
 ## 📑 API Reference
 
 ### User Routes
@@ -129,251 +126,294 @@ npm run dev
   POST /api/user/login
 ```
 
+| Parameter  | Type     | Description                        |
+| :--------- | :------- | :--------------------------------- |
+| `email`    | `string` | **Required**. User's email address |
+| `password` | `string` | **Required**. User's password      |
+
+#### Signup
+
+```http
+  POST /api/user/signup
+```
+
+| Parameter  | Type     | Description                        |
+| :--------- | :------- | :--------------------------------- |
+| `email`    | `string` | **Required**. User's email address |
+| `password` | `string` | **Required**. User's password      |
+
+#### Profile Setup
+
+```http
+  POST /api/user/setup
+```
+
+| Parameter      | Type     | Description                          |
+| :------------- | :------- | :----------------------------------- |
+| `firstName`    | `string` | **Required**. User's first name      |
+| `lastName`     | `string` | **Required**. User's last name       |
+| `avatar`       | `file`   | **Required**. User's profile picture |
+| `profileTheme` | `string` | **Required**. User's profile theme   |
+
+#### Logout
+
+```http
+  GET /api/user/logout
+```
+
+#### User info
+
+```http
+  GET /api/user/
+```
+
+#### All users (For Adding members in channel)
+
+```http
+  GET /api/user/getAllUsers
+```
+
+### Profile Routes
+
+#### Get Profiles (Search Profiles)
+
+```http
+  POST /api/profiles/getProfiles
+```
+
+| Parameter    | Type     | Description               |
+| :----------- | :------- | :------------------------ |
+| `searchTerm` | `string` | **Required**. Search term |
+
+#### Get Profiles (Search users already in conversation)
+
+```http
+  GET /api/profiles/getProfilesForDMList
+```
+
+### Channel Routes
+
+#### Create Channel
+
+```http
+  POST /api/channel/create
+```
+
+| Parameter      | Type     | Description                   |
+| :------------- | :------- | :---------------------------- |
+| `name`         | `string` | **Required**. Channel name    |
+| `members`      | `Array`  | **Required**. Channel members |
+| `admin`        | `Object` | **Required**. Channel admin   |
+| `avatar`       | `file`   | **Required**. Channel image   |
+| `profileTheme` | `string` | **Required**. Channel theme   |
+
+#### Join Channel
+
+```http
+  POST /api/channel/join
+```
+
+| Parameter   | Type     | Description              |
+| :---------- | :------- | :----------------------- |
+| `channelId` | `string` | **Required**. Channel id |
+| `userId`    | `string` | **Required**. User id    |
+
+#### Channels
+
+```http
+  GET /api/channel/getChannels
+```
+
+#### Searched Channels
+
+```http
+  POST /api/channel/getSearchedChannels
+```
+
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `email` | `string` | **Required**. User's email address |
-| `password` | `string` | **Required**. User's password |
+| `name`    | `string` | **Required**. Channel name |
 
-#### Register
-
-```http
-  POST /api/user/register
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `name`      | `string` | **Required**. User's full name |
-| `email`      | `string` | **Required**. User's email address |
-| `password`      | `string` | **Required**. User's password |
-
-#### Admin Register
+#### User Channels
 
 ```http
-  POST /api/user/admin_register
+  GET /api/channel/getUserChannels
 ```
 
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `name`      | `string` | **Required**. Admin's full name |
-| `email`      | `string` | **Required**. Admin's email address |
-| `password`      | `string` | **Required**. Admin's password |
-| `adminSecretKey`      | `string` | **Required**. Admin secret key for registration |
+### Chat Routes
 
-
-### Order Routes
-
-#### Place Order
+#### Chat Messages
 
 ```http
-  POST /api/order/place
+  POST /api/chat
 ```
 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `orderData` | `object` | **Required**. Contains order details like items, amount, and address |
+| Parameter | Type     | Description                   |
+| :-------- | :------- | :---------------------------- |
+| `user1`   | `string` | **Required**. ID of the user1 |
+| `user2`   | `string` | **Required**. ID of the user2 |
 
-#### Verify Order
+#### Channel Chat Messages
 
 ```http
-  POST /api/order/verify
+  POST /api/chat/getChannelMessages
 ```
 
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `orderId`      | `string` | **Required**. Order ID |
-| `success`      | `string` | **Required**. Payment success status (true or false) 
+| Parameter   | Type     | Description              |
+| :---------- | :------- | :----------------------- |
+| `channelId` | `string` | **Required**. Channel Id |
 
-#### Fetch Orders
+#### Send file
 
 ```http
-  POST /api/order/orders
+  POST /api/chat/send_file
 ```
 
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `none`      | `none` | **Required**. Authentication required |
+| Parameter  | Type   | Description             |
+| :--------- | :----- | :---------------------- |
+| `fileName` | `file` | **Required**. File name |
 
-#### Fetch Orders (Admin)
+#### Download file
 
 ```http
-  GET /api/order/list
+  GET /api/chat/download_file/:filename
 ```
 
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `none`      | `none` | **Required**. Admin authentication required |
-
-#### Update Order Status
-
-```http
-  POST /api/order/status
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `orderId`      | `string` | **Required**. ID of the order to update |
-| `status`      | `string` | **Required**. New status of the order |
-
-
-### Food Routes
-#### Add Food
-
-```http
-  POST /api/food/add
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `name`      | `string` | **Required**. Food name |
-| `description`      | `string` | **Required**. Food description |
-| `price`      | `number` | **Required**. Food price |
-| `category`      | `string` | **Required**. Food category |
-| `image`      | `file` | **Required**. Food image (uploaded file) |
-
-#### Remove Food
-
-```http
-  POST /api/food/remove
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. ID of the food item to remove |
-
-#### List Food Items
-
-```http
-  GET /api/food/list
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `none`      | `none` | **Required**. Authentication required |
-
-### Cart Routes
-#### Add to Cart
-
-```http
-  POST /api/cart/add
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `itemId`      | `string` | **Required**. ID of the item to add |
-
-#### Remove from Cart
-
-```http
-  POST /api/cart/remove
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `itemId`      | `string` | **Required**. ID of the item to add |
-
-#### #### Get Cart Data
-
-```http
-  GET /api/cart/get
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `none`      | `none` | **Required**. Authentication required |
+| Parameter  | Type   | Description             |
+| :--------- | :----- | :---------------------- |
+| `fileName` | `file` | **Required**. File name |
 
 ## 📁 Folder Structure
 
-~~~text
-epic-eats
-├── admin
-│   ├── public
-│   ├── src
-│   │   ├── assets
-│   │   ├── components
-│   │   │   ├── Header.jsx
-│   │   │   ├── HrLine.jsx
-│   │   │   ├── LoginPopup.jsx
-│   │   │   ├── Sidebar.jsx
-│   │   │   └── SignupPopup.jsx
-│   │   ├── context
-│   │   │   └── StoreContext.jsx
-│   │   ├── Pages
-│   │   │   ├── Add.jsx
-│   │   │   ├── List.jsx
-│   │   │   └── Order.jsx
-│   │   ├── App.jsx
-│   │   └── main.jsx
-├── client
-│   ├── public
-│   ├── src
-│   │   ├── assets
-│   │   ├── components
-│   │   │   ├── ExploreMenu.jsx
-│   │   │   ├── FoodItem.jsx
-│   │   │   ├── FoodItems.jsx
-│   │   │   ├── Footer.jsx
-│   │   │   ├── Header.jsx
-│   │   │   ├── Hero.jsx
-│   │   │   ├── HrLine.jsx
-│   │   │   ├── LoginPopup.jsx
-│   │   │   ├── MobileApp.jsx
-│   │   │   └── SignupPopup.jsx
-│   │   ├── context
-│   │   │   └── StoreContext.jsx
-│   │   ├── pages
-│   │   │   ├── Cart.jsx
-│   │   │   ├── Checkout.jsx
-│   │   │   ├── Home.jsx
-│   │   │   ├── Order.jsx
-│   │   │   ├── Orders.jsx
-│   │   │   └── Verify.jsx
-│   │   ├── utils
-│   │   │   └── ProtectedRoutes.jsx
-│   │   ├── App.jsx
-│   │   └── main.jsx
-└── server
-│   ├── controller
-│   │   ├── Cart.js
-│   │   ├── Food.js
-│   │   ├── Order.js
-│   │   └── User.js
-│   ├── database
-│   │   ├── config.env
-│   │   └── connect.js
-│   ├── middlewares
-│   │   ├── adminAuth.js
-│   │   ├── auth.js
-│   │   └── error.js
-│   ├── model
-│   │   ├── Food.js
-│   │   ├── Order.js
-│   │   └── User.js
-│   ├── routes
-│   │   ├── Cart.js
-│   │   ├── Food.js
-│   │   ├── Order.js
-│   │   └── User.js
-│   ├── uploads
-│   ├── app.js
-│   └── server.js
-└── assets
-~~~
-## 🎬 Scripts
+```text
+📁chat-nest
+    └── 📁assets
+    └── 📁client
+        └── .env
+        └── .gitignore
+        └── components.json
+        └── eslint.config.js
+        └── index.html
+        └── package-lock.json
+        └── package.json
+        └── postcss.config.js
+        └── 📁public
+            └── icon.png
+        └── README.md
+        └── 📁src
+            └── App.css
+            └── App.tsx
+            └── 📁assets
+            └── 📁components
+                └── ChannelChat.tsx
+                └── ChannelChatMain.tsx
+                └── ChannelChats.tsx
+                └── ChannelsDialog.tsx
+                └── Chat.tsx
+                └── ChatMain.tsx
+                └── Chats.tsx
+                └── ChatSidebar.tsx
+                └── CreateChannel.tsx
+                └── GradientBackground.tsx
+                └── HomeSidebar.tsx
+                └── ProfilesDialog.tsx
+                └── ToggleTheme.tsx
+                └── 📁ui
+                    └── alert-dialog.tsx
+                    └── background-beams-with-collision.tsx
+                    └── background-gradient-animation.tsx
+                    └── badge.tsx
+                    └── button.tsx
+                    └── command.tsx
+                    └── dialog.tsx
+                    └── dropdown-menu.tsx
+                    └── 📁extension
+                        └── multi-select.tsx
+                    └── input.tsx
+                    └── skeleton.tsx
+                    └── tabs.tsx
+                └── UserSkeleton.tsx
+            └── 📁context
+                └── SocketProvier.tsx
+                └── ThemeProvider.tsx
+            └── index.css
+            └── 📁lib
+                └── utils.ts
+            └── main.tsx
+            └── 📁Pages
+                └── Auth.tsx
+                └── Home.tsx
+                └── Profile.tsx
+            └── 📁slices
+                └── AuthApi.ts
+                └── AuthSlice.ts
+                └── ChatApi.ts
+                └── ChatSlice.ts
+            └── 📁store
+                └── store.ts
+            └── types.ts
+            └── 📁utils
+                └── getCookie.ts
+                └── profileTheme.ts
+                └── profileThemeKeys.ts
+                └── ProtectedRoute.tsx
+                └── type.ts
+                └── UserProfile.tsx
+            └── vite-env.d.ts
+        └── tailwind.config.js
+        └── tsconfig.app.json
+        └── tsconfig.json
+        └── tsconfig.node.json
+        └── vercel.json
+        └── vite.config.ts
+    └── 📁server
+        └── .env
+        └── .gitIgnore
+        └── app.js
+        └── 📁controllers
+            └── Channel.js
+            └── Chat.js
+            └── Profile.js
+            └── User.js
+        └── 📁cron
+            └── cron.js
+        └── 📁database
+            └── db.js
+        └── 📁middleware
+            └── auth.js
+            └── error.js
+        └── 📁model
+            └── Channel.js
+            └── Message.js
+            └── User.js
+        └── package-lock.json
+        └── package.json
+        └── 📁routes
+            └── Channel.js
+            └── Chat.js
+            └── Profile.js
+            └── User.js
+        └── socket.js
+        └── 📁uploads
+            └── 📁files
+            └── 📁profiles
+    └── README.md
+```
+
+## </> Scripts
 
 #### Server Scripts
+
 `npm run dev` - Start the server in development mode using nodemon
 
 `npm start` - Start the server in production mode
 
 #### Client Scripts
+
 `npm run dev` - Start the client in development mode using Vite
 
 `npm run build` - Build the client for production
+
 ## 🤝 Contributing
 
 We welcome contributions! Feel free to fork the repository and submit a pull request with your improvements.
-
-See `contributing.md` for ways to get started.
-
-Please adhere to this project's `code of conduct`.
-

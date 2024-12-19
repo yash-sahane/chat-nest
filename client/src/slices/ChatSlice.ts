@@ -43,7 +43,7 @@ const ChatSlice = createSlice({
         ...state.selectedChatMessages,
         {
           ...action.payload,
-          sender: action.payload.sender._id,
+          sender: action.payload.sender ? action.payload.sender._id : undefined,
           recipient: action.payload.recipient
             ? action.payload.recipient._id
             : undefined,

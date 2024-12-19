@@ -80,7 +80,7 @@ function ProfilesDialog({ children }: { children: React.ReactNode }) {
       <AlertDialogContent className="transition-all">
         <AlertDialogCancel
           onClick={closeDialogHandler}
-          className="p-1 border-none text-gray-400 absolute top-3 right-3 w-fit h-fit bg-transparent !mt-0 hover:bg-[hsl(var(--chat-primary))]"
+          className="p-1 border-none text-gray-600 absolute top-3 right-3 w-fit h-fit bg-transparent !mt-0 hover:bg-[hsl(var(--chat-primary))]"
         >
           <X size={22} />
         </AlertDialogCancel>
