@@ -10,31 +10,27 @@ Welcome to ChatNest! ChatNest is your go-to chat application, designed to offer 
 
 ## 📸 Screenshots
 
-- Component Tree :
+![Home Page](https://github.com/yash-sahane/chat-nest/raw/main/assets/1.png)
 
-![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/0.png)
+![Home Page](https://github.com/yash-sahane/chat-nest/raw/main/assets/2.png)
 
-![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/1.png)
+![Home Page](https://github.com/yash-sahane/chat-nest/raw/main/assets/3.png)
 
-![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/2.png)
+![Home Page](https://github.com/yash-sahane/chat-nest/raw/main/assets/4.png)
 
-![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/3.png)
+![Home Page](https://github.com/yash-sahane/chat-nest/raw/main/assets/5.png)
 
-![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/4.png)
+![Home Page](https://github.com/yash-sahane/chat-nest/raw/main/assets/7.png)
 
-![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/5.png)
+![Home Page](https://github.com/yash-sahane/chat-nest/raw/main/assets/6.png)
 
-![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/6.png)
+![Home Page](https://github.com/yash-sahane/chat-nest/raw/main/assets/8.png)
 
-![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/7.png)
+![Home Page](https://github.com/yash-sahane/chat-nest/raw/main/assets/9.png)
 
-![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/8.png)
+![Home Page](https://github.com/yash-sahane/chat-nest/raw/main/assets/10.png)
 
-![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/9.png)
-
-![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/10.png)
-
-![Home Page](https://github.com/yash-sahane/epic-eats/raw/main/assets/11.png)
+![Home Page](https://github.com/yash-sahane/chat-nest/raw/main/assets/11.png)
 
 ## 🌟 Features
 
