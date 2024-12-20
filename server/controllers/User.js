@@ -43,7 +43,7 @@ export const login = async (req, res, next) => {
 
     res
       .cookie("jwt", createToken(user._id), {
-        // httpOnly: true,
+        httpOnly: process.env.NODE_ENV === "production",
         maxAge,
         secure: true,
         sameSite: "None",
@@ -93,7 +93,7 @@ export const signup = async (req, res, next) => {
 
     res
       .cookie("jwt", createToken(newUser._id), {
-        // httpOnly: true,
+        httpOnly: process.env.NODE_ENV === "production",
         maxAge,
         secure: true,
         sameSite: "None",
