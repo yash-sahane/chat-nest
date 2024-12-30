@@ -25,6 +25,8 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
       return <Video size={18} />;
     } else if (channel.lastMessageType === "file") {
       return <File size={18} />;
+    } else {
+      return undefined;
     }
   };
 
@@ -54,7 +56,7 @@ const ChannelChat = ({ channel }: { channel: Channel }) => {
                       channel?.lastMessageType.slice(1)}
                   </div>
                 )}
-            {!channel.lastMessage && "No messages yet!"}
+            {!channel.lastMessage && !getMessageType() && "No messages yet!"}
           </div>
           {/* <span className="flex items-center justify-center px-[6px] rounded-full bg-[hsl(var(--primary))]">
             <p className="text-xs text-white">1</p>

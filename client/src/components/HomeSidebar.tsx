@@ -47,29 +47,15 @@ const HomeSidebar = () => {
   };
 
   const userProfile = () => {
-    const borderColor = user?.avatar
-      ? `${
-          theme === "dark"
-            ? darkProfileTheme[user?.profileTheme].border
-            : lightProfileTheme[user?.profileTheme].border
-        }`
-      : `${
-          theme === "dark"
-            ? darkProfileTheme["violet"].border
-            : lightProfileTheme["violet"].border
-        }`;
+    const borderColor =
+      theme === "dark"
+        ? darkProfileTheme[user?.profileTheme!].border
+        : lightProfileTheme[user?.profileTheme!].border;
 
-    const bg = user?.avatar
-      ? `${
-          theme === "dark"
-            ? darkProfileTheme[user?.profileTheme].bg
-            : lightProfileTheme[user?.profileTheme].bg
-        }`
-      : `${
-          theme === "dark"
-            ? darkProfileTheme["violet"].bg
-            : lightProfileTheme["violet"].bg
-        }`;
+    const bg =
+      theme === "dark"
+        ? darkProfileTheme[user?.profileTheme!].bg
+        : lightProfileTheme[user?.profileTheme!].bg;
 
     return user?.avatar ? (
       <img

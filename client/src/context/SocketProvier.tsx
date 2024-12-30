@@ -1,4 +1,4 @@
-import { getDMProfiles } from "@/slices/ChatApi";
+import { getDMProfiles, getUserChannels } from "@/slices/ChatApi";
 import {
   setSelectedChannelMessages,
   setSelectedChatMessages,
@@ -34,12 +34,16 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const [socket, setSocket] = useState<typeof Socket | null>(null);
 
   const receiveMessageHandler = (message: Message) => {
+    console.log(message);
+
     if (
       selectedChatDataRef.current !== undefined &&
       (selectedChatDataRef.current._id === message.sender._id ||
         selectedChatDataRef.current._id === message.recipient?._id)
     ) {
       dispatch(setSelectedChatMessages(message));
+    } else {
+      dispatch(getDMProfiles());
     }
   };
 
@@ -49,6 +53,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       selectedChatDataRef.current._id === message.channel
     ) {
       dispatch(setSelectedChannelMessages(message));
+    } else {
+      dispatch(getUserChannels());
     }
   };
 

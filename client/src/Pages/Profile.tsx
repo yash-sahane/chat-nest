@@ -149,7 +149,7 @@ const Profile = () => {
                     </label>
                   ) : (
                     <div
-                      className={`transition-all duration-150 ease-linear absolute hover:bottom-0  -bottom-[50px] sm:-bottom-[60px]  rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[80px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer`}
+                      className={`transition-all duration-150 ease-linear absolute hover:bottom-0  -bottom-[50px] sm:-bottom-[55px]  rounded-bl-full rounded-br-full m-auto hover:w-full hover:h-full hover:rounded-full w-[82%] h-[80px] sm:h-[95px] flex justify-center items-center bg-[hsl(var(--background))] gap-2 flex-col cursor-pointer`}
                       onClick={() => {
                         setProfileImg(undefined);
                       }}
