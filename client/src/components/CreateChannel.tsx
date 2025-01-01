@@ -189,7 +189,7 @@ const CreateChannel = ({
                     values={selectedProfiles}
                     onValuesChange={setSelectedProfiles}
                     loop
-                    className="sm:max-w-xs"
+                    className="!max-w-full sm:max-w-xs"
                   >
                     <MultiSelectorTrigger>
                       <MultiSelectorInput placeholder="Select profiles" />

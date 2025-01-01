@@ -41,6 +41,8 @@ Welcome to ChatNest! ChatNest is your go-to chat application, designed to offer 
 - **Emoji Support**: Send and receive emojis in messages.
 - **Media Sharing**: Share images, videos, and files within the chat.
 - **Message History**: Persistent message history for continuous conversations.
+- **Profile Setup**: Setup profile with profile picture and In app theme.
+- **Theme**: Switch between light and dark modes.
 
 ## 🛠️ Tech Stack
 
@@ -48,7 +50,7 @@ Welcome to ChatNest! ChatNest is your go-to chat application, designed to offer 
 - **Backend**: Node.js, Express.js, Socket.io, Multer
 - **Database**: MongoDB
 - **State Management**: Redux Toolkit (RTK), Context Api (Theme, Socket)
-- **UI Components**: Aceternity UI, Chadcn
+- **UI Components**: Aceternity UI, Shadcn
 - **Authentication**: JWT (JSON Web Tokens)
 
 ## 🛠️ Installation
@@ -91,6 +93,8 @@ SERVER_URI = <backend_uri_for_development>
 MONGO_URI = <your_mongo_db_connection_string>
 
 SECRET_KEY = <your_jwt_secret>
+
+NODE_ENV = <development || production>
 ```
 
 - Create a `.env` file in the `client` directory and add the following:
@@ -371,8 +375,6 @@ npm run dev
             └── Chat.js
             └── Profile.js
             └── User.js
-        └── 📁cron
-            └── cron.js
         └── 📁database
             └── db.js
         └── 📁middleware
@@ -395,20 +397,6 @@ npm run dev
             └── 📁profiles
     └── README.md
 ```
-
-## </> Scripts
-
-#### Server Scripts
-
-`npm run dev` - Start the server in development mode using nodemon
-
-`npm start` - Start the server in production mode
-
-#### Client Scripts
-
-`npm run dev` - Start the client in development mode using Vite
-
-`npm run build` - Build the client for production
 
 ## 🤝 Contributing
 
