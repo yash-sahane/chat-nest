@@ -12,7 +12,7 @@ import { createServer } from "http";
 import setupSocket from "./socket.js";
 import job from "./cron/cron.js";
 
-job.start();
+// job.start();
 
 config();
 
