@@ -1,0 +1,40 @@
+services:
+  client:
+    env_file:
+      - ./client/.env
+    image: domniic/chat-nest-client:latest
+    container_name: chat-nest-client
+    ports:
+      - "5173:5173"
+    networks:
+      - chat-nest
+
+  server:
+    env_file:
+      - ./server/.env
+    image: domniic/chat-nest-server:latest
+    container_name: chat-nest-server
+    ports:
+      - "3000:3000"
+    networks:
+      - chat-nest
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    container_name: chat-nest-mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - chat-nest
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  chat-nest:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local
