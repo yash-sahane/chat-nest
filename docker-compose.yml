@@ -1,21 +1,30 @@
 services:
   client:
-    env_file:
-      - ./client/.env
     image: domniic/chat-nest-client:latest
     container_name: chat-nest-client
     ports:
       - "5173:5173"
+    environment:
+      # - VITE_SERVER_URI=http://localhost:3000
+      - VITE_SERVER_URI=http://13.127.220.193:3000
     networks:
       - chat-nest
 
   server:
-    env_file:
-      - ./server/.env
     image: domniic/chat-nest-server:latest
     container_name: chat-nest-server
     ports:
       - "3000:3000"
+    environment:
+      - PORT=3000
+      # - ORIGIN=http://localhost:5173
+      - ORIGIN=http://13.127.220.193:5173
+      # - MONGO_URI=mongodb://chat-nest-mongo:27017/
+      - MONGO_URI=mongodb://chat-nest-mongo:27017/chat-nest
+      - SECRET_KEY=e8c0*2$$cn0s^cnp1@wsxxp0
+      # - SERVER_URI=http://localhost:3000
+      - SERVER_URI=http://13.127.220.193:3000
+      - NODE_ENV=development
     networks:
       - chat-nest
     depends_on:
@@ -24,8 +33,8 @@ services:
   mongo:
     image: mongo
     container_name: chat-nest-mongo
-    ports:
-      - "27017:27017"
+    # ports:
+    #   - "27017:27017"
     networks:
       - chat-nest
     volumes:
