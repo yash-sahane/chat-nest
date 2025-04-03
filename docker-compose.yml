@@ -6,7 +6,7 @@ services:
       - "5173:5173"
     environment:
       # - VITE_SERVER_URI=http://localhost:3000
-      - VITE_SERVER_URI=http://13.127.220.193:3000
+      - VITE_SERVER_URI=http://13.126.85.24:3000
     networks:
       - chat-nest
 
@@ -18,12 +18,12 @@ services:
     environment:
       - PORT=3000
       # - ORIGIN=http://localhost:5173
-      - ORIGIN=http://13.127.220.193:5173
+      - ORIGIN=http://13.126.85.24:5173
       # - MONGO_URI=mongodb://chat-nest-mongo:27017/
       - MONGO_URI=mongodb://chat-nest-mongo:27017/chat-nest
       - SECRET_KEY=e8c0*2$$cn0s^cnp1@wsxxp0
       # - SERVER_URI=http://localhost:3000
-      - SERVER_URI=http://13.127.220.193:3000
+      - SERVER_URI=http://13.126.85.24:3000
       - NODE_ENV=development
     networks:
       - chat-nest
