@@ -46,7 +46,7 @@ export const login = async (req, res, next) => {
         httpOnly: process.env.NODE_ENV === "production",
         maxAge,
         // secure: true,
-        // sameSite: "None",
+        sameSite: "None",
       })
       .json({
         success: true,
@@ -64,7 +64,7 @@ export const logout = async (req, res) => {
       .cookie("jwt", "", {
         httpOnly: process.env.NODE_ENV === "production",
         maxAge: 1,
-        // sameSite: "None",
+        sameSite: "None",
         // secure: true,
       })
       .json({
@@ -101,7 +101,7 @@ export const signup = async (req, res, next) => {
         httpOnly: process.env.NODE_ENV === "production",
         maxAge,
         // secure: true,
-        // sameSite: "None",
+        sameSite: "None",
       })
       .json({
         success: true,
