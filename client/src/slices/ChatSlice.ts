@@ -32,6 +32,37 @@ const ChatSlice = createSlice({
   name: "chat",
   initialState: initialState,
   reducers: {
+    updateUserStatus: (
+      state,
+      action: {
+        payload: {
+          userId: string;
+          status: "online" | "offline";
+        };
+      }
+    ) => {
+      state.DMProfiles = state.DMProfiles.map((profile) =>
+        profile._id === action.payload.userId
+          ? { ...profile, status: action.payload.status }
+          : profile
+      );
+
+      console.log(
+        state.selectedChatData &&
+          "status" in state.selectedChatData &&
+          state.selectedChatData._id === action.payload.userId
+      );
+
+      if (
+        state.selectedChatData &&
+        "status" in state.selectedChatData &&
+        state.selectedChatData._id === action.payload.userId
+      )
+        state.selectedChatData =
+          state.selectedChatData?._id === action.payload.userId
+            ? { ...state.selectedChatData, status: action.payload.status }
+            : state.selectedChatData;
+    },
     setSelectedChatType: (state, action) => {
       state.selectedChatType = action.payload;
     },
@@ -86,6 +117,7 @@ const ChatSlice = createSlice({
 });
 
 export const {
+  updateUserStatus,
   setSelectedChatType,
   setSelectedChatData,
   setSelectedChatMessages,

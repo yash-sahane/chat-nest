@@ -2,6 +2,7 @@ import { getDMProfiles, getUserChannels } from "@/slices/ChatApi";
 import {
   setSelectedChannelMessages,
   setSelectedChatMessages,
+  updateUserStatus,
 } from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { Message } from "@/types";
@@ -58,15 +59,20 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const statusChangeHandler = () => {
+  const statusChangeHandler = (user: {
+    userId: string;
+    status: "online" | "offline";
+  }) => {
+    console.log(user);
     if (chatView === "person") {
-      dispatch(getDMProfiles());
+      dispatch(updateUserStatus(user));
+      // dispatch(getDMProfiles());
     }
   };
 
   useEffect(() => {
     if (user) {
-      let newSocket = io(
+      const newSocket = io(
         import.meta.env.VITE_SERVER_URI || "http://localhost:3000",
         {
           query: { userId: user._id },

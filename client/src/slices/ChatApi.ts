@@ -85,13 +85,14 @@ export const getDMProfiles = createAsyncThunk(
         const selectedChatData = state.chat.selectedChatData;
         const DMProfiles: DMProfile[] = data.data;
         DMProfiles.map((dmProfile) => {
-          dmProfile._id === selectedChatData?._id &&
+          if (dmProfile._id === selectedChatData?._id) {
             dispatch(
               setSelectedChatData({
                 ...selectedChatData,
                 status: dmProfile.status,
               })
             );
+          }
         });
         return data;
       } else {
