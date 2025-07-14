@@ -54,6 +54,8 @@ export type ChatMsg = {
   content: string;
   fileURL: string;
   timeStamp: Date;
+  isRead: boolean;
+  readAt: Date;
 };
 
 export type ChannelChatMsg = {

@@ -35,8 +35,6 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const [socket, setSocket] = useState<typeof Socket | null>(null);
 
   const receiveMessageHandler = (message: Message) => {
-    console.log(message);
-
     if (
       selectedChatDataRef.current !== undefined &&
       (selectedChatDataRef.current._id === message.sender._id ||
@@ -70,6 +68,12 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const messageMarkedAsRead = async ({
+    messageId,
+  }: {
+    messageId: string;
+  }) => {};
+
   useEffect(() => {
     if (user) {
       const newSocket = io(
@@ -86,6 +90,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       newSocket.emit("userOnline");
       newSocket.on("userStatusChanged", statusChangeHandler);
       newSocket.on("receiveMessage", receiveMessageHandler);
+      newSocket.on("messageMarkedAsRead", messageMarkedAsRead);
       newSocket.on("receiveChannelMessage", receiveChannelMessageHandler);
 
       return () => {

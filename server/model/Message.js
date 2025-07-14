@@ -41,6 +41,14 @@ const messageSchema = new Schema({
       },
     },
   },
+  isRead: {
+    type: Boolean,
+    default: false
+  },
+  readAt: {
+    type: Date,
+    default: null,
+  },
   timeStamp: {
     type: Date,
     default: Date.now,

@@ -80,6 +80,15 @@ const setupSocket = (server) => {
       io.emit("userStatusChanged", { userId, status: "online" });
     });
 
+    const markAsRead = async ({ messageId, senderId }) => {
+      await Message.findByIdAndUpdate(messageId, { isRead: true, readAt: new Date() });
+
+      const senderSocketId = userSocketMap.get(senderId);
+      console.log(senderSocketId);
+
+      socket.to(senderSocketId).emit('messageMarkedAsRead', { messageId });
+    }
+
     const userId = socket.handshake.query.userId;
     if (userId) {
       userSocketMap.set(userId, socket.id);
@@ -90,6 +99,7 @@ const setupSocket = (server) => {
 
     socket.on("sendMessage", sendMessage);
     socket.on("sendChannelMessage", sendChannelMessage);
+    socket.on('markAsRead', markAsRead);
 
     socket.on("disconnect", async () => {
       await User.findByIdAndUpdate(userId, { status: "offline" });

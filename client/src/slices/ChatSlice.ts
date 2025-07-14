@@ -47,12 +47,6 @@ const ChatSlice = createSlice({
           : profile
       );
 
-      console.log(
-        state.selectedChatData &&
-          "status" in state.selectedChatData &&
-          state.selectedChatData._id === action.payload.userId
-      );
-
       if (
         state.selectedChatData &&
         "status" in state.selectedChatData &&
@@ -92,6 +86,14 @@ const ChatSlice = createSlice({
     },
     setChatView: (state, action) => {
       state.chatView = action.payload;
+    },
+    updateMessageReadStatus: (state, action) => {
+      const messageId = action.payload;
+      state.selectedChatMessages = state.selectedChatMessages.map((chatMsg) =>
+        chatMsg._id === messageId
+          ? { ...chatMsg, isRead: true, readAt: new Date() }
+          : chatMsg
+      );
     },
   },
   extraReducers: (builder) => {
