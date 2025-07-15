@@ -2,6 +2,7 @@ import { getDMProfiles, getUserChannels } from "@/slices/ChatApi";
 import {
   setSelectedChannelMessages,
   setSelectedChatMessages,
+  updateMessageReadStatus,
   updateUserStatus,
 } from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
@@ -34,47 +35,57 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
   const [socket, setSocket] = useState<typeof Socket | null>(null);
 
-  const receiveMessageHandler = (message: Message) => {
-    if (
-      selectedChatDataRef.current !== undefined &&
-      (selectedChatDataRef.current._id === message.sender._id ||
-        selectedChatDataRef.current._id === message.recipient?._id)
-    ) {
-      dispatch(setSelectedChatMessages(message));
-    } else {
-      dispatch(getDMProfiles());
-    }
-  };
-
-  const receiveChannelMessageHandler = (message: Message) => {
-    if (
-      selectedChatDataRef.current !== undefined &&
-      selectedChatDataRef.current._id === message.channel
-    ) {
-      dispatch(setSelectedChannelMessages(message));
-    } else {
-      dispatch(getUserChannels());
-    }
-  };
-
-  const statusChangeHandler = (user: {
-    userId: string;
-    status: "online" | "offline";
-  }) => {
-    console.log(user);
-    if (chatView === "person") {
-      dispatch(updateUserStatus(user));
-      // dispatch(getDMProfiles());
-    }
-  };
-
-  const messageMarkedAsRead = async ({
-    messageId,
-  }: {
-    messageId: string;
-  }) => {};
-
   useEffect(() => {
+    const receiveMessageHandler = (message: Message) => {
+      if (
+        selectedChatDataRef.current !== undefined &&
+        (selectedChatDataRef.current._id === message.sender._id ||
+          selectedChatDataRef.current._id === message.recipient?._id)
+      ) {
+        dispatch(setSelectedChatMessages(message));
+      } else {
+        dispatch(getDMProfiles());
+      }
+    };
+
+    const receiveChannelMessageHandler = (message: Message) => {
+      if (
+        selectedChatDataRef.current !== undefined &&
+        selectedChatDataRef.current._id === message.channel
+      ) {
+        dispatch(setSelectedChannelMessages(message));
+      } else {
+        dispatch(getUserChannels());
+      }
+    };
+
+    const statusChangeHandler = (user: {
+      userId: string;
+      status: "online" | "offline";
+    }) => {
+      console.log(user);
+      if (chatView === "person") {
+        dispatch(updateUserStatus(user));
+        // dispatch(getDMProfiles());
+      }
+    };
+
+    const messageMarkedAsRead = async ({
+      messageId,
+    }: {
+      messageId: string;
+    }) => {
+      console.log("assume im a receiver");
+
+      const element = document.querySelector("[data-message-id]");
+      if (element?.getAttribute("data-message-id") === messageId) {
+        console.log("gotcha");
+
+        element.setAttribute("data-is-read", "true");
+      }
+      dispatch(updateMessageReadStatus(messageId));
+    };
+
     if (user) {
       const newSocket = io(
         import.meta.env.VITE_SERVER_URI || "http://localhost:3000",
@@ -97,7 +108,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         newSocket.close();
       };
     }
-  }, [user]);
+  }, [chatView, dispatch, user]);
 
   useEffect(() => {
     selectedChatDataRef.current = selectedChatData;

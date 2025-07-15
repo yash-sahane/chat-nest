@@ -84,6 +84,8 @@ export const getDMProfiles = createAsyncThunk(
         const state = getState() as RootState;
         const selectedChatData = state.chat.selectedChatData;
         const DMProfiles: DMProfile[] = data.data;
+        console.log("memory leak");
+
         DMProfiles.map((dmProfile) => {
           if (dmProfile._id === selectedChatData?._id) {
             dispatch(

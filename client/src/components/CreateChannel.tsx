@@ -54,7 +54,7 @@ const CreateChannel = ({
     }
 
     const formData = new FormData();
-    profileImg && formData.append("image", profileImg);
+    if (profileImg) formData.append("image", profileImg);
     formData.append("profileTheme", activeProfileTheme);
     formData.append("channelName", channelName);
     formData.append("selectedProfiles", JSON.stringify(selectedProfiles));

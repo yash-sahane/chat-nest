@@ -42,7 +42,7 @@ export type Message = {
   messageType: "text" | "file" | "image" | "video";
   content: string;
   fileURL: string;
-  timeStamp: Date;
+  timeStamp: string;
   channel: string;
 };
 
@@ -53,9 +53,9 @@ export type ChatMsg = {
   messageType: "text" | "file" | "image" | "video";
   content: string;
   fileURL: string;
-  timeStamp: Date;
+  timeStamp: string;
   isRead: boolean;
-  readAt: Date;
+  readAt: string;
 };
 
 export type ChannelChatMsg = {

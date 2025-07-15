@@ -80,13 +80,16 @@ const setupSocket = (server) => {
       io.emit("userStatusChanged", { userId, status: "online" });
     });
 
-    const markAsRead = async ({ messageId, senderId }) => {
+    const markAsRead = async ({ messageId, senderId, receiverId }) => {
       await Message.findByIdAndUpdate(messageId, { isRead: true, readAt: new Date() });
 
       const senderSocketId = userSocketMap.get(senderId);
-      console.log(senderSocketId);
+      const receiverSocketId = userSocketMap.get(receiverId);
+      console.log('sender socket id is ', senderSocketId);
+      console.log('sender socket id is ', receiverSocketId);
 
-      socket.to(senderSocketId).emit('messageMarkedAsRead', { messageId });
+      io.to(senderSocketId).emit('messageMarkedAsRead', { messageId });
+      io.to(receiverSocketId).emit('messageMarkedAsRead', { messageId });
     }
 
     const userId = socket.handshake.query.userId;

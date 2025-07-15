@@ -88,10 +88,12 @@ const ChatSlice = createSlice({
       state.chatView = action.payload;
     },
     updateMessageReadStatus: (state, action) => {
+      console.log("updating");
+
       const messageId = action.payload;
       state.selectedChatMessages = state.selectedChatMessages.map((chatMsg) =>
         chatMsg._id === messageId
-          ? { ...chatMsg, isRead: true, readAt: new Date() }
+          ? { ...chatMsg, isRead: true, readAt: new Date().toISOString() }
           : chatMsg
       );
     },
@@ -125,6 +127,7 @@ export const {
   setSelectedChatMessages,
   setSelectedChannelMessages,
   setChatView,
+  updateMessageReadStatus,
 } = ChatSlice.actions;
 
 export default ChatSlice.reducer;

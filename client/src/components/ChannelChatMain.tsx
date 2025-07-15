@@ -172,7 +172,7 @@ const ChannelChatMain = () => {
               </div> */}
             </div>
           </div>
-          <div className="h-[calc(100%-134px)] flex flex-col gap-3 pr-2 mt-2 overflow-y-auto">
+          <div className="h-[calc(100%-134px)] flex flex-col gap-3 mt-2 overflow-y-auto">
             {selectedChannelMessages.map((chatMsg, idx) => {
               return (
                 <React.Fragment key={chatMsg._id}>
@@ -193,10 +193,8 @@ const ChannelChatMain = () => {
                             : "0 auto 0 0",
                       }}
                       className={`${
-                        chatMsg.fileURL
-                          ? "max-w-[500px]"
-                          : "py-[6px] max-w-[80%]"
-                      } w-fit rounded-md text-sm flex gap-2 items-center py-3 transition-all duration-150 ease-linear`}
+                        chatMsg.fileURL ? "max-w-[500px]" : "max-w-[80%]"
+                      } w-fit rounded-md text-sm flex gap-2 items-center transition-all duration-150 ease-linear`}
                     >
                       <div className="flex gap-2 w-full">
                         <UserProfile userProfile={chatMsg.sender} />

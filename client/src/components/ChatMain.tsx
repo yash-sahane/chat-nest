@@ -10,6 +10,7 @@ import {
   Download,
   File,
   LucideCheck,
+  LucideCheckCheck,
   Paperclip,
   Send,
   Smile,
@@ -148,16 +149,11 @@ const ChatMain = () => {
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        console.log("observing 2");
         const messageId = entry.target.getAttribute("data-message-id");
         const senderId = entry.target.getAttribute("data-sender-id");
-
-        console.log(
-          entry.isIntersecting && messageId && user?._id !== senderId
-        );
-
+        const receiverId = entry.target.getAttribute("data-receiver-id");
         if (entry.isIntersecting && messageId && user?._id !== senderId) {
-          socket?.emit("markAsRead", { messageId, senderId });
+          socket?.emit("markAsRead", { messageId, senderId, receiverId });
         }
       });
     });
@@ -165,14 +161,14 @@ const ChatMain = () => {
     const elements = document.querySelectorAll("[data-message-id]");
     elements.forEach((ele) => {
       if (ele.getAttribute("data-is-read") === "false") {
-        console.log("observing 1");
-
         observer.observe(ele);
       }
     });
 
     console.log(selectedChatMessages);
   }, [selectedChatMessages]);
+
+  console.log("chatmain is running");
 
   return (
     <div
@@ -214,6 +210,7 @@ const ChatMain = () => {
                     }
                     data-message-id={chatMsg._id}
                     data-sender-id={chatMsg.sender}
+                    data-receiver-id={chatMsg.recipient}
                     data-is-read={chatMsg.isRead}
                   >
                     <div
@@ -268,22 +265,27 @@ const ChatMain = () => {
                         </div>
                       )}
                     </div>
-                    <div className="flex gap-1">
-                      <p
-                        className={`text-xs text-gray-500 w-full flex gap-1 ${
-                          user?._id === chatMsg.sender
-                            ? "text-right "
-                            : "text-left"
-                        }`}
-                      >
-                        {moment(chatMsg.timeStamp).format("LT")}{" "}
-                        {chatMsg.sender === user?._id && chatMsg.isRead && (
-                          <span>
-                            <LucideCheck />
-                          </span>
-                        )}
-                      </p>
-                    </div>
+                    <p
+                      className={`text-xs text-gray-500 w-full flex items-center gap-1 ${
+                        user?._id === chatMsg.sender
+                          ? "justify-end"
+                          : "justify-start"
+                      }`}
+                    >
+                      {moment(chatMsg.timeStamp).format("LT")}{" "}
+                      {chatMsg.sender === user?._id && (
+                        <span>
+                          {chatMsg.isRead ? (
+                            <LucideCheckCheck
+                              size={16}
+                              className="text-primary"
+                            />
+                          ) : (
+                            <LucideCheck size={16} className="text-primary" />
+                          )}
+                        </span>
+                      )}
+                    </p>
                   </div>
                 </React.Fragment>
               );
