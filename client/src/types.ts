@@ -64,7 +64,8 @@ export type ChannelChatMsg = {
   messageType: "text" | "file" | "image" | "video";
   content: string;
   fileURL: string;
-  timeStamp: Date;
+  timeStamp: string;
+  readBy: [{ user: string; readAt: string }];
 };
 
 export type DMProfile = {

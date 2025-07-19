@@ -2,6 +2,7 @@ import { getDMProfiles, getUserChannels } from "@/slices/ChatApi";
 import {
   setSelectedChannelMessages,
   setSelectedChatMessages,
+  updateChannelMessageReadStatus,
   updateMessageReadStatus,
   updateUserStatus,
 } from "@/slices/ChatSlice";
@@ -37,6 +38,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const receiveMessageHandler = (message: Message) => {
+      // console.log("calling receive msg handler");
+
       if (
         selectedChatDataRef.current !== undefined &&
         (selectedChatDataRef.current._id === message.sender._id ||
@@ -63,7 +66,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       userId: string;
       status: "online" | "offline";
     }) => {
-      console.log(user);
+      // console.log(user);
       if (chatView === "person") {
         dispatch(updateUserStatus(user));
         // dispatch(getDMProfiles());
@@ -75,15 +78,42 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     }: {
       messageId: string;
     }) => {
-      console.log("assume im a receiver");
+      const elements = document.querySelectorAll("[data-message-id]");
+      // console.log(elements);
 
-      const element = document.querySelector("[data-message-id]");
-      if (element?.getAttribute("data-message-id") === messageId) {
-        console.log("gotcha");
+      // elements.forEach(
+      //   (ele) =>
+      //     ele.getAttribute("data-message-id") === messageId && console.log(ele)
+      // );
+      // const element = document.querySelector("[data-message-id]");
+      // console.log(element);
 
-        element.setAttribute("data-is-read", "true");
-      }
+      // if (element?.getAttribute("data-message-id") === messageId) {
+      //   console.log("gotcha");
+
+      //   element.setAttribute("data-is-read", "true");
+      // }
       dispatch(updateMessageReadStatus(messageId));
+    };
+
+    const channelMessageMarkedAsRead = async ({
+      messageId,
+      channelId,
+      readerId,
+    }: {
+      messageId: string;
+      channelId: string;
+      readerId: string;
+    }) => {
+      if (
+        selectedChatDataRef.current !== undefined &&
+        channelId !== selectedChatDataRef.current._id
+      )
+        return;
+
+      // console.log({ messageId, readerId });
+
+      dispatch(updateChannelMessageReadStatus({ messageId, readerId }));
     };
 
     if (user) {
@@ -102,6 +132,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       newSocket.on("userStatusChanged", statusChangeHandler);
       newSocket.on("receiveMessage", receiveMessageHandler);
       newSocket.on("messageMarkedAsRead", messageMarkedAsRead);
+      newSocket.on("channelMessageMarkedAsRead", channelMessageMarkedAsRead);
       newSocket.on("receiveChannelMessage", receiveChannelMessageHandler);
 
       return () => {

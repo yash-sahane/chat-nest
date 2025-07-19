@@ -147,7 +147,42 @@ const ChannelChatMain = () => {
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const messageId = entry.target.getAttribute("data-message-id");
+        const senderId = entry.target.getAttribute("data-sender-id");
+        const channelId = selectedChatData?._id;
+        if (entry.isIntersecting && messageId && user?._id !== senderId) {
+          socket?.emit("markAsRead:channel", {
+            messageId,
+            senderId,
+            channelId,
+            readerId: user?._id,
+          });
+        }
+      });
+    });
+
+    const elements = document.querySelectorAll("[data-message-id]");
+    elements.forEach((ele) => {
+      if (ele.getAttribute("data-is-read") === "false") {
+        observer.observe(ele);
+      }
+    });
   }, [selectedChannelMessages]);
+
+  const checkIsRead = (message: ChannelChatMsg) => {
+    const isMessageReadByReader = message.readBy.some((reader) => {
+      console.log(reader.user === user?._id, " ", reader.user, " ", user?._id);
+
+      return reader.user === user?._id;
+    });
+
+    // console.log(isMessageReadByReader || message.sender._id === user?._id);
+
+    return isMessageReadByReader || message.sender._id === user?._id;
+  };
 
   return (
     <div className="custom-transition bg-[hsl(var(--chat-bg))] w-full sm:w-4/5 rounded-2xl p-3">
@@ -183,6 +218,9 @@ const ChannelChatMain = () => {
                         ? scrollRef
                         : null
                     }
+                    data-message-id={chatMsg._id}
+                    data-sender-id={chatMsg.sender._id}
+                    data-is-read={checkIsRead(chatMsg)}
                   >
                     <div
                       style={{

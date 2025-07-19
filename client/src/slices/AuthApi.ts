@@ -11,6 +11,8 @@ export const fetchUser = createAsyncThunk(
         { withCredentials: true }
       );
       if (data.success) {
+        // console.log(data.data);
+
         return data.data;
       } else {
         return rejectWithValue(data.message);

@@ -80,7 +80,7 @@ const setupSocket = (server) => {
       io.emit("userStatusChanged", { userId, status: "online" });
     });
 
-    const markAsRead = async ({ messageId, senderId, receiverId }) => {
+    const markMsgAsRead = async ({ messageId, senderId, receiverId }) => {
       await Message.findByIdAndUpdate(messageId, { isRead: true, readAt: new Date() });
 
       const senderSocketId = userSocketMap.get(senderId);
@@ -89,7 +89,16 @@ const setupSocket = (server) => {
       console.log('sender socket id is ', receiverSocketId);
 
       io.to(senderSocketId).emit('messageMarkedAsRead', { messageId });
-      io.to(receiverSocketId).emit('messageMarkedAsRead', { messageId });
+      // io.to(receiverSocketId).emit('messageMarkedAsRead', { messageId });
+    }
+
+    const markChannelMsgAsRead = async ({ messageId, senderId, channelId, readerId }) => {
+      await Message.updateOne({ _id: messageId, "readBy.user": { $ne: readerId } }, { $push: { readBy: { user: readerId } } });
+
+      const senderSocketId = userSocketMap.get(senderId);
+      const readerSocketId = userSocketMap.get(readerId);
+      io.to(senderSocketId).emit('channelMessageMarkedAsRead', { messageId, channelId, readerId });
+      io.to(readerSocketId).emit('channelMessageMarkedAsRead', { messageId, channelId, readerId });
     }
 
     const userId = socket.handshake.query.userId;
@@ -102,7 +111,8 @@ const setupSocket = (server) => {
 
     socket.on("sendMessage", sendMessage);
     socket.on("sendChannelMessage", sendChannelMessage);
-    socket.on('markAsRead', markAsRead);
+    socket.on('markAsRead', markMsgAsRead);
+    socket.on('markAsRead:channel', markChannelMsgAsRead);
 
     socket.on("disconnect", async () => {
       await User.findByIdAndUpdate(userId, { status: "offline" });

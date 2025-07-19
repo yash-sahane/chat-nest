@@ -140,7 +140,7 @@ const ChatMain = () => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => handleClickOutside();
-  }, [useRef]);
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -161,6 +161,7 @@ const ChatMain = () => {
     const elements = document.querySelectorAll("[data-message-id]");
     elements.forEach((ele) => {
       if (ele.getAttribute("data-is-read") === "false") {
+        // console.log(ele);
         observer.observe(ele);
       }
     });
@@ -168,7 +169,7 @@ const ChatMain = () => {
     console.log(selectedChatMessages);
   }, [selectedChatMessages]);
 
-  console.log("chatmain is running");
+  // console.log("chatmain is running");
 
   return (
     <div

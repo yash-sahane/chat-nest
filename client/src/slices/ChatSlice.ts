@@ -97,6 +97,19 @@ const ChatSlice = createSlice({
           : chatMsg
       );
     },
+    updateChannelMessageReadStatus: (state, action) => {
+      const { messageId, readerId } = action.payload;
+      console.log(readerId);
+
+      state.selectedChannelMessages.forEach((chatMsg) => {
+        if (chatMsg._id === messageId) {
+          chatMsg.readBy.push({
+            user: readerId,
+            readAt: new Date().toISOString(),
+          });
+        }
+      });
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -128,6 +141,7 @@ export const {
   setSelectedChannelMessages,
   setChatView,
   updateMessageReadStatus,
+  updateChannelMessageReadStatus,
 } = ChatSlice.actions;
 
 export default ChatSlice.reducer;
