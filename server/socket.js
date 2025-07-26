@@ -95,10 +95,12 @@ const setupSocket = (server) => {
     const markChannelMsgAsRead = async ({ messageId, senderId, channelId, readerId }) => {
       await Message.updateOne({ _id: messageId, "readBy.user": { $ne: readerId } }, { $push: { readBy: { user: readerId } } });
 
+      const reader = await User.findById(readerId).select('_id firstName lastName avatar profileTheme')
+
       const senderSocketId = userSocketMap.get(senderId);
       const readerSocketId = userSocketMap.get(readerId);
-      io.to(senderSocketId).emit('channelMessageMarkedAsRead', { messageId, channelId, readerId });
-      io.to(readerSocketId).emit('channelMessageMarkedAsRead', { messageId, channelId, readerId });
+      io.to(senderSocketId).emit('channelMessageMarkedAsRead', { messageId, channelId, reader });
+      io.to(readerSocketId).emit('channelMessageMarkedAsRead', { messageId, channelId, reader });
     }
 
     const userId = socket.handshake.query.userId;

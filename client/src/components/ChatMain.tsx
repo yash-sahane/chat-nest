@@ -20,13 +20,14 @@ import { useSelector } from "react-redux";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useSocket } from "@/context/SocketProvier";
-import { ApiResponse, ChannelChatMsg, ChatMsg } from "@/types";
+import { ApiResponse, ChannelChatMsg, ChatMsgType } from "@/types";
 import moment from "moment";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { isUser } from "@/utils/type";
 import { useDispatch } from "react-redux";
 import { setSelectedChatData } from "@/slices/ChatSlice";
+import ChatMsg from "./ChatMsg";
 
 const ChatMain = () => {
   const { selectedChatData, selectedChatMessages } = useSelector(
@@ -62,7 +63,7 @@ const ChatMain = () => {
   };
 
   let lastDate: string | null = null;
-  const renderDate = (chatMsg: ChannelChatMsg | ChatMsg) => {
+  const renderDate = (chatMsg: ChannelChatMsg | ChatMsgType) => {
     const messageDate = moment(chatMsg.timeStamp).format("YYYY-MM-DD");
     const showDate = messageDate !== lastDate;
     lastDate = messageDate;
@@ -118,12 +119,6 @@ const ChatMain = () => {
     }
   };
 
-  const downloadHandler = (fileUrl: string) => {
-    window.location.href = `${
-      import.meta.env.VITE_SERVER_URI
-    }/api/chat/download_file/${fileUrl.split("/").pop()}`;
-  };
-
   const clearSelectedChatData = () => {
     dispatch(setSelectedChatData(undefined));
   };
@@ -167,9 +162,11 @@ const ChatMain = () => {
     });
 
     console.log(selectedChatMessages);
-  }, [selectedChatMessages]);
 
-  // console.log("chatmain is running");
+    return () => observer.disconnect();
+  }, [selectedChatMessages, socket, user?._id]);
+
+  console.log("chatmain is running");
 
   return (
     <div
@@ -205,89 +202,7 @@ const ChatMain = () => {
               return (
                 <React.Fragment key={chatMsg._id}>
                   {renderDate(chatMsg)}
-                  <div
-                    ref={
-                      selectedChatMessages.length === idx + 1 ? scrollRef : null
-                    }
-                    data-message-id={chatMsg._id}
-                    data-sender-id={chatMsg.sender}
-                    data-receiver-id={chatMsg.recipient}
-                    data-is-read={chatMsg.isRead}
-                  >
-                    <div
-                      className={`custom-transition ${
-                        chatMsg.fileURL
-                          ? "max-w-[500px]"
-                          : "py-[6px] max-w-[80%]"
-                      } rounded-md p-3 text-sm w-fit`}
-                      style={{
-                        background:
-                          user?._id === chatMsg.sender
-                            ? "hsl(var(--message-background))"
-                            : "hsl(var(--chat-primary))",
-                        margin:
-                          user?._id === chatMsg.sender
-                            ? "0 0 0 auto"
-                            : "0 auto 0 0",
-                      }}
-                    >
-                      {chatMsg.messageType === "text" && (
-                        <p>{chatMsg.content}</p>
-                      )}
-                      {chatMsg.messageType === "image" && (
-                        <img
-                          src={`${import.meta.env.VITE_SERVER_URI}/files/${
-                            chatMsg.fileURL
-                          }`}
-                          className="w-full h-full object-contain rounded-md"
-                        />
-                      )}
-                      {chatMsg.messageType === "video" && (
-                        <video
-                          src={`${import.meta.env.VITE_SERVER_URI}/files/${
-                            chatMsg.fileURL
-                          }`}
-                          className="w-full h-full object-contain rounded-md"
-                          controls
-                        />
-                      )}
-                      {chatMsg.messageType === "file" && (
-                        <div className="flex gap-2 items-center">
-                          <div className="flex justify-center rounded-md p-2 bg-[hsl(var(--background))]">
-                            <File size={19} />
-                          </div>
-                          <p>{chatMsg.fileURL}</p>
-                          <Button className="h-fit flex justify-center rounded-md p-2">
-                            <Download
-                              size={20}
-                              onClick={() => downloadHandler(chatMsg.fileURL)}
-                            />
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                    <p
-                      className={`text-xs text-gray-500 w-full flex items-center gap-1 ${
-                        user?._id === chatMsg.sender
-                          ? "justify-end"
-                          : "justify-start"
-                      }`}
-                    >
-                      {moment(chatMsg.timeStamp).format("LT")}{" "}
-                      {chatMsg.sender === user?._id && (
-                        <span>
-                          {chatMsg.isRead ? (
-                            <LucideCheckCheck
-                              size={16}
-                              className="text-primary"
-                            />
-                          ) : (
-                            <LucideCheck size={16} className="text-primary" />
-                          )}
-                        </span>
-                      )}
-                    </p>
-                  </div>
+                  <ChatMsg chatMsg={chatMsg} idx={idx} />
                 </React.Fragment>
               );
             })}

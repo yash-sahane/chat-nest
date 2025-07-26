@@ -7,7 +7,7 @@ import {
   updateUserStatus,
 } from "@/slices/ChatSlice";
 import { AppDispatch, RootState } from "@/store/store";
-import { Message } from "@/types";
+import { Message, User } from "@/types";
 import {
   createContext,
   ReactNode,
@@ -66,7 +66,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       userId: string;
       status: "online" | "offline";
     }) => {
-      // console.log(user);
+      console.log(user);
       if (chatView === "person") {
         dispatch(updateUserStatus(user));
         // dispatch(getDMProfiles());
@@ -78,32 +78,17 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     }: {
       messageId: string;
     }) => {
-      const elements = document.querySelectorAll("[data-message-id]");
-      // console.log(elements);
-
-      // elements.forEach(
-      //   (ele) =>
-      //     ele.getAttribute("data-message-id") === messageId && console.log(ele)
-      // );
-      // const element = document.querySelector("[data-message-id]");
-      // console.log(element);
-
-      // if (element?.getAttribute("data-message-id") === messageId) {
-      //   console.log("gotcha");
-
-      //   element.setAttribute("data-is-read", "true");
-      // }
       dispatch(updateMessageReadStatus(messageId));
     };
 
     const channelMessageMarkedAsRead = async ({
       messageId,
       channelId,
-      readerId,
+      reader,
     }: {
       messageId: string;
       channelId: string;
-      readerId: string;
+      reader: User;
     }) => {
       if (
         selectedChatDataRef.current !== undefined &&
@@ -113,7 +98,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
       // console.log({ messageId, readerId });
 
-      dispatch(updateChannelMessageReadStatus({ messageId, readerId }));
+      dispatch(updateChannelMessageReadStatus({ messageId, reader }));
     };
 
     if (user) {

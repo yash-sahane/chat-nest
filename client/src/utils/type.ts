@@ -1,4 +1,4 @@
-import { Channel, ChannelChatMsg, ChatMsg, User } from "@/types";
+import { Channel, ChannelChatMsg, ChatMsgType, User } from "@/types";
 
 export function isUser(data: User | Channel | undefined): data is User {
   return (data as User)?.email !== undefined;
@@ -9,11 +9,13 @@ export function isChannel(data: User | Channel | undefined): data is Channel {
 }
 
 export function isChannelChatMsg(
-  data: ChannelChatMsg | ChatMsg
+  data: ChannelChatMsg | ChatMsgType
 ): data is ChannelChatMsg {
   return (data as ChannelChatMsg)?.sender._id !== undefined;
 }
 
-export function isChatMsg(data: ChannelChatMsg | ChatMsg): data is ChatMsg {
-  return (data as ChatMsg)?.recipient !== undefined;
+export function isChatMsg(
+  data: ChannelChatMsg | ChatMsgType
+): data is ChatMsgType {
+  return (data as ChatMsgType)?.recipient !== undefined;
 }

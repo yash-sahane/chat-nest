@@ -46,7 +46,7 @@ export type Message = {
   channel: string;
 };
 
-export type ChatMsg = {
+export type ChatMsgType = {
   _id: string;
   sender: string;
   recipient: string;
@@ -65,7 +65,7 @@ export type ChannelChatMsg = {
   content: string;
   fileURL: string;
   timeStamp: string;
-  readBy: [{ user: string; readAt: string }];
+  readBy: [{ user: User; readAt: string }];
 };
 
 export type DMProfile = {

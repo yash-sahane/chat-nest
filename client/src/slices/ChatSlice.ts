@@ -1,4 +1,4 @@
-import { Channel, ChannelChatMsg, ChatMsg, DMProfile, User } from "@/types";
+import { Channel, ChannelChatMsg, ChatMsgType, DMProfile, User } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   getChannelMessages,
@@ -11,7 +11,7 @@ import {
 type InitialState = {
   selectedChatType: "chat" | "channel" | undefined;
   selectedChatData: User | Channel | undefined;
-  selectedChatMessages: ChatMsg[] | [];
+  selectedChatMessages: ChatMsgType[] | [];
   selectedChannelMessages: ChannelChatMsg[] | [];
   channels: Channel[] | [];
   DMProfiles: DMProfile[] | [];
@@ -98,13 +98,14 @@ const ChatSlice = createSlice({
       );
     },
     updateChannelMessageReadStatus: (state, action) => {
-      const { messageId, readerId } = action.payload;
-      console.log(readerId);
+      const { messageId, reader }: { messageId: string; reader: User } =
+        action.payload;
+      console.log(reader);
 
       state.selectedChannelMessages.forEach((chatMsg) => {
         if (chatMsg._id === messageId) {
           chatMsg.readBy.push({
-            user: readerId,
+            user: reader,
             readAt: new Date().toISOString(),
           });
         }

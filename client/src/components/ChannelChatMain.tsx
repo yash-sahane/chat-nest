@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useSocket } from "@/context/SocketProvier";
-import { ApiResponse, ChannelChatMsg, ChatMsg } from "@/types";
+import { ApiResponse, ChannelChatMsg, ChatMsgType } from "@/types";
 import moment from "moment";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -62,7 +62,7 @@ const ChannelChatMain = () => {
   };
 
   let lastDate: string | null = null;
-  const renderDate = (chatMsg: ChannelChatMsg | ChatMsg) => {
+  const renderDate = (chatMsg: ChannelChatMsg | ChatMsgType) => {
     const messageDate = moment(chatMsg.timeStamp).format("YYYY-MM-DD");
     const showDate = messageDate !== lastDate;
     lastDate = messageDate;
@@ -174,9 +174,15 @@ const ChannelChatMain = () => {
 
   const checkIsRead = (message: ChannelChatMsg) => {
     const isMessageReadByReader = message.readBy.some((reader) => {
-      console.log(reader.user === user?._id, " ", reader.user, " ", user?._id);
+      console.log(
+        reader.user._id === user?._id,
+        " ",
+        reader.user,
+        " ",
+        user?._id
+      );
 
-      return reader.user === user?._id;
+      return reader.user._id === user?._id;
     });
 
     // console.log(isMessageReadByReader || message.sender._id === user?._id);
@@ -207,7 +213,7 @@ const ChannelChatMain = () => {
               </div> */}
             </div>
           </div>
-          <div className="h-[calc(100%-134px)] flex flex-col gap-3 mt-2 overflow-y-auto">
+          <div className="h-[calc(100%-134px)] flex flex-col gap-3 pr-2 mt-2 overflow-y-auto">
             {selectedChannelMessages.map((chatMsg, idx) => {
               return (
                 <React.Fragment key={chatMsg._id}>

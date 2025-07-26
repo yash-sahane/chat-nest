@@ -4,20 +4,34 @@ import User from "../model/User.js";
 
 export const getAllProfiles = async (req, res, next) => {
   try {
-    const { searchTerm } = req.body;
+    const { searchTerm = "" } = req.body;
 
-    const regexSearchTerm = searchTerm.replace(
-      /[~`!#$%^&*(){}\[\];:"'<,>?\/\\|_+=-]/g,
-      ""
-    );
-    const regex = new RegExp(regexSearchTerm, "i");
-    const profiles = await User.find({
-      $and: [
-        { _id: { $ne: req.user.id } },
-        { profileSetup: true },
-        { $or: [{ firstName: regex }, { lastName: regex }] },
-      ],
-    });
+    const sanitizedSearch = searchTerm
+      .replace(/[~`!#$%^&*(){}\[\];:"'<,>?\/\\|_+=-]/g, "")
+      .trim();
+
+    const query = {
+      _id: { $ne: req.user.id },
+      profileSetup: true,
+    };
+
+    if (sanitizedSearch) {
+      const searchWords = sanitizedSearch.split(/\s+/).map((word) => new RegExp(word, "i"));
+
+      query.$or = [
+        // Match firstName or lastName contains any word
+        { firstName: { $in: searchWords } },
+        { lastName: { $in: searchWords } },
+        // Match exact pairs: firstName with one word AND lastName with another
+        ...searchWords.flatMap((word1) =>
+          searchWords.map((word2) => ({
+            $and: [{ firstName: word1 }, { lastName: word2 }],
+          }))
+        ),
+      ];
+    }
+
+    const profiles = await User.find(query);
 
     return res.json({
       success: true,
@@ -25,8 +39,10 @@ export const getAllProfiles = async (req, res, next) => {
     });
   } catch (e) {
     console.log(e.message);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
 
 export const getAllProfilesForDMList = async (req, res, next) => {
   try {
