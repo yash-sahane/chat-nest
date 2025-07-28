@@ -20,7 +20,7 @@ import { useSelector } from "react-redux";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useSocket } from "@/context/SocketProvier";
-import { ApiResponse, ChannelChatMsg, ChatMsgType } from "@/types";
+import { ApiResponse, ChannelChatMsgType, ChatMsgType } from "@/types";
 import moment from "moment";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -63,7 +63,7 @@ const ChatMain = () => {
   };
 
   let lastDate: string | null = null;
-  const renderDate = (chatMsg: ChannelChatMsg | ChatMsgType) => {
+  const renderDate = (chatMsg: ChannelChatMsgType | ChatMsgType) => {
     const messageDate = moment(chatMsg.timeStamp).format("YYYY-MM-DD");
     const showDate = messageDate !== lastDate;
     lastDate = messageDate;

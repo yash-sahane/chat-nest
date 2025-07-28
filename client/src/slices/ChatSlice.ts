@@ -1,4 +1,10 @@
-import { Channel, ChannelChatMsg, ChatMsgType, DMProfile, User } from "@/types";
+import {
+  Channel,
+  ChannelChatMsgType,
+  ChatMsgType,
+  DMProfile,
+  User,
+} from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   getChannelMessages,
@@ -12,7 +18,7 @@ type InitialState = {
   selectedChatType: "chat" | "channel" | undefined;
   selectedChatData: User | Channel | undefined;
   selectedChatMessages: ChatMsgType[] | [];
-  selectedChannelMessages: ChannelChatMsg[] | [];
+  selectedChannelMessages: ChannelChatMsgType[] | [];
   channels: Channel[] | [];
   DMProfiles: DMProfile[] | [];
   chatView: "person" | "channel";

@@ -21,7 +21,6 @@ const ChatMsg = ({ chatMsg, idx }: { chatMsg: ChatMsgType; idx: number }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { socket } = useSocket();
   const scrollRef = useRef<null | HTMLDivElement>(null);
-
   const [showTooltip, setShowTooltip] = useState(false);
 
   const downloadHandler = (fileUrl: string) => {

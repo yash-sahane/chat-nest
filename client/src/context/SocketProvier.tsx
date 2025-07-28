@@ -19,6 +19,7 @@ import {
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import io, { Socket } from "socket.io-client";
+import { log } from "util";
 
 type SocketContextType = {
   socket: typeof Socket | null;
@@ -90,6 +91,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       channelId: string;
       reader: User;
     }) => {
+      console.log(reader);
+
       if (
         selectedChatDataRef.current !== undefined &&
         channelId !== selectedChatDataRef.current._id

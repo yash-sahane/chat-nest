@@ -39,10 +39,17 @@ export const getChannelChatMessages = async (req, res, next) => {
 
     const channel = await Channel.findById(channelId).populate({
       path: "messages",
-      populate: {
-        path: "sender",
-        select: "firstName lastName email _id avatar profileTheme",
-      },
+      populate: [
+        {
+          path: "sender",
+          select: "firstName lastName email _id avatar profileTheme",
+        },
+        {
+          path: "readBy.user", // populate reader details
+          model: "user",
+          select: "firstName lastName email _id avatar profileTheme",
+        },
+      ],
     });
 
     return res.json({

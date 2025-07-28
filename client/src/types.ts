@@ -58,7 +58,7 @@ export type ChatMsgType = {
   readAt: string;
 };
 
-export type ChannelChatMsg = {
+export type ChannelChatMsgType = {
   _id: string;
   sender: User;
   messageType: "text" | "file" | "image" | "video";
